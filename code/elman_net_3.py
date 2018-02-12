@@ -76,7 +76,8 @@ def main():
 				I[k,0] = 1.*(I[k-1,0] != I[k-2,0])
 			else:
 				I[k,0] = int(np.random.rand()+.5)
-		I = (I-.5)*.5
+		I = I*0.6 + .2
+		#I = (I-.5)*.5
 		#'''
 		#I[:,0] = np.sin(np.array(range(n_t))*0.125*2.*np.pi)*0.125 + np.sin(np.array(range(n_t))*0.0625*2.*np.pi)*0.125
 		
