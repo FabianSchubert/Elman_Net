@@ -72,13 +72,13 @@ mu_plast_ei = 0.01 # I->E learning rate
 ##
 
 ## Simulation
-n_t = 200000 # simulation time steps
+n_t = 10000 # simulation time steps
 n_t_skip_w_rec = 100 # only record every n_th weight matrix
 n_t_w_rec = int(n_t/n_t_skip_w_rec)
 ##
 
 ## Analysis
-t_range_analysis = [n_t-20000,n_t]
+t_range_analysis = [n_t-3000,n_t]
 t_range_plot_act_raster = [n_t-1000,n_t]
 ##
 
@@ -307,7 +307,7 @@ def main():
 
 	Z_m = linkage(rec_gramm_groups_mean,metric=hamm_d)
 
-	pdb.set_trace()
+	#pdb.set_trace()
 	
 	### Plotting routines	
 	fig_sp, ax_sp = plt.subplots(2,1)
@@ -321,12 +321,16 @@ def main():
 	ax_sp[1].set_xlabel("Time Step + " + str(t_range_plot_act_raster[0]))
 	ax_sp[1].set_ylabel("Inh. Neuron #")
 
+	plt.savefig("./plots/act_raster.png",dpi=(300))
+
 	fig_mean_x, ax_mean_x = plt.subplots(1,1)
 	ax_mean_x.plot(x_e_rec.mean(axis=1),lw=1,label="Excitatory Population")
 	ax_mean_x.plot(x_i_rec.mean(axis=1),lw=1,label="Inhibitory Population")
 	ax_mean_x.legend()
 	ax_mean_x.set_xlabel("Time Step")
 	ax_mean_x.set_ylabel("Mean Rate")
+
+	plt.savefig("./plots/pop_act_time.png",dpi=(300))
 
 	fig_T,ax_T = plt.subplots(1,1)
 	ax_T.plot(T_e_rec.mean(axis=1),label="Excitatory Population")
@@ -335,16 +339,22 @@ def main():
 	ax_T.set_xlabel("Time Step")
 	ax_T.set_ylabel("Mean Treshold")
 	
+	plt.savefig("./plots/thresholds_time.png",dpi=(300))
+
 	fig_W_ee,ax_W_ee = plt.subplots(1,1)
 	ax_W_ee.plot(W_ee_rec[:,0,:],c="k",lw=1)
 	ax_W_ee.set_xlabel("Time Step / 10")
 	ax_W_ee.set_ylabel("$W^{EE}_{0j}$, $ j \\in \\{ 0,N_e\\}$")
+
+	plt.savefig("./plots/w_ee_sample_time.png",dpi=(300))
 
 	fig_fir_dist, ax_fir_dist = plt.subplots(1,1)
 	ax_fir_dist.hist(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:].mean(axis=1),bins=np.linspace(0.,1.,50),histtype="step")
 	ax_fir_dist.hist(x_i_rec[t_range_analysis[0]:t_range_analysis[1],:].mean(axis=1),bins=np.linspace(0.,1.,50),histtype="step")
 	ax_fir_dist.set_xlabel("Time Average of Firing Rate")
 	ax_fir_dist.set_ylabel("Probability")
+
+	plt.savefig("./plots/act_dist.png",dpi=(300))
 
 	fig_isi_dist,ax_isi_dist = plt.subplots(1,1)
 	ax_isi_dist.hist(isi_e_join,bins=np.array(range(101)),histtype="step",normed="True",label="Excitatory Population")
@@ -354,18 +364,23 @@ def main():
 	ax_isi_dist.set_ylabel("Probability")
 	ax_isi_dist.legend()
 	
+	plt.savefig("./plots/isi_dist.png",dpi=(300))
+
 	fig_dend = plt.figure()
 	dendrogram(Z_m,link_color_func=lambda x:'k')
 	plt.xlabel("Input Node Indices")
 	plt.ylabel("Hamming Distance")
 
+	plt.savefig("./plots/act_dendrogram.png",dpi=(300))
+
 	###
 
+	#plt.show()
+	plt.close("all")
 	plt.show()
 
-
 	## See what we got
-	pdb.set_trace()
+	#pdb.set_trace()
 
 
 if __name__ == "__main__":
