@@ -72,7 +72,7 @@ mu_plast_ei = 0.01 # I->E learning rate
 ##
 
 ## Simulation
-n_t = 10000 # simulation time steps
+n_t = 20000 # simulation time steps
 n_t_skip_w_rec = 100 # only record every n_th weight matrix
 n_t_w_rec = int(n_t/n_t_skip_w_rec)
 ##
@@ -306,6 +306,19 @@ def main():
 		rec_gramm_groups_mean[k,:] = rec_act_gramm_groups[k].mean(axis=0)
 
 	Z_m = linkage(rec_gramm_groups_mean,metric=hamm_d)
+	#pdb.set_trace()
+	Z_full = linkage(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:],method="ward")
+
+	activity_smoothing_kernel = np.exp(-np.array(range(n_t))/100.)
+	activity_smoothing_kernel /= activity_smoothing_kernel.sum()
+
+	x_e_smooth = np.convolve(x_e_rec.mean(axis=1),activity_smoothing_kernel)[:n_t]
+	x_i_smooth = np.convolve(x_i_rec.mean(axis=1),activity_smoothing_kernel)[:n_t]
+
+
+	#pdb.set_trace()
+
+	
 
 	#pdb.set_trace()
 	
@@ -324,11 +337,11 @@ def main():
 	plt.savefig("./plots/act_raster.png",dpi=(300))
 
 	fig_mean_x, ax_mean_x = plt.subplots(1,1)
-	ax_mean_x.plot(x_e_rec.mean(axis=1),lw=1,label="Excitatory Population")
-	ax_mean_x.plot(x_i_rec.mean(axis=1),lw=1,label="Inhibitory Population")
+	ax_mean_x.plot(x_e_smooth,lw=1,label="Excitatory Population")
+	ax_mean_x.plot(x_i_smooth,lw=1,label="Inhibitory Population")
 	ax_mean_x.legend()
 	ax_mean_x.set_xlabel("Time Step")
-	ax_mean_x.set_ylabel("Mean Rate")
+	ax_mean_x.set_ylabel("Mean Rate (Running Average)")
 
 	plt.savefig("./plots/pop_act_time.png",dpi=(300))
 
@@ -371,16 +384,23 @@ def main():
 	plt.xlabel("Input Node Indices")
 	plt.ylabel("Hamming Distance")
 
+	plt.savefig("./plots/act_dendrogram_mean.png",dpi=(300))
+
+	fid_dend_full = plt.figure()
+	dendrogram(Z_full,p=6,truncate_mode="level",link_color_func=lambda x:'k')
+	plt.xlabel("(Truncated) Excitatory Activity Clusters")
+	plt.ylabel("Hamming Distance")
+
 	plt.savefig("./plots/act_dendrogram.png",dpi=(300))
 
 	###
 
-	#plt.show()
+	plt.show()
 	plt.close("all")
 	plt.show()
 
 	## See what we got
-	#pdb.set_trace()
+	pdb.set_trace()
 
 
 if __name__ == "__main__":
