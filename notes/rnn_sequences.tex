@@ -9,10 +9,12 @@
 \usepackage{comment}
 \usepackage[left=4cm,right=4cm,top=4cm,bottom=4cm]{geometry}
 \title{Learning Structure in Time with a Plastic Recurrent Neural Network}
+\author{Fabian Schubert}
 \makeatletter
 \g@addto@macro\@floatboxreset{\centering}
 \makeatother
-
+%\usepackage{helvet}
+%\renewcommand{\familydefault}{\sfdefault}
 \begin{document}
 \maketitle
 \section{Introduction}
@@ -180,13 +182,14 @@ Generally speaking, the implemented plasticity rules often gave rise to time cou
 
 \subsection{Cluster Analysis of Excitatory Activity}
 
-Following the conceptual idea presented by Elman \cite{Elman_1990}, we performed a hierarchical cluster analysis of the binary activity vectors of the exitatory population. For this, we used the activity data of $x_e$ from the last $t range analysis[1]-t range analysis[0]$  steps. We then performed a hierachical cluster analysis with Ward's method. The resulting dendrogram is depicted in Fig. \ref{fig:act_dendrogram}. A 3-fold structure is visible in the uppermost branching layer.
+Following the conceptual idea presented by Elman \cite{Elman_1990}, we performed a hierarchical cluster analysis of the binary activity vectors of the exitatory population. For this, we used the activity data of $x_e$ from the last $3000$  steps. We then performed a hierachical cluster analysis with Ward's method. The resulting dendrogram is depicted in Fig. \ref{fig:act_dendrogram}. A 3-fold structure is visible in the uppermost branching layer.
 
 \begin{figure}
 \includegraphics[width=\textwidth]{../plots/act_dendrogram.png}
 \caption{\label{fig:act_dendrogram} Dendrogram of a cluster analysis of excitatory activity patterns.}
 \end{figure}
 
+\newpage
 \bibliographystyle{unsrt}
 \bibliography{../code/ipynb_biblio}
 

@@ -7,6 +7,7 @@ from tqdm import tqdm
 from scipy.cluster.hierarchy import linkage, dendrogram
 
 import pdb
+import sys
 
 
 ###### Parameters
@@ -20,13 +21,13 @@ Markov_Gramm[0:3,6:9] = 1./3.
 ##
 
 ## Network
-N_e = 300 # number of excitatory neurons
+N_e = 500 # number of excitatory neurons
 N_i = int(N_e*.2) # number of inhibitory neurons
 
-CF_ee = 0.05 # connection fraction E->E
-CF_ei = 0.1 # connection fraction I->E
-CF_ie = 0.2 # connection fraction E->I
-CF_ii = 0.2 # connection fraction I->I
+CF_ee = 0.025 # connection fraction E->E
+CF_ei = 0.05 # connection fraction I->E
+CF_ie = 0.1 # connection fraction E->I
+CF_ii = 0.1 # connection fraction I->I
 
 CF_eext = 0.1 # connection fraction Ext->E
 w_mean_pre_ext_input = .2
@@ -46,21 +47,21 @@ r_target_i_mu = 0.1 # mean homeostatic inhibitory target firing rate
 r_target_i_sigm = 0.#2 # standard deviation of homeostatic inhibitory target firing rate
 r_target_set_i = np.minimum(1.,np.maximum(0.,np.random.normal(r_target_i_mu,r_target_i_sigm,N_i))) 
 
-mu_IP = 0.002 # threshold adaption rate
+mu_IP = 0.001 # threshold adaption rate
 
-T_e_max_init = 1.
-T_i_max_init = 1.
+T_e_init_range = [-.1,.1]
+T_i_init_range = [-.1,.1]
 
 mu_mem_noise = 0.
-sigm_mem_noise = np.sqrt(0.01)
+sigm_mem_noise = np.sqrt(0.001)
 ##
 
 ## Synaptic Normalization
 w_total_ee = .5#*N_e**.5 # total presynaptic E->E input
 #w_total_eext = .5 # total presynaptic Ext->E input
-w_total_ei = -1.#*N_i**.5 # total presynaptic I->E input
-w_total_ie = 1.#*N_e**.5 # total presynaptic E->I input
-w_total_ii = -1.#*N_i**.5 # total presynaptic I->I input
+w_total_ei = -.5#*N_i**.5 # total presynaptic I->E input
+w_total_ie = .5#*N_e**.5 # total presynaptic E->I input
+w_total_ii = -.5#*N_i**.5 # total presynaptic I->I input
 ##
 
 ## Excitatory Plasticity
@@ -72,7 +73,7 @@ mu_plast_ei = 0.01 # I->E learning rate
 ##
 
 ## Simulation
-n_t = 20000 # simulation time steps
+n_t = 15000 # simulation time steps
 n_t_skip_w_rec = 100 # only record every n_th weight matrix
 n_t_w_rec = int(n_t/n_t_skip_w_rec)
 ##
@@ -104,6 +105,7 @@ def synnorm(W,w_total_param):
 ## EE - Plasticity
 def hebb_ee(W,x_new,x_old,mu_learn):
 	delta_W = np.outer(x_new,x_old) - np.outer(x_old,x_new)
+	#delta_W = np.outer(x_new,x_old)
 	delta_W = delta_W*(W!=0.)
 	return W + mu_learn*delta_W
 ##
@@ -118,6 +120,7 @@ def hebb_ei(W,x_e_new,x_i_old,r_target,mu_learn):
 ## Threshold Adaptation
 def update_th(T,x,r_target,mu):
 	return T + mu*(x-r_target)
+	#return T + mu*(x.mean()-r_target)
 
 def main():
 
@@ -187,12 +190,15 @@ def main():
 	x_ext[-1] = 1.
 
 	## Initialize thresholds
-	T_e = np.random.rand(N_e)*T_e_max_init
-	T_i = np.random.rand(N_i)*T_i_max_init
+	T_e = T_e_init_range[0] + np.random.rand(N_e)*(T_e_init_range[1] - T_e_init_range[0])
+	T_i = T_i_init_range[0] + np.random.rand(N_i)*(T_i_init_range[1] - T_i_init_range[0])
 
 	## Initialize containers for recording
 	x_e_rec = np.ndarray((n_t,N_e))
 	x_i_rec = np.ndarray((n_t,N_i))
+
+	x_e_determ_diff = np.ndarray((n_t,N_e))
+	x_i_determ_diff = np.ndarray((n_t,N_i))
 
 	W_ee_rec = np.ndarray((n_t_w_rec,N_e,N_e))
 	W_ei_rec = np.ndarray((n_t_w_rec,N_e,N_i))
@@ -204,6 +210,9 @@ def main():
 	I_ei_rec = np.ndarray((n_t,N_e))
 
 	ext_sequ_rec = np.ndarray((n_t))
+
+
+
 	##
 
 	## Start simulation loop
@@ -230,8 +239,16 @@ def main():
 		I_ie = np.dot(W_ie,x_e)
 		I_ii = np.dot(W_ii,x_i)
 
-		x_e = s(I_ee + I_ei + I_eext + np.random.normal(mu_mem_noise,sigm_mem_noise,N_e) - T_e,g_neur)
-		x_i = s(I_ie + I_ii + np.random.normal(mu_mem_noise,sigm_mem_noise,N_i) - T_i,g_neur)
+		noise_e = np.random.normal(mu_mem_noise,sigm_mem_noise,N_e)
+		noise_i = np.random.normal(mu_mem_noise,sigm_mem_noise,N_i)
+
+		x_e = s(I_ee + I_ei + I_eext + noise_e - T_e,g_neur)
+		x_i = s(I_ie + I_ii + noise_i - T_i,g_neur)
+		
+		x_e_determ = s(I_ee + I_ei + I_eext - T_e,g_neur)
+		x_i_determ = s(I_ie + I_ii  - T_i,g_neur)
+
+
 		##
 
 		## Update tresholds
@@ -244,17 +261,21 @@ def main():
 		W_ee = hebb_ee(W_ee,x_e,x_e_old,mu_plast_ee)
 		#W_ei = hebb_ei(W_ei,x_e,x_i_old,r_target_set_e,mu_plast_ei)
 
-		W_ee = synnorm(W_ee,w_total_ee)
-		#W_ei = synnorm(W_ei,w_total_ei)
-
 		W_ee = np.maximum(W_ee,w_exc_min)*W_ee_conn
 		#W_ei = np.minimum(W_ei,w_inh_max)*W_ei_conn
+
+		W_ee = synnorm(W_ee,w_total_ee)
+		#W_ei = synnorm(W_ei,w_total_ei)
 		##
+		
 		
 
 		## Record
 		x_e_rec[t,:] = x_e[:]
 		x_i_rec[t,:] = x_i[:]
+
+		x_e_determ_diff[t,:] = 1.*(x_e != x_e_determ)
+		x_i_determ_diff[t,:] = 1.*(x_i != x_i_determ)
 
 		if t%n_t_skip_w_rec == 0:
 			W_ee_rec[int(t/n_t_skip_w_rec),:,:] = W_ee[:,:]
@@ -316,6 +337,18 @@ def main():
 	x_i_smooth = np.convolve(x_i_rec.mean(axis=1),activity_smoothing_kernel)[:n_t]
 
 
+	x_e_corr = np.corrcoef(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:].T)
+	x_i_corr = np.corrcoef(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:].T)
+
+	x_e_corr_inv = 1. - x_e_corr
+	x_e_corr_inv[range(N_e),range(N_e)] = 0.
+	x_e_corr_inv = 0.5*(x_e_corr_inv + x_e_corr_inv.T)
+
+	Z_e_corr = linkage(x_e_corr_inv,method="ward")
+
+	Dend_e_corr = dendrogram(Z_e_corr,no_plot=True)
+
+
 	#pdb.set_trace()
 
 	
@@ -334,7 +367,7 @@ def main():
 	ax_sp[1].set_xlabel("Time Step + " + str(t_range_plot_act_raster[0]))
 	ax_sp[1].set_ylabel("Inh. Neuron #")
 
-	plt.savefig("./plots/act_raster.png",dpi=(300))
+
 
 	fig_mean_x, ax_mean_x = plt.subplots(1,1)
 	ax_mean_x.plot(x_e_smooth,lw=1,label="Excitatory Population")
@@ -343,7 +376,7 @@ def main():
 	ax_mean_x.set_xlabel("Time Step")
 	ax_mean_x.set_ylabel("Mean Rate (Running Average)")
 
-	plt.savefig("./plots/pop_act_time.png",dpi=(300))
+
 
 	fig_T,ax_T = plt.subplots(1,1)
 	ax_T.plot(T_e_rec.mean(axis=1),label="Excitatory Population")
@@ -352,14 +385,14 @@ def main():
 	ax_T.set_xlabel("Time Step")
 	ax_T.set_ylabel("Mean Treshold")
 	
-	plt.savefig("./plots/thresholds_time.png",dpi=(300))
+
 
 	fig_W_ee,ax_W_ee = plt.subplots(1,1)
 	ax_W_ee.plot(W_ee_rec[:,0,:],c="k",lw=1)
 	ax_W_ee.set_xlabel("Time Step / 10")
 	ax_W_ee.set_ylabel("$W^{EE}_{0j}$, $ j \\in \\{ 0,N_e\\}$")
 
-	plt.savefig("./plots/w_ee_sample_time.png",dpi=(300))
+
 
 	fig_fir_dist, ax_fir_dist = plt.subplots(1,1)
 	ax_fir_dist.hist(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:].mean(axis=1),bins=np.linspace(0.,1.,50),histtype="step")
@@ -367,7 +400,7 @@ def main():
 	ax_fir_dist.set_xlabel("Time Average of Firing Rate")
 	ax_fir_dist.set_ylabel("Probability")
 
-	plt.savefig("./plots/act_dist.png",dpi=(300))
+
 
 	fig_isi_dist,ax_isi_dist = plt.subplots(1,1)
 	ax_isi_dist.hist(isi_e_join,bins=np.array(range(101)),histtype="step",normed="True",label="Excitatory Population")
@@ -377,23 +410,67 @@ def main():
 	ax_isi_dist.set_ylabel("Probability")
 	ax_isi_dist.legend()
 	
-	plt.savefig("./plots/isi_dist.png",dpi=(300))
 
 	fig_dend = plt.figure()
 	dendrogram(Z_m,link_color_func=lambda x:'k')
 	plt.xlabel("Input Node Indices")
 	plt.ylabel("Hamming Distance")
 
-	plt.savefig("./plots/act_dendrogram_mean.png",dpi=(300))
+	
 
-	fid_dend_full = plt.figure()
+	fig_dend_full = plt.figure()
 	dendrogram(Z_full,p=6,truncate_mode="level",link_color_func=lambda x:'k')
 	plt.xlabel("(Truncated) Excitatory Activity Clusters")
 	plt.ylabel("Hamming Distance")
 
-	plt.savefig("./plots/act_dendrogram.png",dpi=(300))
+	try:
+		save_opt = sys.argv[1]
+		if save_opt == "save_plots":
+			save_opt = 1
+		else:
+			print("Wrong Argument")
+			save_opt = 0 
+	except:
+		save_opt = 0
+	
+
+	fig_corr, ax_corr = plt.subplots(2,1,figsize=(5,10))
+	ax_corr[0].pcolormesh(x_e_corr[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:],cmap="Greys")
+	ax_corr[0].set_title("Clustered $x_e$ correlation matrix")
+	ax_corr[1].pcolormesh(W_ee[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:],cmap="Greys")
+	ax_corr[1].set_title("Rearranged $W_\{ee\}$ matrix according to activity clustering")
+	
+
+	if save_opt:
+	
+		fig_sp.savefig("../plots/act_raster.png",dpi=(300))
+		fig_mean_x.savefig("../plots/pop_act_time.png",dpi=(300))
+		fig_T.savefig("../plots/thresholds_time.png",dpi=(300))
+		fig_W_ee.savefig("../plots/w_ee_sample_time.png",dpi=(300))
+		fig_fir_dist.savefig("../plots/act_dist.png",dpi=(300))
+		fig_isi_dist.savefig("../plots/isi_dist.png",dpi=(300))
+		fig_dend.savefig("../plots/act_dendrogram_mean.png",dpi=(300))
+		fig_dend_full.savefig("../plots/act_dendrogram.png",dpi=(300))
+		fig_corr.savefig("../plots/corr_mat_clustering.png",dpi=(300))
 
 	###
+
+	t_e_act = np.where(x_e_rec==1)
+	t_e_inact = np.where(x_e_rec==0)
+
+	t_i_act = np.where(x_i_rec==1)
+	t_i_inact = np.where(x_i_rec==0)
+
+	p_change_x_e_act = x_e_determ_diff[t_e_act[0],t_e_act[1]].mean()
+	p_change_x_e_inact = x_e_determ_diff[t_e_inact[0],t_e_inact[1]].mean()
+
+	p_change_x_i_act = x_i_determ_diff[t_i_act[0],t_i_act[1]].mean()
+	p_change_x_i_inact = x_i_determ_diff[t_i_inact[0],t_i_inact[1]].mean()
+
+	print("Chance that a deterministic update of x_e gives the opposite result, given the actual update gave 1: " + str(p_change_x_e_act))
+	print("Chance that a deterministic update of x_e gives the opposite result, given the actual update gave 0: " + str(p_change_x_e_inact))
+	print("Chance that a deterministic update of x_i gives the opposite result, given the actual update gave 1: " + str(p_change_x_i_act))
+	print("Chance that a deterministic update of x_i gives the opposite result, given the actual update gave 0: " + str(p_change_x_i_inact))
 
 	plt.show()
 	plt.close("all")
