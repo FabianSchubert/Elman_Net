@@ -6,6 +6,8 @@ from tqdm import tqdm
 
 from scipy.cluster.hierarchy import linkage, dendrogram
 
+from grammar_data_reader import *
+
 import pdb
 import sys
 
@@ -13,15 +15,17 @@ import sys
 ###### Parameters
 
 ## External Grammar
-N_ext = 9 # number of input nodes (features, letters...)
-Markov_Gramm = np.zeros((N_ext,N_ext))
-Markov_Gramm[3:6,0:3] = 1./3.
-Markov_Gramm[6:9,3:6] = 1./3.
-Markov_Gramm[0:3,6:9] = 1./3.
+
+Markov_Gramm = read_ppm("../misc_data/grammar_mat_2.ppm")
+
+letter_node_ind,letters,inp_node_ind = read_letter_map("../misc_data/letter_mapping_2.csv")
+
+N_letter_nodes = inp_node_ind.shape[0]
+N_ext = inp_node_ind.max() + 1 # number of input nodes (features, letters...)
 ##
 
 ## Network
-N_e = 500 # number of excitatory neurons
+N_e = 1500 # number of excitatory neurons
 N_i = int(N_e*.2) # number of inhibitory neurons
 
 CF_ee = 0.025 # connection fraction E->E
@@ -53,7 +57,7 @@ T_e_init_range = [-.1,.1]
 T_i_init_range = [-.1,.1]
 
 mu_mem_noise = 0.
-sigm_mem_noise = np.sqrt(0.001)
+sigm_mem_noise = np.sqrt(0.01)
 ##
 
 ## Synaptic Normalization
@@ -65,7 +69,7 @@ w_total_ii = -.5#*N_i**.5 # total presynaptic I->I input
 ##
 
 ## Excitatory Plasticity
-mu_plast_ee = 0.01 # E->E learning rate
+mu_plast_ee = 0.002 # E->E learning rate
 ##
 
 ## Inhibitory Plasticity
@@ -73,8 +77,8 @@ mu_plast_ei = 0.01 # I->E learning rate
 ##
 
 ## Simulation
-n_t = 15000 # simulation time steps
-n_t_skip_w_rec = 100 # only record every n_th weight matrix
+n_t = 10000 # simulation time steps
+n_t_skip_w_rec = 500 # only record every n_th weight matrix
 n_t_w_rec = int(n_t/n_t_skip_w_rec)
 ##
 
@@ -185,9 +189,10 @@ def main():
 	x_i_old = np.array(x_i)
 	##
 
-	##Initialize Input node
-	x_ext = np.zeros((N_ext))
-	x_ext[-1] = 1.
+	##Initialize Input
+	x_letter_node = np.zeros((N_letter_nodes))
+	x_letter_node[np.where(letters==" ")[0]] = 1.
+
 
 	## Initialize thresholds
 	T_e = T_e_init_range[0] + np.random.rand(N_e)*(T_e_init_range[1] - T_e_init_range[0])
@@ -210,19 +215,22 @@ def main():
 	I_ei_rec = np.ndarray((n_t,N_e))
 
 	ext_sequ_rec = np.ndarray((n_t))
-
-
-
 	##
+
+
+
 
 	## Start simulation loop
 	for t in tqdm(range(n_t)):
 
 		## Generate Markov Grammar Input
-		p_next = np.dot(Markov_Gramm,x_ext)
-		next_in = np.random.choice(N_ext,p=p_next)
+		p_next = np.dot(Markov_Gramm,x_letter_node)
+		next_letter_node = np.random.choice(N_letter_nodes,p=p_next)
+		x_letter_node = np.zeros((N_letter_nodes))
+		x_letter_node[next_letter_node] = 1.
 		x_ext = np.zeros(N_ext)
-		x_ext[next_in] = 1.
+		x_ext[inp_node_ind[next_letter_node]] = 1.
+		input_letter = letters[next_letter_node]
 		##
 
 		## Store old activities (for plasticity mechanisms)
@@ -287,7 +295,7 @@ def main():
 		I_ee_rec[t,:] = I_ee[:]
 		I_ei_rec[t,:] = I_ei[:]
 
-		ext_sequ_rec[t] = next_in
+		ext_sequ_rec[t] = next_letter_node
 		##
 
 	spt_e = []
@@ -437,7 +445,8 @@ def main():
 	fig_corr, ax_corr = plt.subplots(2,1,figsize=(5,10))
 	ax_corr[0].pcolormesh(x_e_corr[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:],cmap="Greys")
 	ax_corr[0].set_title("Clustered $x_e$ correlation matrix")
-	ax_corr[1].pcolormesh(W_ee[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:],cmap="Greys")
+	#ax_corr[1].pcolormesh(W_ee[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:],cmap="Greys")
+	ax_corr[1].pcolormesh(W_ee[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:]**.5,cmap="Greys")
 	ax_corr[1].set_title("Rearranged $W_\{ee\}$ matrix according to activity clustering")
 	
 
