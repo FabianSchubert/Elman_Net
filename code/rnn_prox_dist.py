@@ -16,12 +16,18 @@ import sys
 
 ## External Grammar
 
-Markov_Gramm = read_ppm("../misc_data/grammar_mat_2.ppm")
+Markov_Gramm = read_ppm("../misc_data/grammar_mat.ppm")
 
-letter_node_ind,letters,inp_node_ind = read_letter_map("../misc_data/letter_mapping_2.csv")
+letter_node_ind,letters,inp_node_ind = read_letter_map("../misc_data/letter_mapping.csv")
 
 N_letter_nodes = inp_node_ind.shape[0]
 N_ext = inp_node_ind.max() + 1 # number of input nodes (features, letters...)
+
+p_mat_node_letter = np.zeros((N_ext,N_letter_nodes))
+
+for k in range(N_letter_nodes):
+	p_mat_node_letter[inp_node_ind[k],k] = 1.
+
 ##
 
 ## Network
@@ -36,7 +42,7 @@ CF_ii = 0.1 # connection fraction I->I
 CF_eext = 0.1 # connection fraction Ext->E
 w_mean_pre_ext_input = .2
 
-w_exc_min = 0.0001
+w_exc_min = 0.001
 w_inh_max = -0.0001
 ##
 
@@ -76,8 +82,21 @@ mu_plast_ee = 0.002 # E->E learning rate
 mu_plast_ei = 0.01 # I->E learning rate
 ##
 
+## Readout Learning
+mu_learn_readout = 0.0002
+readout_mean_initial = .005
+readout_std_initial = .001
+
+tau_mu_learn_readout = 100.
+
+# recursive least squares
+alpha = 2.
+
+##
+
+
 ## Simulation
-n_t = 10000 # simulation time steps
+n_t = 2000 # simulation time steps
 n_t_skip_w_rec = 500 # only record every n_th weight matrix
 n_t_w_rec = int(n_t/n_t_skip_w_rec)
 ##
@@ -126,7 +145,7 @@ def update_th(T,x,r_target,mu):
 	return T + mu*(x-r_target)
 	#return T + mu*(x.mean()-r_target)
 
-def main():
+def main_simulation():
 
 	## Initialize Weights
 	print("Initialize E->E")
@@ -198,6 +217,18 @@ def main():
 	T_e = T_e_init_range[0] + np.random.rand(N_e)*(T_e_init_range[1] - T_e_init_range[0])
 	T_i = T_i_init_range[0] + np.random.rand(N_i)*(T_i_init_range[1] - T_i_init_range[0])
 
+	## Initialize readout matrix
+	W_oe = np.random.normal(readout_mean_initial,readout_std_initial,(N_ext,N_e))
+	
+	P_recursive_least_squares = np.ndarray((N_ext,N_e,N_e))
+	for k in range(N_ext):
+		P_recursive_least_squares[k,:,:] = np.eye(N_e)/alpha
+
+	mu_learn_readout_dyn = mu_learn_readout
+
+	##
+
+
 	## Initialize containers for recording
 	x_e_rec = np.ndarray((n_t,N_e))
 	x_i_rec = np.ndarray((n_t,N_i))
@@ -214,7 +245,14 @@ def main():
 	I_ee_rec = np.ndarray((n_t,N_e))
 	I_ei_rec = np.ndarray((n_t,N_e))
 
+	x_ext_rec = np.ndarray((n_t,N_ext))
 	ext_sequ_rec = np.ndarray((n_t))
+
+	z_rec = np.ndarray((n_t,N_ext))
+	W_oe_rec = np.ndarray((n_t,N_ext,N_e))
+
+	D_KL_rec = np.ndarray((n_t))
+	Perf_rec = np.ndarray((n_t))
 	##
 
 
@@ -232,7 +270,7 @@ def main():
 		x_ext[inp_node_ind[next_letter_node]] = 1.
 		input_letter = letters[next_letter_node]
 		##
-
+		
 		## Store old activities (for plasticity mechanisms)
 		x_e_old[:] = x_e[:]
 		x_i_old[:] = x_i[:]
@@ -276,7 +314,45 @@ def main():
 		#W_ei = synnorm(W_ei,w_total_ei)
 		##
 		
+		## Update Readout
+		z = np.dot(W_oe,x_e_old)
+		err_readout = z - x_ext
+		mu_learn_readout_dyn += mu_learn_readout_dyn*(-mu_learn_readout_dyn + np.linalg.norm(err_readout)**1.5 / tau_mu_learn_readout)/tau_mu_learn_readout
+
+		#pdb.set_trace()
+
+		W_oe += -mu_learn_readout_dyn*np.outer(err_readout,x_e_old)
+
+		'''
 		
+		
+		for k in range(N_ext):
+			P_recursive_temp = np.dot(P_recursive_least_squares[k,:,:],x_e_old)
+			P_recursive_least_squares[k,:,:] -=  np.outer(P_recursive_temp,P_recursive_temp)/(1.+np.dot(x_e_old,P_recursive_temp))
+			W_oe[k,:] -= err_readout[k]*np.dot(P_recursive_least_squares[k,:,:],x_e_old)
+
+		'''
+		##
+		
+
+		## Performance Analysis
+		z_rect = np.maximum(0.,z)
+		z_rect_sum = z_rect.sum()
+		if z_rect_sum != 0:
+			P_readout_rect = z_rect/z_rect_sum
+		else:
+			P_readout_rect = np.ones(N_ext)/N_ext
+
+		P_target = np.dot(p_mat_node_letter,p_next)
+
+		#D_KL = (P_target*np.log(P_target/P_readout_rect)).sum()
+		nonz_prob = np.where(P_target != 0)[0]
+		if nonz_prob.shape != 0:
+			Perf_temp = ((P_readout_rect[nonz_prob]/P_target[nonz_prob])**P_target[nonz_prob]).prod()
+		else:
+			print("something went wrong")
+		##
+
 
 		## Record
 		x_e_rec[t,:] = x_e[:]
@@ -295,199 +371,228 @@ def main():
 		I_ee_rec[t,:] = I_ee[:]
 		I_ei_rec[t,:] = I_ei[:]
 
+		x_ext_rec[t,:] = x_ext
+		z_rec[t,:] = z
+		W_oe_rec[t,:,:] = W_oe[:,:]
+
 		ext_sequ_rec[t] = next_letter_node
+
+		#D_KL_rec[t] = D_KL
+		Perf_rec[t] = Perf_temp
+
 		##
-
-	spt_e = []
-	isi_e = []
-
-	isi_e_join = np.ndarray([])
-
-	spt_i = []
-	isi_i = []
-
-	isi_i_join = np.ndarray([])
-
-	for k in range(N_e):
-		t_sp = np.where(x_e_rec[t_range_analysis[0]:t_range_analysis[1],k] == 1.)[0]
-		spt_e.append(t_sp)
-		isi_e.append(t_sp[1:]-t_sp[:-1])
-		isi_e_join = np.append(isi_e_join,isi_e[-1])
-
-	for k in range(N_i):
-		t_sp = np.where(x_i_rec[t_range_analysis[0]:t_range_analysis[1],k] == 1.)[0]
-		spt_i.append(t_sp)
-		isi_i.append(t_sp[1:]-t_sp[:-1])
-		isi_i_join = np.append(isi_i_join,isi_i[-1])
-
-	rec_act_gramm_groups = []
-
-
-
-	for k in range(N_ext):
-		times_letter = np.where(ext_sequ_rec == k)[0]
-		times_letter = times_letter[np.where((times_letter>=t_range_analysis[0])*(times_letter <= t_range_analysis[1]))]
-		rec_act_gramm_groups.append(x_e_rec[times_letter,:])
-
-	rec_gramm_groups_mean = np.ndarray((N_ext,N_e))
-
-	for k in range(N_ext):
-		rec_gramm_groups_mean[k,:] = rec_act_gramm_groups[k].mean(axis=0)
-
-	Z_m = linkage(rec_gramm_groups_mean,metric=hamm_d)
-	#pdb.set_trace()
-	Z_full = linkage(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:],method="ward")
-
-	activity_smoothing_kernel = np.exp(-np.array(range(n_t))/100.)
-	activity_smoothing_kernel /= activity_smoothing_kernel.sum()
-
-	x_e_smooth = np.convolve(x_e_rec.mean(axis=1),activity_smoothing_kernel)[:n_t]
-	x_i_smooth = np.convolve(x_i_rec.mean(axis=1),activity_smoothing_kernel)[:n_t]
-
-
-	x_e_corr = np.corrcoef(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:].T)
-	x_i_corr = np.corrcoef(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:].T)
-
-	x_e_corr_inv = 1. - x_e_corr
-	x_e_corr_inv[range(N_e),range(N_e)] = 0.
-	x_e_corr_inv = 0.5*(x_e_corr_inv + x_e_corr_inv.T)
-
-	Z_e_corr = linkage(x_e_corr_inv,method="ward")
-
-	Dend_e_corr = dendrogram(Z_e_corr,no_plot=True)
-
-
-	#pdb.set_trace()
-
 	
+	if __name__ == "__main__":
 
-	#pdb.set_trace()
+		spt_e = []
+		isi_e = []
+
+		isi_e_join = np.ndarray([])
+
+		spt_i = []
+		isi_i = []
+
+		isi_i_join = np.ndarray([])
+
+		for k in range(N_e):
+			t_sp = np.where(x_e_rec[t_range_analysis[0]:t_range_analysis[1],k] == 1.)[0]
+			spt_e.append(t_sp)
+			isi_e.append(t_sp[1:]-t_sp[:-1])
+			isi_e_join = np.append(isi_e_join,isi_e[-1])
+
+		for k in range(N_i):
+			t_sp = np.where(x_i_rec[t_range_analysis[0]:t_range_analysis[1],k] == 1.)[0]
+			spt_i.append(t_sp)
+			isi_i.append(t_sp[1:]-t_sp[:-1])
+			isi_i_join = np.append(isi_i_join,isi_i[-1])
+
+
+		rec_act_gramm_groups = []
+
+
+
+		for k in range(N_ext):
+			times_letter = np.where(ext_sequ_rec == k)[0]
+			times_letter = times_letter[np.where((times_letter>=t_range_analysis[0])*(times_letter <= t_range_analysis[1]))]
+			rec_act_gramm_groups.append(x_e_rec[times_letter,:])
+
+		rec_gramm_groups_mean = np.ndarray((N_ext,N_e))
+
+		for k in range(N_ext):
+			rec_gramm_groups_mean[k,:] = rec_act_gramm_groups[k].mean(axis=0)
+
+		Z_m = linkage(rec_gramm_groups_mean,metric=hamm_d)
+		#pdb.set_trace()
+		Z_full = linkage(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:],method="ward")
+
+		activity_smoothing_kernel = np.exp(-np.array(range(n_t))/100.)
+		activity_smoothing_kernel /= activity_smoothing_kernel.sum()
+
+		x_e_smooth = np.convolve(x_e_rec.mean(axis=1),activity_smoothing_kernel)[:n_t]
+		x_i_smooth = np.convolve(x_i_rec.mean(axis=1),activity_smoothing_kernel)[:n_t]
+
+
+		x_e_corr = np.corrcoef(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:].T)
+		x_i_corr = np.corrcoef(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:].T)
+
+		x_e_corr_inv = 1. - x_e_corr
+		x_e_corr_inv[range(N_e),range(N_e)] = 0.
+		x_e_corr_inv = 0.5*(x_e_corr_inv + x_e_corr_inv.T)
+
+		Z_e_corr = linkage(x_e_corr_inv,method="ward")
+
+		Dend_e_corr = dendrogram(Z_e_corr,no_plot=True)
+
+
+		
+
+
+
+		#pdb.set_trace()
+
+		
+		
+		#pdb.set_trace()
+		
+		### Plotting routines	
+		fig_sp, ax_sp = plt.subplots(2,1)
+		ax_sp[0].pcolormesh(x_e_rec[t_range_plot_act_raster[0]:t_range_plot_act_raster[1],:].T,cmap="gray_r")
+		#ax_sp[0].set_xlim([n_t-1000,n_t])
+		ax_sp[0].set_xlabel("Time Step + " + str(t_range_plot_act_raster[0]))
+		ax_sp[0].set_ylabel("Exc. Neuron #")
+
+		ax_sp[1].pcolormesh(x_i_rec[t_range_plot_act_raster[0]:t_range_plot_act_raster[1],:].T,cmap="gray_r")
+		#ax_sp[1].set_xlim([n_t-1000,n_t])
+		ax_sp[1].set_xlabel("Time Step + " + str(t_range_plot_act_raster[0]))
+		ax_sp[1].set_ylabel("Inh. Neuron #")
+
+
+
+		fig_mean_x, ax_mean_x = plt.subplots(1,1)
+		ax_mean_x.plot(x_e_smooth,lw=1,label="Excitatory Population")
+		ax_mean_x.plot(x_i_smooth,lw=1,label="Inhibitory Population")
+		ax_mean_x.legend()
+		ax_mean_x.set_xlabel("Time Step")
+		ax_mean_x.set_ylabel("Mean Rate (Running Average)")
+
+
+
+		fig_T,ax_T = plt.subplots(1,1)
+		ax_T.plot(T_e_rec.mean(axis=1),label="Excitatory Population")
+		ax_T.plot(T_i_rec.mean(axis=1),label="Inhibitory Population")
+		ax_T.legend()
+		ax_T.set_xlabel("Time Step")
+		ax_T.set_ylabel("Mean Treshold")
+		
+
+
+		fig_W_ee,ax_W_ee = plt.subplots(1,1)
+		ax_W_ee.plot(W_ee_rec[:,0,:],c="k",lw=1)
+		ax_W_ee.set_xlabel("Time Step / 10")
+		ax_W_ee.set_ylabel("$W^{EE}_{0j}$, $ j \\in \\{ 0,N_e\\}$")
+
+
+
+		fig_fir_dist, ax_fir_dist = plt.subplots(1,1)
+		ax_fir_dist.hist(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:].mean(axis=1),bins=np.linspace(0.,1.,50),histtype="step")
+		ax_fir_dist.hist(x_i_rec[t_range_analysis[0]:t_range_analysis[1],:].mean(axis=1),bins=np.linspace(0.,1.,50),histtype="step")
+		ax_fir_dist.set_xlabel("Time Average of Firing Rate")
+		ax_fir_dist.set_ylabel("Probability")
+
+
+
+		fig_isi_dist,ax_isi_dist = plt.subplots(1,1)
+		ax_isi_dist.hist(isi_e_join,bins=np.array(range(101)),histtype="step",normed="True",label="Excitatory Population")
+		ax_isi_dist.hist(isi_i_join,bins=np.array(range(101)),histtype="step",normed="True",label="Inhibitory Population")
+		ax_isi_dist.set_yscale("log")
+		ax_isi_dist.set_xlabel("ISI")
+		ax_isi_dist.set_ylabel("Probability")
+		ax_isi_dist.legend()
+		
+
+		fig_dend = plt.figure()
+		dendrogram(Z_m,link_color_func=lambda x:'k')
+		plt.xlabel("Input Node Indices")
+		plt.ylabel("Hamming Distance")
+
+		
+
+		fig_dend_full = plt.figure()
+		dendrogram(Z_full,p=6,truncate_mode="level",link_color_func=lambda x:'k')
+		plt.xlabel("(Truncated) Excitatory Activity Clusters")
+		plt.ylabel("Hamming Distance")
+
+		try:
+			save_opt = sys.argv[1]
+			if save_opt == "save_plots":
+				save_opt = 1
+			else:
+				print("Wrong Argument")
+				save_opt = 0 
+		except:
+			save_opt = 0
+		
+
+		fig_corr, ax_corr = plt.subplots(2,1,figsize=(5,10))
+		ax_corr[0].pcolormesh(x_e_corr[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:],cmap="Greys")
+		ax_corr[0].set_title("Clustered $x_e$ correlation matrix")
+		#ax_corr[1].pcolormesh(W_ee[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:],cmap="Greys")
+		ax_corr[1].pcolormesh(W_ee[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:]**.5,cmap="Greys")
+		ax_corr[1].set_title("Rearranged $W_{ee}$ matrix according to activity clustering")
+		
+
+		if save_opt:
+		
+			fig_sp.savefig("../plots/act_raster.png",dpi=(300))
+			fig_mean_x.savefig("../plots/pop_act_time.png",dpi=(300))
+			fig_T.savefig("../plots/thresholds_time.png",dpi=(300))
+			fig_W_ee.savefig("../plots/w_ee_sample_time.png",dpi=(300))
+			fig_fir_dist.savefig("../plots/act_dist.png",dpi=(300))
+			fig_isi_dist.savefig("../plots/isi_dist.png",dpi=(300))
+			fig_dend.savefig("../plots/act_dendrogram_mean.png",dpi=(300))
+			fig_dend_full.savefig("../plots/act_dendrogram.png",dpi=(300))
+			fig_corr.savefig("../plots/corr_mat_clustering.png",dpi=(300))
+
+		###
+
+		t_e_act = np.where(x_e_rec==1)
+		t_e_inact = np.where(x_e_rec==0)
+
+		t_i_act = np.where(x_i_rec==1)
+		t_i_inact = np.where(x_i_rec==0)
+
+		p_change_x_e_act = x_e_determ_diff[t_e_act[0],t_e_act[1]].mean()
+		p_change_x_e_inact = x_e_determ_diff[t_e_inact[0],t_e_inact[1]].mean()
+
+		p_change_x_i_act = x_i_determ_diff[t_i_act[0],t_i_act[1]].mean()
+		p_change_x_i_inact = x_i_determ_diff[t_i_inact[0],t_i_inact[1]].mean()
+
+		print("Chance that a deterministic update of x_e gives the opposite result, given the actual update gave 1: " + str(p_change_x_e_act))
+		print("Chance that a deterministic update of x_e gives the opposite result, given the actual update gave 0: " + str(p_change_x_e_inact))
+		print("Chance that a deterministic update of x_i gives the opposite result, given the actual update gave 1: " + str(p_change_x_i_act))
+		print("Chance that a deterministic update of x_i gives the opposite result, given the actual update gave 0: " + str(p_change_x_i_inact))
+
+		plt.show()
+		plt.close("all")
+		plt.show()
+
+		pdb.set_trace()
 	
-	### Plotting routines	
-	fig_sp, ax_sp = plt.subplots(2,1)
-	ax_sp[0].pcolormesh(x_e_rec[t_range_plot_act_raster[0]:t_range_plot_act_raster[1],:].T,cmap="gray_r")
-	#ax_sp[0].set_xlim([n_t-1000,n_t])
-	ax_sp[0].set_xlabel("Time Step + " + str(t_range_plot_act_raster[0]))
-	ax_sp[0].set_ylabel("Exc. Neuron #")
-
-	ax_sp[1].pcolormesh(x_i_rec[t_range_plot_act_raster[0]:t_range_plot_act_raster[1],:].T,cmap="gray_r")
-	#ax_sp[1].set_xlim([n_t-1000,n_t])
-	ax_sp[1].set_xlabel("Time Step + " + str(t_range_plot_act_raster[0]))
-	ax_sp[1].set_ylabel("Inh. Neuron #")
-
-
-
-	fig_mean_x, ax_mean_x = plt.subplots(1,1)
-	ax_mean_x.plot(x_e_smooth,lw=1,label="Excitatory Population")
-	ax_mean_x.plot(x_i_smooth,lw=1,label="Inhibitory Population")
-	ax_mean_x.legend()
-	ax_mean_x.set_xlabel("Time Step")
-	ax_mean_x.set_ylabel("Mean Rate (Running Average)")
-
-
-
-	fig_T,ax_T = plt.subplots(1,1)
-	ax_T.plot(T_e_rec.mean(axis=1),label="Excitatory Population")
-	ax_T.plot(T_i_rec.mean(axis=1),label="Inhibitory Population")
-	ax_T.legend()
-	ax_T.set_xlabel("Time Step")
-	ax_T.set_ylabel("Mean Treshold")
-	
-
-
-	fig_W_ee,ax_W_ee = plt.subplots(1,1)
-	ax_W_ee.plot(W_ee_rec[:,0,:],c="k",lw=1)
-	ax_W_ee.set_xlabel("Time Step / 10")
-	ax_W_ee.set_ylabel("$W^{EE}_{0j}$, $ j \\in \\{ 0,N_e\\}$")
-
-
-
-	fig_fir_dist, ax_fir_dist = plt.subplots(1,1)
-	ax_fir_dist.hist(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:].mean(axis=1),bins=np.linspace(0.,1.,50),histtype="step")
-	ax_fir_dist.hist(x_i_rec[t_range_analysis[0]:t_range_analysis[1],:].mean(axis=1),bins=np.linspace(0.,1.,50),histtype="step")
-	ax_fir_dist.set_xlabel("Time Average of Firing Rate")
-	ax_fir_dist.set_ylabel("Probability")
-
-
-
-	fig_isi_dist,ax_isi_dist = plt.subplots(1,1)
-	ax_isi_dist.hist(isi_e_join,bins=np.array(range(101)),histtype="step",normed="True",label="Excitatory Population")
-	ax_isi_dist.hist(isi_i_join,bins=np.array(range(101)),histtype="step",normed="True",label="Inhibitory Population")
-	ax_isi_dist.set_yscale("log")
-	ax_isi_dist.set_xlabel("ISI")
-	ax_isi_dist.set_ylabel("Probability")
-	ax_isi_dist.legend()
-	
-
-	fig_dend = plt.figure()
-	dendrogram(Z_m,link_color_func=lambda x:'k')
-	plt.xlabel("Input Node Indices")
-	plt.ylabel("Hamming Distance")
-
-	
-
-	fig_dend_full = plt.figure()
-	dendrogram(Z_full,p=6,truncate_mode="level",link_color_func=lambda x:'k')
-	plt.xlabel("(Truncated) Excitatory Activity Clusters")
-	plt.ylabel("Hamming Distance")
-
-	try:
-		save_opt = sys.argv[1]
-		if save_opt == "save_plots":
-			save_opt = 1
-		else:
-			print("Wrong Argument")
-			save_opt = 0 
-	except:
-		save_opt = 0
-	
-
-	fig_corr, ax_corr = plt.subplots(2,1,figsize=(5,10))
-	ax_corr[0].pcolormesh(x_e_corr[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:],cmap="Greys")
-	ax_corr[0].set_title("Clustered $x_e$ correlation matrix")
-	#ax_corr[1].pcolormesh(W_ee[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:],cmap="Greys")
-	ax_corr[1].pcolormesh(W_ee[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:]**.5,cmap="Greys")
-	ax_corr[1].set_title("Rearranged $W_\{ee\}$ matrix according to activity clustering")
-	
-
-	if save_opt:
-	
-		fig_sp.savefig("../plots/act_raster.png",dpi=(300))
-		fig_mean_x.savefig("../plots/pop_act_time.png",dpi=(300))
-		fig_T.savefig("../plots/thresholds_time.png",dpi=(300))
-		fig_W_ee.savefig("../plots/w_ee_sample_time.png",dpi=(300))
-		fig_fir_dist.savefig("../plots/act_dist.png",dpi=(300))
-		fig_isi_dist.savefig("../plots/isi_dist.png",dpi=(300))
-		fig_dend.savefig("../plots/act_dendrogram_mean.png",dpi=(300))
-		fig_dend_full.savefig("../plots/act_dendrogram.png",dpi=(300))
-		fig_corr.savefig("../plots/corr_mat_clustering.png",dpi=(300))
-
-	###
-
-	t_e_act = np.where(x_e_rec==1)
-	t_e_inact = np.where(x_e_rec==0)
-
-	t_i_act = np.where(x_i_rec==1)
-	t_i_inact = np.where(x_i_rec==0)
-
-	p_change_x_e_act = x_e_determ_diff[t_e_act[0],t_e_act[1]].mean()
-	p_change_x_e_inact = x_e_determ_diff[t_e_inact[0],t_e_inact[1]].mean()
-
-	p_change_x_i_act = x_i_determ_diff[t_i_act[0],t_i_act[1]].mean()
-	p_change_x_i_inact = x_i_determ_diff[t_i_inact[0],t_i_inact[1]].mean()
-
-	print("Chance that a deterministic update of x_e gives the opposite result, given the actual update gave 1: " + str(p_change_x_e_act))
-	print("Chance that a deterministic update of x_e gives the opposite result, given the actual update gave 0: " + str(p_change_x_e_inact))
-	print("Chance that a deterministic update of x_i gives the opposite result, given the actual update gave 1: " + str(p_change_x_i_act))
-	print("Chance that a deterministic update of x_i gives the opposite result, given the actual update gave 0: " + str(p_change_x_i_inact))
-
-	plt.show()
-	plt.close("all")
-	plt.show()
-
 	## See what we got
-	pdb.set_trace()
+
+	#smooth_kernel = np.exp(-np.linspace(0.,10.,500)/1.5)
+	#smooth_kernel /= smooth_kernel.sum()
+	#plt.plot(np.convolve(Perf_rec,smooth_kernel,mode="valid"))
+	#plt.show()
+
+	#pdb.set_trace()
+
+	else:
+		
+		return x_e_rec, x_i_rec, W_ee_rec, W_ei_rec, T_e_rec, T_i_rec, I_ee_rec, I_ei_rec, x_ext_rec, ext_sequ_rec, z_rec, W_oe_rec, Perf_rec
 
 
 if __name__ == "__main__":
-	main()
+	main_simulation()
+	#import cProfile
+	#cProfile.run('main()')
