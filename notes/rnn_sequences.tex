@@ -189,6 +189,16 @@ Following the conceptual idea presented by Elman \cite{Elman_1990}, we performed
 \caption{\label{fig:act_dendrogram} Dendrogram of a cluster analysis of excitatory activity patterns.}
 \end{figure}
 
+\section{More Complex Input Sequences}
+In the input sequence used in the previous section each letter corresponds to a a particular state in a Markov model. Thus, the prediction of the next letter only requires knowledge about the previous letter received. A more realistic kind of input stream would require the network to gather information about multiple time steps in order to optimally predict the next letter. Such a kind of artificial grammar was also used in \citep{Duarte_2014} and initially introduced by Reber \cite{Reber_1967}. It is depicted in Fig. \ref{fig:Reber_Grammar}(top). Interestingly, the rules of this grammar is described as a finite-state machine where the \textit{transitions} between states correspond to letters. Of course, this kind of representation of the dynamics also has a counterpart where letters are identified with states, see the bottom network in Fig. \ref{fig:Reber_Grammar}. Our previous analysis of network activity was based on the assumption that letters, or sets of letters were represented by states of the recurrent network and not in transitions between those. In consequence, a reflection of the Reber grammar within the network should resemble the mapping shown in the bottom network of Fig. \ref{fig:Reber_Grammar}. 
+\begin{figure}
+\includegraphics[width=0.7\textwidth]{../plots/artif_grammar_illustration.png}
+\includegraphics[width=0.5\textwidth]{../plots/Reber_Grammar_States.png}
+\caption{Artificial Grammar Rule proposed by Reber \citep{Reber_1967} (top) and the corresponding network where letters are represented by states (bottom).}
+\label{fig:Reber_Grammar}
+\end{figure}
+
+
 \newpage
 \bibliographystyle{unsrt}
 \bibliography{../code/ipynb_biblio}

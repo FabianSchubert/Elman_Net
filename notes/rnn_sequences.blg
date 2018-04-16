@@ -3,44 +3,44 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: rnn_sequences.aux
 The style file: unsrt.bst
 Database file #1: ../code/ipynb_biblio.bib
-You've used 2 entries,
+You've used 3 entries,
             1791 wiz_defined-function locations,
-            461 strings with 3865 characters,
-and the built_in function-call counts, 436 in all, are:
-= -- 35
-> -- 15
+            467 strings with 3989 characters,
+and the built_in function-call counts, 565 in all, are:
+= -- 46
+> -- 19
 < -- 0
-+ -- 6
-- -- 4
-* -- 30
-:= -- 73
-add.period$ -- 6
-call.type$ -- 2
-change.case$ -- 2
++ -- 8
+- -- 5
+* -- 33
+:= -- 97
+add.period$ -- 9
+call.type$ -- 3
+change.case$ -- 3
 chr.to.int$ -- 0
-cite$ -- 2
-duplicate$ -- 21
-empty$ -- 50
-format.name$ -- 4
-if$ -- 94
+cite$ -- 3
+duplicate$ -- 29
+empty$ -- 64
+format.name$ -- 5
+if$ -- 122
 int.to.chr$ -- 0
-int.to.str$ -- 2
-missing$ -- 2
-newline$ -- 13
-num.names$ -- 2
-pop$ -- 8
+int.to.str$ -- 3
+missing$ -- 3
+newline$ -- 18
+num.names$ -- 3
+pop$ -- 11
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 6
+skip$ -- 9
 stack$ -- 0
 substring$ -- 25
-swap$ -- 3
+swap$ -- 4
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 4
-width$ -- 3
-write$ -- 23
+while$ -- 5
+width$ -- 4
+write$ -- 33

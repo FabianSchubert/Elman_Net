@@ -16,9 +16,9 @@ import sys
 
 ## External Grammar
 
-Markov_Gramm = read_ppm("../misc_data/grammar_mat.ppm")
+Markov_Gramm = read_ppm("../misc_data/grammar_mat_simple.ppm")
 
-letter_node_ind,letters,inp_node_ind = read_letter_map("../misc_data/letter_mapping.csv")
+letter_node_ind,letters,inp_node_ind = read_letter_map("../misc_data/letter_mapping_simple.csv")
 
 N_letter_nodes = inp_node_ind.shape[0]
 N_ext = inp_node_ind.max() + 1 # number of input nodes (features, letters...)
@@ -28,10 +28,12 @@ p_mat_node_letter = np.zeros((N_ext,N_letter_nodes))
 for k in range(N_letter_nodes):
 	p_mat_node_letter[inp_node_ind[k],k] = 1.
 
+pdb.set_trace()
+
 ##
 
 ## Network
-N_e = 1500 # number of excitatory neurons
+N_e = 1000 # number of excitatory neurons
 N_i = int(N_e*.2) # number of inhibitory neurons
 
 CF_ee = 0.025 # connection fraction E->E
@@ -51,11 +53,9 @@ g_neur = 20. # gain factor of the activation function
 
 r_target_e_mu = 0.1 # mean homeostatic excitatory target firing rate
 r_target_e_sigm = 0.#2 # standard deviation of homeostatic excitatory target firing rate
-r_target_set_e = np.minimum(1.,np.maximum(0.,np.random.normal(r_target_e_mu,r_target_e_sigm,N_e)))
 
 r_target_i_mu = 0.1 # mean homeostatic inhibitory target firing rate
 r_target_i_sigm = 0.#2 # standard deviation of homeostatic inhibitory target firing rate
-r_target_set_i = np.minimum(1.,np.maximum(0.,np.random.normal(r_target_i_mu,r_target_i_sigm,N_i))) 
 
 mu_IP = 0.001 # threshold adaption rate
 
@@ -87,7 +87,7 @@ mu_learn_readout = 0.0002
 readout_mean_initial = .005
 readout_std_initial = .001
 
-tau_mu_learn_readout = 100.
+tau_mu_learn_readout = 70.
 
 # recursive least squares
 alpha = 2.
@@ -96,15 +96,16 @@ alpha = 2.
 
 
 ## Simulation
-n_t = 2000 # simulation time steps
-n_t_skip_w_rec = 500 # only record every n_th weight matrix
-n_t_w_rec = int(n_t/n_t_skip_w_rec)
+
+n_t_plast = 1000
+n_t_readout_convergence = 4000
+n_t_analysis = 4000
+
+#n_t = n_t_plast + n_t_readout_convergence + n_t_analysis # simulation time steps
+
+n_t_skip_w_rec = 200 # only record every n_th weight matrix
 ##
 
-## Analysis
-t_range_analysis = [n_t-3000,n_t]
-t_range_plot_act_raster = [n_t-1000,n_t]
-##
 
 ######
 
@@ -114,9 +115,33 @@ def hamm_d(x1,x2):
 ##
 
 ## Activation Function
+def sigma(x):
+	return (np.tanh(gain*x/2.)+1.)/2.
+
+
 def s(x,gain):
 	#return (np.tanh(gain*x/2.)+1.)/2.
 	return 1.*(x>0.)
+
+
+#def s(n_in,x_p,x_d):
+#	M = a1 + a2*sigma((x_d-a3)/a4)
+#	T = b1 + b2*sigma((x_d-b3)/b4)
+#	f = M*sigma((x_p-T)/c)
+#	return 1.*(np.random.rand(n_in) <= f)
+
+# Parameters
+a1 = 0.5
+a2 = 0.5
+a3 = 0.36
+a4 = 0.05
+b1 = 0.1
+b2 = 0.5
+b3 = 0.3
+b4 = -0.063
+c = 0.003
+#
+
 ##
 
 ## Synaptic Normalization
@@ -145,10 +170,26 @@ def update_th(T,x,r_target,mu):
 	return T + mu*(x-r_target)
 	#return T + mu*(x.mean()-r_target)
 
-def main_simulation():
+def main_simulation(N_e = 1500,N_i = int(N_e*.2),n_t_plast = 20000):
+
+	n_t = n_t_plast + n_t_readout_convergence + n_t_analysis
+
+	n_t_w_rec = int(n_t/n_t_skip_w_rec)
+
+	## Analysis
+	t_range_analysis = [n_t-n_t_analysis,n_t]
+	t_range_plot_act_raster = [n_t-1000,n_t]
+	##
+
 
 	## Initialize Weights
-	print("Initialize E->E")
+	#print("Initialize E->E")
+	W_ee = np.random.rand(N_e,N_e)*(np.random.rand(N_e,N_e) <= CF_ee)
+	if 0 in W_ee.sum(axis=1):
+		for k in np.where(W_ee.sum(axis=1)==0)[0]:
+			W_ee[k,int(np.random.rand()*N_e)] = 1.
+	W_ee_conn = 1.*(W_ee != 0.)		
+	'''
 	while True:
 		W_ee = np.random.rand(N_e,N_e)*(np.random.rand(N_e,N_e) <= CF_ee)
 		W_ee[np.array(range(N_e)),np.array(range(N_e))] = 0.
@@ -156,22 +197,43 @@ def main_simulation():
 
 		if not 0 in W_ee_conn.sum(axis=1):
 			break
-	print("Initialize I->E")
+	'''
+
+	#print("Initialize I->E")
+	W_ei = np.random.rand(N_e,N_i)*(np.random.rand(N_e,N_i) <= CF_ei)
+	if 0 in W_ei.sum(axis=1):
+		for k in np.where(W_ei.sum(axis=1)==0)[0]:
+			W_ei[k,int(np.random.rand()*N_i)] = 1.
+	W_ei_conn = 1.*(W_ei != 0.)
+	'''
 	while True:
 		W_ei = np.random.rand(N_e,N_i)*(np.random.rand(N_e,N_i) <= CF_ei)
 		W_ei_conn = 1.*(W_ei != 0.)
 
 		if not 0 in W_ei_conn.sum(axis=1):
 			break
-	print ("Initialize E->I")
+	'''
+	#print ("Initialize E->I")
+	W_ie = np.random.rand(N_i,N_e)*(np.random.rand(N_i,N_e) <= CF_ie)
+	if 0 in W_ie.sum(axis=1):
+		for k in np.where(W_ie.sum(axis=1)==0)[0]:
+			W_ie[k,int(np.random.rand()*N_e)] = 1.
+	W_ie_conn = 1.*(W_ie != 0.)
+	'''
 	while True:
 		W_ie = np.random.rand(N_i,N_e)*(np.random.rand(N_i,N_e) <= CF_ie)
 		W_ie_conn = 1.*(W_ie != 0.)
 
 		if not 0 in W_ie_conn.sum(axis=1):
 			break
-
-	print ("Initialize I->I")
+	'''
+	#print ("Initialize I->I")
+	W_ii = np.random.rand(N_i,N_i)*(np.random.rand(N_i,N_i) <= CF_ii)
+	if 0 in W_ii.sum(axis=1):
+		for k in np.where(W_ii.sum(axis=1)==0)[0]:
+			W_ii[k,int(np.random.rand()*N_i)] = 1.
+	W_ii_conn = 1.*(W_ii != 0.)
+	'''
 	while True:
 		W_ii = np.random.rand(N_i,N_i)*(np.random.rand(N_i,N_i) <= CF_ii)
 		W_ii[np.array(range(N_i)),np.array(range(N_i))] = 0.
@@ -179,29 +241,30 @@ def main_simulation():
 
 		if not 0 in W_ii_conn.sum(axis=1):
 			break
-	print ("Initialize Ext->I")
+	'''
+	#print ("Initialize Ext->I")
 	W_eext = 2.*w_mean_pre_ext_input*np.random.rand(N_e,N_ext)*(np.random.rand(N_e,N_ext) <= CF_eext)
 	W_eext_conn = 1.*(W_eext != 0.)
 	##
 
 
 	## Initial normalization step
-	print("Normalize E->E")
+	#print("Normalize E->E")
 	W_ee = synnorm(W_ee,w_total_ee)
 	#print("Normalize Ext->E")
 	#W_eext = synnorm(W_eext,w_total_eext)	
-	print("Normalize I->E")
+	#print("Normalize I->E")
 	W_ei = synnorm(W_ei,w_total_ei)
-	print("Normalize E->I")
+	#print("Normalize E->I")
 	W_ie = synnorm(W_ie,w_total_ie)
-	print("Normalize I->I")
+	#print("Normalize I->I")
 	W_ii = synnorm(W_ii,w_total_ii)
 	##
 
 	## Initialize activities and temporal storage vectors
-	print("Initialize x_e")
+	#print("Initialize x_e")
 	x_e = np.random.rand(N_e)
-	print("Initialize x_i")
+	#print("Initialize x_i")
 	x_i = np.random.rand(N_i)
 
 	x_e_old = np.array(x_e)
@@ -216,6 +279,10 @@ def main_simulation():
 	## Initialize thresholds
 	T_e = T_e_init_range[0] + np.random.rand(N_e)*(T_e_init_range[1] - T_e_init_range[0])
 	T_i = T_i_init_range[0] + np.random.rand(N_i)*(T_i_init_range[1] - T_i_init_range[0])
+
+	## Initialize target rates
+	r_target_set_e = np.minimum(1.,np.maximum(0.,np.random.normal(r_target_e_mu,r_target_e_sigm,N_e)))
+	r_target_set_i = np.minimum(1.,np.maximum(0.,np.random.normal(r_target_i_mu,r_target_i_sigm,N_i)))
 
 	## Initialize readout matrix
 	W_oe = np.random.normal(readout_mean_initial,readout_std_initial,(N_ext,N_e))
@@ -249,7 +316,7 @@ def main_simulation():
 	ext_sequ_rec = np.ndarray((n_t))
 
 	z_rec = np.ndarray((n_t,N_ext))
-	W_oe_rec = np.ndarray((n_t,N_ext,N_e))
+	W_oe_rec = np.ndarray((n_t_w_rec,N_ext,N_e))
 
 	D_KL_rec = np.ndarray((n_t))
 	Perf_rec = np.ndarray((n_t))
@@ -259,7 +326,7 @@ def main_simulation():
 
 
 	## Start simulation loop
-	for t in tqdm(range(n_t)):
+	for t in tqdm(range(n_t)):#range(n_t):#
 
 		## Generate Markov Grammar Input
 		p_next = np.dot(Markov_Gramm,x_letter_node)
@@ -302,36 +369,42 @@ def main_simulation():
 		T_i = update_th(T_i,x_i,r_target_set_i,mu_IP)
 		##
 		
-		
-		## Update weights
-		W_ee = hebb_ee(W_ee,x_e,x_e_old,mu_plast_ee)
-		#W_ei = hebb_ei(W_ei,x_e,x_i_old,r_target_set_e,mu_plast_ei)
+		if t <= n_t_plast:
+			## Update weights
+			W_ee = hebb_ee(W_ee,x_e,x_e_old,mu_plast_ee)
+			#W_ei = hebb_ei(W_ei,x_e,x_i_old,r_target_set_e,mu_plast_ei)
 
-		W_ee = np.maximum(W_ee,w_exc_min)*W_ee_conn
-		#W_ei = np.minimum(W_ei,w_inh_max)*W_ei_conn
+			W_ee = np.maximum(W_ee,w_exc_min)*W_ee_conn
+			#W_ei = np.minimum(W_ei,w_inh_max)*W_ei_conn
 
-		W_ee = synnorm(W_ee,w_total_ee)
-		#W_ei = synnorm(W_ei,w_total_ei)
-		##
-		
-		## Update Readout
+			W_ee = synnorm(W_ee,w_total_ee)
+			#W_ei = synnorm(W_ei,w_total_ei)
+			##
+			#'''
+
 		z = np.dot(W_oe,x_e_old)
-		err_readout = z - x_ext
-		mu_learn_readout_dyn += mu_learn_readout_dyn*(-mu_learn_readout_dyn + np.linalg.norm(err_readout)**1.5 / tau_mu_learn_readout)/tau_mu_learn_readout
+			
+		if t > n_t_plast and t <= (n_t_plast + n_t_readout_convergence):
+			## Update Readout
+			
+			err_readout = z - x_ext
+			
+			'''
+			mu_learn_readout_dyn += mu_learn_readout_dyn*(-mu_learn_readout_dyn + np.linalg.norm(err_readout)**1.5 / tau_mu_learn_readout)/tau_mu_learn_readout
 
-		#pdb.set_trace()
+			#pdb.set_trace()
 
-		W_oe += -mu_learn_readout_dyn*np.outer(err_readout,x_e_old)
+			W_oe += -mu_learn_readout_dyn*np.outer(err_readout,x_e_old)
 
-		'''
-		
-		
-		for k in range(N_ext):
-			P_recursive_temp = np.dot(P_recursive_least_squares[k,:,:],x_e_old)
-			P_recursive_least_squares[k,:,:] -=  np.outer(P_recursive_temp,P_recursive_temp)/(1.+np.dot(x_e_old,P_recursive_temp))
-			W_oe[k,:] -= err_readout[k]*np.dot(P_recursive_least_squares[k,:,:],x_e_old)
+			'''
+			
+			#'''			
+			for k in range(N_ext):
+				P_recursive_temp = np.dot(P_recursive_least_squares[k,:,:],x_e_old)
+				P_recursive_least_squares[k,:,:] -=  np.outer(P_recursive_temp,P_recursive_temp)/(1.+np.dot(x_e_old,P_recursive_temp))
+				W_oe[k,:] -= err_readout[k]*np.dot(P_recursive_least_squares[k,:,:],x_e_old)
 
-		'''
+			#'''
 		##
 		
 
@@ -361,9 +434,10 @@ def main_simulation():
 		x_e_determ_diff[t,:] = 1.*(x_e != x_e_determ)
 		x_i_determ_diff[t,:] = 1.*(x_i != x_i_determ)
 
-		if t%n_t_skip_w_rec == 0:
+		if t%n_t_skip_w_rec == 0 and int(t/n_t_skip_w_rec) < n_t_w_rec:
 			W_ee_rec[int(t/n_t_skip_w_rec),:,:] = W_ee[:,:]
 			W_ei_rec[int(t/n_t_skip_w_rec),:,:] = W_ei[:,:]
+			W_oe_rec[int(t/n_t_skip_w_rec),:,:] = W_oe[:,:]
 
 		T_e_rec[t,:] = T_e[:]
 		T_i_rec[t,:] = T_i[:]
@@ -373,7 +447,7 @@ def main_simulation():
 
 		x_ext_rec[t,:] = x_ext
 		z_rec[t,:] = z
-		W_oe_rec[t,:,:] = W_oe[:,:]
+		
 
 		ext_sequ_rec[t] = next_letter_node
 
@@ -383,7 +457,7 @@ def main_simulation():
 		##
 	
 	if __name__ == "__main__":
-
+		
 		spt_e = []
 		isi_e = []
 
@@ -575,7 +649,7 @@ def main_simulation():
 		plt.show()
 		plt.close("all")
 		plt.show()
-
+		
 		pdb.set_trace()
 	
 	## See what we got
