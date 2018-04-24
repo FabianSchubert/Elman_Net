@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.20)  16 APR 2018 11:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.20)  19 APR 2018 16:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -666,50 +666,87 @@ File: ../plots/act_dendrogram.png Graphic file (type png)
 Package pdftex.def Info: ../plots/act_dendrogram.png used on input line 188.
 (pdftex.def)             Requested size: 369.88583pt x 277.42719pt.
 
-<../plots/artif_grammar_illustration.png, id=34, 772.8875pt x 393.47pt>
+<../plots/corr_weight_mat.png, id=34, 361.35pt x 722.7pt>
+File: ../plots/corr_weight_mat.png Graphic file (type png)
+
+<use ../plots/corr_weight_mat.png>
+Package pdftex.def Info: ../plots/corr_weight_mat.png used on input line 195.
+(pdftex.def)             Requested size: 295.90979pt x 591.82385pt.
+
+
+LaTeX Warning: Float too large for page by 22.34349pt on input line 197.
+
+[4 <../plots/pop_act_time.png>] [5 <../plots/thresholds_time.png> <../plots/act
+_raster.png>] [6 <../plots/isi_dist.png> <../plots/w_ee_sample_time.png>]
+[7 <../plots/act_dendrogram.png>] [8 <../plots/corr_weight_mat.png>]
+<../plots/f_comp.png, id=58, 578.16pt x 433.62pt>
+File: ../plots/f_comp.png Graphic file (type png)
+ <use ../plots/f_comp.png>
+Package pdftex.def Info: ../plots/f_comp.png used on input line 230.
+(pdftex.def)             Requested size: 184.94292pt x 138.70168pt.
+
+<../plots/corr_weight_mat_prox_dist.png, id=59, 361.35pt x 722.7pt>
+File: ../plots/corr_weight_mat_prox_dist.png Graphic file (type png)
+
+<use ../plots/corr_weight_mat_prox_dist.png>
+Package pdftex.def Info: ../plots/corr_weight_mat_prox_dist.png used on input l
+ine 237.
+(pdftex.def)             Requested size: 295.90979pt x 591.82385pt.
+
+
+LaTeX Warning: Float too large for page by 10.89905pt on input line 239.
+
+<../plots/prox_dist_act_cloud.png, id=60, 729.2043pt x 430.0065pt>
+File: ../plots/prox_dist_act_cloud.png Graphic file (type png)
+
+<use ../plots/prox_dist_act_cloud.png>
+Package pdftex.def Info: ../plots/prox_dist_act_cloud.png used on input line 24
+6.
+(pdftex.def)             Requested size: 369.88583pt x 218.11937pt.
+
+<../plots/artif_grammar_illustration.png, id=61, 772.8875pt x 393.47pt>
 File: ../plots/artif_grammar_illustration.png Graphic file (type png)
 
 <use ../plots/artif_grammar_illustration.png>
 Package pdftex.def Info: ../plots/artif_grammar_illustration.png used on input 
-line 195.
+line 255.
 (pdftex.def)             Requested size: 258.91895pt x 131.81476pt.
 
-<../plots/Reber_Grammar_States.png, id=35, 257.763pt x 305.943pt>
+<../plots/Reber_Grammar_States.png, id=62, 257.763pt x 305.943pt>
 File: ../plots/Reber_Grammar_States.png Graphic file (type png)
 
 <use ../plots/Reber_Grammar_States.png>
-Package pdftex.def Info: ../plots/Reber_Grammar_States.png used on input line 1
-96.
+Package pdftex.def Info: ../plots/Reber_Grammar_States.png used on input line 2
+56.
 (pdftex.def)             Requested size: 184.94292pt x 219.51784pt.
- [4 <../plots/pop_act_time.png>]
-[5 <../plots/thresholds_time.png> <../plots/act_raster.png>] [6 <../plots/isi_d
-ist.png> <../plots/w_ee_sample_time.png>] [7 <../plots/act_dendrogram.png>]
-[8 <../plots/artif_grammar_illustration.png> <../plots/Reber_Grammar_States.png
->] (./rnn_sequences.bbl) [9] (./rnn_sequences.aux) ) 
+ [9 <../plots/f_comp.png>] [10 <../plots/corr_weight_mat_prox_dist.png>] [11 <.
+./plots/prox_dist_act_cloud.png>]
+[12 <../plots/artif_grammar_illustration.png> <../plots/Reber_Grammar_States.pn
+g>] (./rnn_sequences.bbl) [13] (./rnn_sequences.aux) ) 
 Here is how much of TeX's memory you used:
- 4010 strings out of 493223
- 52287 string characters out of 6142684
- 129138 words of memory out of 5000000
- 7418 multiletter control sequences out of 15000+600000
+ 4045 strings out of 493223
+ 53159 string characters out of 6142684
+ 130247 words of memory out of 5000000
+ 7449 multiletter control sequences out of 15000+600000
  11541 words of font info for 45 fonts, out of 8000000 for 9000
  1084 hyphenation exceptions out of 8191
- 38i,10n,27p,1269b,229s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
-2.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on rnn_sequences.pdf (9 pages, 1050404 bytes).
+ 38i,10n,27p,1269b,250s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+r12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on rnn_sequences.pdf (13 pages, 3048060 bytes).
 PDF statistics:
- 103 PDF objects out of 1000 (max. 8388607)
- 59 compressed objects within 1 object stream
+ 124 PDF objects out of 1000 (max. 8388607)
+ 68 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 51 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 71 words of extra memory for PDF output out of 10000 (max. 10000000)
 

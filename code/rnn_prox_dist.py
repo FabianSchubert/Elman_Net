@@ -28,12 +28,11 @@ p_mat_node_letter = np.zeros((N_ext,N_letter_nodes))
 for k in range(N_letter_nodes):
 	p_mat_node_letter[inp_node_ind[k],k] = 1.
 
-pdb.set_trace()
 
 ##
 
 ## Network
-N_e = 1000 # number of excitatory neurons
+N_e = 300 # number of excitatory neurons
 N_i = int(N_e*.2) # number of inhibitory neurons
 
 CF_ee = 0.025 # connection fraction E->E
@@ -98,8 +97,8 @@ alpha = 2.
 ## Simulation
 
 n_t_plast = 1000
-n_t_readout_convergence = 4000
-n_t_analysis = 4000
+n_t_readout_convergence = 5000
+n_t_analysis = 5000
 
 #n_t = n_t_plast + n_t_readout_convergence + n_t_analysis # simulation time steps
 
@@ -116,7 +115,7 @@ def hamm_d(x1,x2):
 
 ## Activation Function
 def sigma(x):
-	return (np.tanh(gain*x/2.)+1.)/2.
+	return (np.tanh(x/2.)+1.)/2.
 
 
 def s(x,gain):
@@ -124,11 +123,14 @@ def s(x,gain):
 	return 1.*(x>0.)
 
 
-#def s(n_in,x_p,x_d):
-#	M = a1 + a2*sigma((x_d-a3)/a4)
-#	T = b1 + b2*sigma((x_d-b3)/b4)
-#	f = M*sigma((x_p-T)/c)
-#	return 1.*(np.random.rand(n_in) <= f)
+def s_pd(n_in,x_p,x_d,norm_x_p,norm_x_d,T_contr):
+	x_p_norm = x_p/norm_x_p
+	x_d_norm = x_d/norm_x_d
+
+	M = a1 + a2*sigma((x_d_norm-a3)/a4)
+	T = b1 + b2*sigma((x_d_norm-b3)/b4)
+	f = M*sigma((x_p_norm-T)/c)
+	return 1.*(np.random.rand(n_in)*sigma(-T_contr) <= f)
 
 # Parameters
 a1 = 0.5
@@ -170,7 +172,7 @@ def update_th(T,x,r_target,mu):
 	return T + mu*(x-r_target)
 	#return T + mu*(x.mean()-r_target)
 
-def main_simulation(N_e = 1500,N_i = int(N_e*.2),n_t_plast = 20000):
+def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = 30000):
 
 	n_t = n_t_plast + n_t_readout_convergence + n_t_analysis
 
@@ -273,7 +275,7 @@ def main_simulation(N_e = 1500,N_i = int(N_e*.2),n_t_plast = 20000):
 
 	##Initialize Input
 	x_letter_node = np.zeros((N_letter_nodes))
-	x_letter_node[np.where(letters==" ")[0]] = 1.
+	x_letter_node[0] = 1.
 
 
 	## Initialize thresholds
@@ -355,11 +357,14 @@ def main_simulation(N_e = 1500,N_i = int(N_e*.2),n_t_plast = 20000):
 		noise_e = np.random.normal(mu_mem_noise,sigm_mem_noise,N_e)
 		noise_i = np.random.normal(mu_mem_noise,sigm_mem_noise,N_i)
 
-		x_e = s(I_ee + I_ei + I_eext + noise_e - T_e,g_neur)
+		x_e = s_pd(N_e,I_eext/(w_mean_pre_ext_input*2.),(I_ee + I_ei - w_total_ei)/(w_total_ee - w_total_ei),1.,1.,T_e)#.2,T_e)#r_target_set_e.mean()*w_total_ee,T_e)
+		#x_i = s(N_i,I_ie + I_ii,0.,r_target_set_i.mean()*w_total_ii + r_target_set_e.mean()*w_total_ie,1.,T_i)
+
+		#x_e = s(I_ee + I_ei + I_eext + noise_e - T_e,g_neur)
 		x_i = s(I_ie + I_ii + noise_i - T_i,g_neur)
 		
-		x_e_determ = s(I_ee + I_ei + I_eext - T_e,g_neur)
-		x_i_determ = s(I_ie + I_ii  - T_i,g_neur)
+		#x_e_determ = s(I_ee + I_ei + I_eext - T_e,g_neur)
+		#x_i_determ = s(I_ie + I_ii  - T_i,g_neur)
 
 
 		##
@@ -431,8 +436,8 @@ def main_simulation(N_e = 1500,N_i = int(N_e*.2),n_t_plast = 20000):
 		x_e_rec[t,:] = x_e[:]
 		x_i_rec[t,:] = x_i[:]
 
-		x_e_determ_diff[t,:] = 1.*(x_e != x_e_determ)
-		x_i_determ_diff[t,:] = 1.*(x_i != x_i_determ)
+		#x_e_determ_diff[t,:] = 1.*(x_e != x_e_determ)
+		#x_i_determ_diff[t,:] = 1.*(x_i != x_i_determ)
 
 		if t%n_t_skip_w_rec == 0 and int(t/n_t_skip_w_rec) < n_t_w_rec:
 			W_ee_rec[int(t/n_t_skip_w_rec),:,:] = W_ee[:,:]
@@ -460,64 +465,83 @@ def main_simulation(N_e = 1500,N_i = int(N_e*.2),n_t_plast = 20000):
 		
 		spt_e = []
 		isi_e = []
-
+		#pdb.set_trace()
 		isi_e_join = np.ndarray([])
 
 		spt_i = []
 		isi_i = []
 
 		isi_i_join = np.ndarray([])
-
+		#pdb.set_trace()
 		for k in range(N_e):
 			t_sp = np.where(x_e_rec[t_range_analysis[0]:t_range_analysis[1],k] == 1.)[0]
 			spt_e.append(t_sp)
 			isi_e.append(t_sp[1:]-t_sp[:-1])
 			isi_e_join = np.append(isi_e_join,isi_e[-1])
-
+		#pdb.set_trace()
 		for k in range(N_i):
 			t_sp = np.where(x_i_rec[t_range_analysis[0]:t_range_analysis[1],k] == 1.)[0]
 			spt_i.append(t_sp)
 			isi_i.append(t_sp[1:]-t_sp[:-1])
 			isi_i_join = np.append(isi_i_join,isi_i[-1])
-
+		#pdb.set_trace()
 
 		rec_act_gramm_groups = []
 
 
-
+		#pdb.set_trace()
 		for k in range(N_ext):
 			times_letter = np.where(ext_sequ_rec == k)[0]
 			times_letter = times_letter[np.where((times_letter>=t_range_analysis[0])*(times_letter <= t_range_analysis[1]))]
 			rec_act_gramm_groups.append(x_e_rec[times_letter,:])
-
+		
+		#pdb.set_trace()
+		
 		rec_gramm_groups_mean = np.ndarray((N_ext,N_e))
-
+		
+		#pdb.set_trace()
+		
 		for k in range(N_ext):
 			rec_gramm_groups_mean[k,:] = rec_act_gramm_groups[k].mean(axis=0)
-
+		
+		#pdb.set_trace()
+		
 		Z_m = linkage(rec_gramm_groups_mean,metric=hamm_d)
 		#pdb.set_trace()
+		#pdb.set_trace()
+
 		Z_full = linkage(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:],method="ward")
+
+		#pdb.set_trace()
 
 		activity_smoothing_kernel = np.exp(-np.array(range(n_t))/100.)
 		activity_smoothing_kernel /= activity_smoothing_kernel.sum()
 
+		#pdb.set_trace()
+
 		x_e_smooth = np.convolve(x_e_rec.mean(axis=1),activity_smoothing_kernel)[:n_t]
 		x_i_smooth = np.convolve(x_i_rec.mean(axis=1),activity_smoothing_kernel)[:n_t]
 
+		pdb.set_trace()
 
 		x_e_corr = np.corrcoef(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:].T)
 		x_i_corr = np.corrcoef(x_e_rec[t_range_analysis[0]:t_range_analysis[1],:].T)
+
+		#pdb.set_trace()
 
 		x_e_corr_inv = 1. - x_e_corr
 		x_e_corr_inv[range(N_e),range(N_e)] = 0.
 		x_e_corr_inv = 0.5*(x_e_corr_inv + x_e_corr_inv.T)
 
+		pdb.set_trace()
+
 		Z_e_corr = linkage(x_e_corr_inv,method="ward")
+
+		pdb.set_trace()
 
 		Dend_e_corr = dendrogram(Z_e_corr,no_plot=True)
 
-
+		
 		
 
 
@@ -608,10 +632,10 @@ def main_simulation(N_e = 1500,N_i = int(N_e*.2),n_t_plast = 20000):
 		
 
 		fig_corr, ax_corr = plt.subplots(2,1,figsize=(5,10))
-		ax_corr[0].pcolormesh(x_e_corr[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:],cmap="Greys")
+		ax_corr[0].pcolormesh(x_e_corr[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:],cmap="Greys",rasterized=True)
 		ax_corr[0].set_title("Clustered $x_e$ correlation matrix")
 		#ax_corr[1].pcolormesh(W_ee[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:],cmap="Greys")
-		ax_corr[1].pcolormesh(W_ee[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:]**.5,cmap="Greys")
+		ax_corr[1].pcolormesh(W_ee[:,Dend_e_corr["leaves"]][Dend_e_corr["leaves"],:]**.5,cmap="Greys",rasterized=True)
 		ax_corr[1].set_title("Rearranged $W_{ee}$ matrix according to activity clustering")
 		
 
@@ -634,7 +658,7 @@ def main_simulation(N_e = 1500,N_i = int(N_e*.2),n_t_plast = 20000):
 
 		t_i_act = np.where(x_i_rec==1)
 		t_i_inact = np.where(x_i_rec==0)
-
+		
 		p_change_x_e_act = x_e_determ_diff[t_e_act[0],t_e_act[1]].mean()
 		p_change_x_e_inact = x_e_determ_diff[t_e_inact[0],t_e_inact[1]].mean()
 
@@ -645,13 +669,37 @@ def main_simulation(N_e = 1500,N_i = int(N_e*.2),n_t_plast = 20000):
 		print("Chance that a deterministic update of x_e gives the opposite result, given the actual update gave 0: " + str(p_change_x_e_inact))
 		print("Chance that a deterministic update of x_i gives the opposite result, given the actual update gave 1: " + str(p_change_x_i_act))
 		print("Chance that a deterministic update of x_i gives the opposite result, given the actual update gave 0: " + str(p_change_x_i_inact))
-
+		
 		plt.show()
 		plt.close("all")
 		plt.show()
 		
+		#pdb.set_trace()
+		
+		x_p = np.linspace(0.,1.,100)
+		x_d = np.linspace(0.,1.,100)
+
+		X_D,X_P = np.meshgrid(x_p,x_d)
+
+		M = a1 + a2*sigma((X_D - a3)/a4)
+		T = b1 + b2*sigma((X_D - b3)/b4)
+		f = M*sigma((X_P - T)/c)
+		
+		#pdb.set_trace()
+
+		I_eext_rec = np.dot(W_eext,x_ext_rec.T).T
+
+		plt.pcolormesh(x_d,x_p,f)
+		plt.xlabel("distal $=I_{ee} + I_{ei}$")
+		plt.ylabel("proximal $=I_{e,ext}-T_e$")
+
+		for k in range(N_e):
+			plt.plot((I_ee_rec[-10000:,k]+I_ei_rec[-10000:,k]- w_total_ei)/(w_total_ee - w_total_ei),I_eext_rec[-10000:,k]/(2.*w_mean_pre_ext_input),'.',c='#1f77b4',markeredgewidth=0.0,alpha=0.03,rasterized=True)
+
+		plt.show()
+
 		pdb.set_trace()
-	
+
 	## See what we got
 
 	#smooth_kernel = np.exp(-np.linspace(0.,10.,500)/1.5)

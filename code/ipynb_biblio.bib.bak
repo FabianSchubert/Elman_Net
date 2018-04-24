@@ -2,6 +2,16 @@
 % Encoding: UTF-8
 
 
+@Article{Bono_2017,
+  Title                    = {{Modeling somatic and dendritic spike mediated plasticity at the single neuron and network level}},
+  Author                   = {Bono, J. and Clopath, C.},
+  Journal                  = {nature communications},
+  Year                     = {2017},
+
+  Owner                    = {fschubert},
+  Timestamp                = {2018.04.17}
+}
+
 @Conference{Duarte_2014,
   Title                    = {{Self-Organized Artificial Grammar Learning in Spiking Neural Networks}},
   Author                   = {Duarte, R. and Series, P. and Morrison, A.},
@@ -26,5 +36,25 @@
   ISSN                     = {1551-6709},
   Publisher                = {Lawrence Erlbaum Associates, Inc.},
   Url                      = {http://dx.doi.org/10.1207/s15516709cog1402_1}
+}
+
+@Article{Reber_1967,
+  Title                    = {{Implicit Learning of Artificial Grammars}},
+  Author                   = {Reber, A. S.},
+  Journal                  = {Journal of Verbal Learning and Verbal Behavoir},
+  Year                     = {1967},
+
+  Owner                    = {fschubert},
+  Timestamp                = {2018.04.13}
+}
+
+@Article{Shai_2015,
+  Title                    = {{Physiology of Layer 5 Pyramidal Neurons in Mouse Primary Visual Cortex: Coincidence Detection thorugh Bursting}},
+  Author                   = {Shai, A. S. and Anastassiou, C. A. and Larkum, M. E. and Koch, C.},
+  Journal                  = {PLoS Computational Biology},
+  Year                     = {2015},
+
+  Owner                    = {fschubert},
+  Timestamp                = {2018.04.17}
 }
 

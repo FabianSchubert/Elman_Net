@@ -189,6 +189,66 @@ Following the conceptual idea presented by Elman \cite{Elman_1990}, we performed
 \caption{\label{fig:act_dendrogram} Dendrogram of a cluster analysis of excitatory activity patterns.}
 \end{figure}
 
+Furthermore, if we use the cluster analysis to reorder the recurrent weight matrix after the plasticity phase in such a way that units with correlated activity are listed next to each other, we observe a structure depicted in Fig. \ref{fig:corr_weight_mat}. In particular, the weight matrix resembles the structure of the transition matrix shown in Fig. \ref{fig:grammar_markov}.
+
+\begin{figure}
+\includegraphics[width=0.8\textwidth]{../plots/corr_weight_mat.png}
+\caption{\label{fig:corr_weight_mat} Top: Correlation matrix of $x_e$ according to the clustering depicted in Fig. \ref{fig:act_dendrogram}. Bottom: Recurrent weight matrix after plasticity, ordered based on the same clustering.}
+\end{figure}
+
+\section{Using a Simple Model of Dendritic Separation}
+So far, the neuron model we used was a simple point neuron model, which did not distinguish between input received by recurrent connection and the one stemming from recurrent connections. As such, one can argue that the emergence of a network structure reflecting the temporal structure of the external input significantly relies on the network being mostly driven by this external signal. Subpopulations subsequently being activated by the external input develop stronger connections due to the pre-post structure of the Hebbian plasticity rule. It is reasonable to assume that this ``driven learning" easily overrides any more complex structure that could potentially arise within the recurrent network.
+
+Recently, nonlinear interactions between dendritic input proximal and distal to the soma have been investigated \cite{Shai_2015,Bono_2017}. Based on experimental findings and detailed neuronal compartment models, Shai et al. proposed a relatively simple phenomenological rate model that subsumes proximal and distal inputs into two input streams: Given some basal synaptic input $Y_p$ and distal input $Y_d$, we express the postsynaptic firing rate as
+\begin{align}
+M &= a_1 + a_2 \sigma \left( \left(Y_d-a_3\right) / a_4 \right) \label{f_comp1} \\ 
+T &= b_1 + b_2 \sigma \left( \left(Y_d-b_3\right) / b_4 \right) \label{f_comp2}\\ 
+f_{\rm comp} &= M \sigma \left(\left(Y_p - T \right) / c \right) \label{f_comp3}\\
+\sigma (x) &= \frac{1}{1+\mathrm{exp}(-x)} \label{f_comp4}
+\end{align}
+where the parameters given in Table \ref{params_f_comp} were chosen to fit the composite function in \cite{Shai_2015}. Fig. \ref{fig:f_comp_plot} shows the resulting dependence on the input: maximum postsynaptic activity is only achieved with a combination of basal and proximal input. However, intermediate activity can also be observed by sufficient proximal input.
+\begin{table}
+\begin{center}
+\caption{Parameters for \eqref{f_comp1} - \eqref{f_comp3}.}
+\begin{tabular}{l|l}
+$a_1$ & $0.5$ \\
+$a_2$ & $0.5$ \\
+$a_3$ & $0.36$ \\
+$a_4$ & $0.05$ \\
+$b_1$ & $0.1$ \\
+$b_2$ & $0.5$ \\
+$b_3$ & $0.3$ \\
+$b_4$ & $-0.063$ \\
+$c$ & $0.003$
+\end{tabular}
+\label{params_f_comp}
+\end{center}
+\end{table}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{../plots/f_comp.png}
+\caption{\label{fig:f_comp_plot} Output activity given by \eqref{f_comp3} as a function of $Y_p$ and $Y_d$.}
+\end{figure}
+
+We implemented this neuron model for the excitatory neurons in our network. Note that since our neurons are only allowed to take binary states, we interpreted the output $f$ as a probability of being in the up-state. Basal input was associated with the external signals, while distal input was chosen to be the sum of recurrent excitation and inhibition. Fig. \ref{fig:corr_weight_mat_prox_dist} shows the resulting weight matrix after plasticity and the clustered correlation matrix.
+
+\begin{figure}
+\includegraphics[width=0.8\textwidth]{../plots/corr_weight_mat_prox_dist.png}
+\caption{\label{fig:corr_weight_mat_prox_dist} Same analysis as in Fig. \ref{fig:corr_weight_mat}, but using the phenomenological compartment model described in \eqref{f_comp1}--\eqref{f_comp4}.}
+\end{figure}
+
+\subsection{A Multi Compartment Model is not Scale Invariant}
+
+One advantage of using a simple linear superposition of inputs in combination with a theta function as a nonlinear output is the scale invariance with respect to the input, since the up-down state separatrix in the input space is simply a plane that does not change shape under a rescale of the input. This, however, is obviously not the case for the activation function shown in Fig. \ref{fig:f_comp_plot}. Under ideal working conditions, the Input should span the region depicted in this figure. However, this is not the case if we naively pass the Input into our prox-dist activation function, as can be seen in Fig. \ref{fig:prox_dist_act_cloud}.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{../plots/prox_dist_act_cloud.png}
+\caption{\label{fig:prox_dist_act_cloud} Overlay of proximal-distal inputs that the excitatory neurons received throughout the simulation over the activation function shown in Fig. \ref{fig:f_comp_plot}. Each blue dot represents a pair of proximal and distal input.}
+\end{figure}
+
+
+
 \section{More Complex Input Sequences}
 In the input sequence used in the previous section each letter corresponds to a a particular state in a Markov model. Thus, the prediction of the next letter only requires knowledge about the previous letter received. A more realistic kind of input stream would require the network to gather information about multiple time steps in order to optimally predict the next letter. Such a kind of artificial grammar was also used in \citep{Duarte_2014} and initially introduced by Reber \cite{Reber_1967}. It is depicted in Fig. \ref{fig:Reber_Grammar}(top). Interestingly, the rules of this grammar is described as a finite-state machine where the \textit{transitions} between states correspond to letters. Of course, this kind of representation of the dynamics also has a counterpart where letters are identified with states, see the bottom network in Fig. \ref{fig:Reber_Grammar}. Our previous analysis of network activity was based on the assumption that letters, or sets of letters were represented by states of the recurrent network and not in transitions between those. In consequence, a reflection of the Reber grammar within the network should resemble the mapping shown in the bottom network of Fig. \ref{fig:Reber_Grammar}. 
 \begin{figure}
