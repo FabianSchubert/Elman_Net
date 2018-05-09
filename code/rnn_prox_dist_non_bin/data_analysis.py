@@ -6,19 +6,29 @@ from matplotlib.widgets import Slider
 import pickle
 
 
-def load_data(path_x="./data/x_e_rec",path_W="./data/W_rec",path_I="./data/I_ee_rec",path_p="./data/parameters.p"):
-	x = np.load("./data/x_e_rec.npy")
-	W = np.load("./data/W_rec.npy")
-	I = np.load("./data/I_ee_rec.npy")
-	with open("./data/parameters.p","rb") as file:
-		p = pickle.load(file)
-	return x,W,I,p
+def load_data(path):
+	dat = np.load(path)
+	x = dat['x_e_rec']
+	W = dat['W_rec']
+	W_eext = dat['W_eext_rec']
+	I_ee = dat['I_ee_rec']
+	I_eext = dat['I_eext_rec']
+	p = dat['param_dict'].tolist()
+	
+	return x,W,W_eext,I_ee,I_eext,p
 
 def h(x_post_pot,x_pre,a):
 
 	f = (x_post_pot*np.tanh(a)/a - np.tanh(x_post_pot))/a**3
 
 	return np.outer(f,x_pre)
+
+def act(x,gain):
+
+	return (np.tanh(gain*x/2.)+1.)/2.
+
+def d_act(x,gain):
+	return gain*act(x,gain)*(1.-act(x,gain))
 
 
 def plot_x():
@@ -29,7 +39,7 @@ def plot_x():
 	plt.ylabel("$x_e$")
 	plt.show()
 
-def animate_mem_dist():
+def animate_mem_dist(I,p):
 	fig, ax = plt.subplots()
 	plt.subplots_adjust(left=0.25, bottom=0.25)
 
@@ -60,4 +70,4 @@ def animate_mem_dist():
 
 
 
-x,W,I,p = load_data()
+#x,W,I,p = load_data()
