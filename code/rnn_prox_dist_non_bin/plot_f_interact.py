@@ -32,6 +32,8 @@ ax = [plt.subplot(gs[:,0])]
 for k in range(9):
 	ax.append(plt.subplot(gs[k,1]))
 
+ax[0].set_xlabel("$Y_{\\rm proximal}$")
+ax[0].set_ylabel("$Y_{\\rm distal}$")
 
 #ax[0].set_position([0.05, 0.05, 0.4, 0.9])
 #ax[1].set_position([0.05, 0.05, 0.4, 0.9])
@@ -46,14 +48,14 @@ mesh = ax[0].pcolormesh(x,y,f(X,Y))
 s_m_0 = Slider(ax[1], 'm_0', 0.0, 1.0, valinit=m_0)
 s_a_m = Slider(ax[2], 'a_m', 0.0, 1.0, valinit=a_m)
 s_theta_m = Slider(ax[3], 'theta_m', 0.0, 1.0, valinit=theta_m)
-s_s_m = Slider(ax[4], 's_m', 0.0, 0.2, valinit=s_m)
+s_s_m = Slider(ax[4], 's_m', 0.0001, 0.2, valinit=s_m)
 
 s_a_t = Slider(ax[5], 'a_t', 0.0, 1.0, valinit=a_t)
 s_theta_t = Slider(ax[6], 'theta_t', 0.0, 1.0, valinit=theta_t)
-s_s_t = Slider(ax[7], 's_t', 0.0, 0.2, valinit=s_t)
+s_s_t = Slider(ax[7], 's_t', 0.0001, 0.2, valinit=s_t)
 
 s_theta_p = Slider(ax[8], 'theta_p', 0.0, 1.0, valinit=theta_p)
-s_s_p = Slider(ax[9], 's_p', 0.0, 0.2, valinit=s_p)
+s_s_p = Slider(ax[9], 's_p', 0.0001, 0.2, valinit=s_p)
 
 def update(val):
 	global m_0
