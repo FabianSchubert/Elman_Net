@@ -9,13 +9,16 @@ import pickle
 def load_data(path):
 	dat = np.load(path)
 	x = dat['x_e_rec']
+	x_mean = dat['x_e_mean_rec']
+	x_ext = dat['x_ext_rec']
+	x_ext_mean = dat['x_ext_mean_rec']
 	W = dat['W_rec']
 	W_eext = dat['W_eext_rec']
 	I_ee = dat['I_ee_rec']
 	I_eext = dat['I_eext_rec']
 	p = dat['param_dict'].tolist()
 	
-	return x,W,W_eext,I_ee,I_eext,p
+	return x,x_mean,x_ext,x_ext_mean,W,W_eext,I_ee,I_eext,p
 
 def h(x_post_pot,x_pre,a):
 

@@ -10,3 +10,4 @@ w_std_pre_ext_input,0
 n_t,250000
 n_t_rec,1000
 ext_plast,False
+int_plast,True
