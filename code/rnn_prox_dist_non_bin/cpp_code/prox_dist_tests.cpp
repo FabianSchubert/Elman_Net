@@ -13,6 +13,11 @@ double sigm(double x)
 	return (tanh(x/2.)+1.)/2.;
 }
 
+double sigm_inv(double y)
+{
+	return -log(1./y - 1.);
+}
+
 double M(double y_d)
 {
 	return m_0 + a_m*sigm((y_d - theta_m)/s_m);
@@ -23,16 +28,18 @@ double T(double y_d)
 	return a_t*sigm((y_d - theta_t)/s_t);
 }
 
-double f_act(double y_p, double y_d)
+double f_act(double x_p, double x_d)
 {
-	return M(y_d)*sigm((y_p + T(y_d) - theta_p)/s_p);
+	return M(x_d)*sigm((x_p + T(x_d) - theta_p)/s_p);
 }
 
-double h(double x, double y, double y_mean,double x_0)
+double h(double x, double y, double y_mean, double x_0)
 {
 	double phi=(-x+tanh(2.*0.958*x/x_0)*x_0/0.958);
 	return phi*(y-y_mean);
 }
+
+
 
 
 int main()
@@ -59,6 +66,9 @@ int main()
 	double * y_p_rec = new double[n_t];
 	double * y_d_rec = new double[n_t];
 
+	double * y_p_mean_rec = new double[n_t];
+	double * y_d_mean_rec = new double[n_t];
+
 	double * y_post_rec = new double[n_t];
 
 	for(int k = 0; k < n_t; k++)
@@ -69,22 +79,26 @@ int main()
 		x_p = y_p*w_p;
 		x_d = y_d*w_d;
 
-		m = M(y_d);
-		t = T(y_d);
+		m = M(x_d);
+		t = T(x_d);
 
 		y_post = f_act(x_p, x_d);
 
 		y_p_mean += mu_mean_act*(y_p - y_p_mean);
 		y_d_mean += mu_mean_act*(y_d - y_d_mean);
 		
-		w_d += mu_learn*h(x_d - , x_d, y_d_mean, 1.0);
-		w_p += mu_learn*h(t, x_p + t - theta_p, y_p_mean, 1.0);
+		w_d += mu_learn*h(x_d, y_d, y_d_mean, x_fix_d);
+		w_p += mu_learn*h(sigm_inv(y_post), y_p, y_p_mean, x_fix_p);
 
 		w_p_rec[k] = w_p;
 		w_d_rec[k] = w_d;
 
 		y_p_rec[k] = y_p;
 		y_d_rec[k] = y_d;
+
+		y_p_mean_rec[k] = y_p_mean;
+		y_d_mean_rec[k] = y_d_mean;
+
 		y_post_rec[k] = y_post;
 
 
@@ -96,9 +110,10 @@ int main()
 	ofstream datafile_weights;
 	datafile_weights.open("data_weights.csv");
 
+	datafile_act << "y_p,y_d,y_p_mean,y_d_mean,y_post" << endl;
 	for(int k = 0; k < n_t; k++)
 	{
-		datafile_act << y_p_rec[k] << "," << y_d_rec[k] << "," << y_post_rec[k];
+		datafile_act << y_p_rec[k] << "," << y_d_rec[k] << "," << y_p_mean_rec[k] << "," << y_d_mean_rec[k] << ","<< y_post_rec[k];
 
 		if(k < n_t-1)
 		{
@@ -106,7 +121,7 @@ int main()
 		}
 		datafile_act << flush;
 	}
-
+	datafile_weights << "w_p,w_d" << endl;
 	for(int k = 0; k < n_t; k++)
 	{
 		datafile_weights << w_p_rec[k] << "," << w_d_rec[k];

@@ -13,6 +13,9 @@ namespace parameters
 	const double theta_p = 0.5;
 	const double s_p = 0.05;
 
+	const double x_fix_p = 0.5;
+	const double x_fix_d = 0.5;
+
 	// simulation
 
 	const int n_t = 10000;

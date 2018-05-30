@@ -43,6 +43,13 @@ X,Y = np.meshgrid(x,y)
 
 mesh = ax[0].pcolormesh(x,y,f(X,Y))
 
+plt.colorbar(mappable=mesh, ax=ax[0])
+
+
+
+ax[0].set_xlabel("$X_{p}$")
+ax[0].set_xlabel("$X_{d}$")
+
 s_m_0 = Slider(ax[1], 'm_0', 0.0, 1.0, valinit=m_0)
 s_a_m = Slider(ax[2], 'a_m', 0.0, 1.0, valinit=a_m)
 s_theta_m = Slider(ax[3], 'theta_m', 0.0, 1.0, valinit=theta_m)
@@ -81,7 +88,10 @@ def update(val):
 	s_p = s_s_p.val
 	#print(a_t)
 	mesh.set_array(f(X,Y)[:-1,:-1].ravel())
+	#mesh.set_data(f(X,Y))
+
 	fig.canvas.draw_idle()
+	#plt.draw()
 
 s_m_0.on_changed(update)
 s_a_m.on_changed(update)

@@ -357,10 +357,10 @@ def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = 30000):
 		noise_e = np.random.normal(mu_mem_noise,sigm_mem_noise,N_e)
 		noise_i = np.random.normal(mu_mem_noise,sigm_mem_noise,N_i)
 
-		x_e = s_pd(N_e,I_eext/(w_mean_pre_ext_input*2.),(I_ee + I_ei - w_total_ei)/(w_total_ee - w_total_ei),1.,1.,T_e)#.2,T_e)#r_target_set_e.mean()*w_total_ee,T_e)
+		#x_e = s_pd(N_e,I_eext/(w_mean_pre_ext_input*2.),(I_ee + I_ei - w_total_ei)/(w_total_ee - w_total_ei),1.,1.,T_e)#.2,T_e)#r_target_set_e.mean()*w_total_ee,T_e)
 		#x_i = s(N_i,I_ie + I_ii,0.,r_target_set_i.mean()*w_total_ii + r_target_set_e.mean()*w_total_ie,1.,T_i)
 
-		#x_e = s(I_ee + I_ei + I_eext + noise_e - T_e,g_neur)
+		x_e = s(I_ee + I_ei + I_eext + noise_e - T_e,g_neur)
 		x_i = s(I_ie + I_ii + noise_i - T_i,g_neur)
 		
 		#x_e_determ = s(I_ee + I_ei + I_eext - T_e,g_neur)
@@ -370,8 +370,8 @@ def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = 30000):
 		##
 
 		## Update tresholds
-		T_e = update_th(T_e,x_e,r_target_set_e,mu_IP)
-		T_i = update_th(T_i,x_i,r_target_set_i,mu_IP)
+		T_e = update_th(T_e, x_e, r_target_set_e, mu_IP)
+		T_i = update_th(T_i, x_i, r_target_set_i, mu_IP)
 		##
 		
 		if t <= n_t_plast:
