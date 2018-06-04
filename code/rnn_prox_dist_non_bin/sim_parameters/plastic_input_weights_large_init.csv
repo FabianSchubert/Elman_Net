@@ -1,7 +1,9 @@
 N_e,300
 sigma_w_init,1
 mu_w_init,0
-mu_learn,0.01
+mu_learn_ext,0.001
+mu_learn_int,0.001
+mu_act_av,0.001
 act_fix,0.1
 mu_hom,0.1
 gain_neuron,1
@@ -11,3 +13,4 @@ n_t,250000
 n_t_rec,500
 ext_plast,True
 int_plast,True
+staging,"[[],[]]"
