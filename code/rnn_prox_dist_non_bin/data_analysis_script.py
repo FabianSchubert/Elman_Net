@@ -93,6 +93,8 @@ def plot_lyap_exp():
 	ax_lyap_exp.set_xlabel("#t")
 	ax_lyap_exp.set_ylabel("Max. Lyapunov Exponent")
 	
+	plt.savefig("./plots/" + file + "/lyapunov_exponents.png",dpi=300)
+
 	plt.show()
 
 
@@ -238,6 +240,8 @@ def analyze_fp_stab():
 		l[k] = np.log(np.abs(np.real(np.linalg.eigvals(d_fix*W_ee[k,:,:]))).max())
 
 	plt.plot(t_ax,l,'-o')
+
+	plt.savefig("./plots/" + file + "/fp_stability.png",dpi=300)
 
 	plt.show()
 

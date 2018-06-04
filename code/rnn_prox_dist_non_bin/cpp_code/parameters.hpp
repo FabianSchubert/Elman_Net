@@ -18,8 +18,7 @@ namespace parameters
 
 	// simulation
 
-	const int n_t = 10000;
-	const double mu_learn = 0.01;
+	const int n_t = 50000;
+	const double mu_learn = 0.001;
 	const double mu_mean_act = 0.01;
-
 }
