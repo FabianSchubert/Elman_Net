@@ -164,7 +164,7 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 
 	##
 
-	for t in tqdm(range(n_t)):
+	for t in range(n_t):
 
 
 		###CUSTOM_COMMANDS_FLAG###
