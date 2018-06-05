@@ -2,7 +2,7 @@
 
 import numpy as np
 #import matplotlib.pyplot as plt
-#from tqdm import tqdm
+from tqdm import tqdm
 
 #import pdb
 
@@ -164,7 +164,7 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 
 	##
 
-	for t in range(n_t):
+	for t in tqdm(range(n_t)):
 
 
 		###CUSTOM_COMMANDS_FLAG###
