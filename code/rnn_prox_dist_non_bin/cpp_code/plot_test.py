@@ -37,8 +37,11 @@ plt.colorbar(mappable=scat, ax=ax_scatter_act)
 
 plt.show()
 
-plt.plot(X["x_p"] + T(X["x_d"]) - theta_p)
-plt.plot(X["x_d"])
+plt.plot(X["x_p"] + T(X["x_d"]) - theta_p,label="X_p + T(X_d) - theta_p")
+plt.plot(X["x_d"],label="X_d")
+plt.ylabel("X")
+plt.xlabel("t")
+plt.legend()
 plt.show()
 
 import pdb
