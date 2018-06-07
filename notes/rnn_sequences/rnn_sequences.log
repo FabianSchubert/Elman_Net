@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.20)  19 APR 2018 16:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.12.20)  5 JUN 2018 13:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -486,7 +486,11 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \Gm@layoutvoffset=\dimen122
 \Gm@dimlist=\toks22
 )
-(./rnn_sequences.aux)
+(./rnn_sequences.aux
+
+LaTeX Warning: Label `eq:x_e_update' multiply defined.
+
+)
 \openout1 = `rnn_sequences.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
@@ -501,8 +505,7 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
 LaTeX Font Info:    ... okay on input line 18.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
 LaTeX Font Info:    ... okay on input line 18.
-
-(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+ (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count105
 \scratchdimen=\dimen123
@@ -602,11 +605,11 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 19.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<../plots/illustration.png, id=1, 255.8358pt x 173.6889pt>
-File: ../plots/illustration.png Graphic file (type png)
+<../../plots/illustration.png, id=1, 255.8358pt x 173.6889pt>
+File: ../../plots/illustration.png Graphic file (type png)
 
-<use ../plots/illustration.png>
-Package pdftex.def Info: ../plots/illustration.png used on input line 25.
+<use ../../plots/illustration.png>
+Package pdftex.def Info: ../../plots/illustration.png used on input line 25.
 (pdftex.def)             Requested size: 258.91895pt x 175.79544pt.
 
 Overfull \hbox (58.85191pt too wide) in paragraph at lines 61--61
@@ -616,137 +619,228 @@ Overfull \hbox (58.85191pt too wide) in paragraph at lines 61--61
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Excluding 'comment' comment. [2 <../plots/illustration.png>]
-<../plots/Grammar_Markov.png, id=23, 505.89pt x 433.62pt>
-File: ../plots/Grammar_Markov.png Graphic file (type png)
+Excluding 'comment' comment. [2 <../../plots/illustration.png>]
+<../../plots/Grammar_Markov.png, id=23, 505.89pt x 433.62pt>
+File: ../../plots/Grammar_Markov.png Graphic file (type png)
 
-<use ../plots/Grammar_Markov.png>
-Package pdftex.def Info: ../plots/Grammar_Markov.png used on input line 133.
+<use ../../plots/Grammar_Markov.png>
+Package pdftex.def Info: ../../plots/Grammar_Markov.png used on input line 133.
+
 (pdftex.def)             Requested size: 369.88583pt x 317.04944pt.
 
-<../plots/pop_act_time.png, id=24, 462.528pt x 346.896pt>
-File: ../plots/pop_act_time.png Graphic file (type png)
+<../../plots/pop_act_time.png, id=24, 462.528pt x 346.896pt>
+File: ../../plots/pop_act_time.png Graphic file (type png)
 
-<use ../plots/pop_act_time.png>
-Package pdftex.def Info: ../plots/pop_act_time.png used on input line 155.
+<use ../../plots/pop_act_time.png>
+Package pdftex.def Info: ../../plots/pop_act_time.png used on input line 155.
 (pdftex.def)             Requested size: 369.88583pt x 277.42719pt.
- [3 <../plots/Grammar_Markov.png>]
-<../plots/thresholds_time.png, id=29, 462.528pt x 346.896pt>
-File: ../plots/thresholds_time.png Graphic file (type png)
+ [3 <../../plots/Grammar_Markov.png>]
+<../../plots/thresholds_time.png, id=29, 462.528pt x 346.896pt>
+File: ../../plots/thresholds_time.png Graphic file (type png)
 
-<use ../plots/thresholds_time.png>
-Package pdftex.def Info: ../plots/thresholds_time.png used on input line 160.
-(pdftex.def)             Requested size: 369.88583pt x 277.42719pt.
-
-<../plots/act_raster.png, id=30, 462.528pt x 346.896pt>
-File: ../plots/act_raster.png Graphic file (type png)
-
-<use ../plots/act_raster.png>
-Package pdftex.def Info: ../plots/act_raster.png used on input line 167.
+<use ../../plots/thresholds_time.png>
+Package pdftex.def Info: ../../plots/thresholds_time.png used on input line 160
+.
 (pdftex.def)             Requested size: 369.88583pt x 277.42719pt.
 
-<../plots/isi_dist.png, id=31, 462.528pt x 346.896pt>
-File: ../plots/isi_dist.png Graphic file (type png)
+<../../plots/act_raster.png, id=30, 462.528pt x 346.896pt>
+File: ../../plots/act_raster.png Graphic file (type png)
 
-<use ../plots/isi_dist.png>
-Package pdftex.def Info: ../plots/isi_dist.png used on input line 172.
+<use ../../plots/act_raster.png>
+Package pdftex.def Info: ../../plots/act_raster.png used on input line 167.
 (pdftex.def)             Requested size: 369.88583pt x 277.42719pt.
 
-<../plots/w_ee_sample_time.png, id=32, 462.528pt x 346.896pt>
-File: ../plots/w_ee_sample_time.png Graphic file (type png)
+<../../plots/isi_dist.png, id=31, 462.528pt x 346.896pt>
+File: ../../plots/isi_dist.png Graphic file (type png)
 
-<use ../plots/w_ee_sample_time.png>
-Package pdftex.def Info: ../plots/w_ee_sample_time.png used on input line 179.
+<use ../../plots/isi_dist.png>
+Package pdftex.def Info: ../../plots/isi_dist.png used on input line 172.
 (pdftex.def)             Requested size: 369.88583pt x 277.42719pt.
 
-<../plots/act_dendrogram.png, id=33, 462.528pt x 346.896pt>
-File: ../plots/act_dendrogram.png Graphic file (type png)
+<../../plots/w_ee_sample_time.png, id=32, 462.528pt x 346.896pt>
+File: ../../plots/w_ee_sample_time.png Graphic file (type png)
 
-<use ../plots/act_dendrogram.png>
-Package pdftex.def Info: ../plots/act_dendrogram.png used on input line 188.
+<use ../../plots/w_ee_sample_time.png>
+Package pdftex.def Info: ../../plots/w_ee_sample_time.png used on input line 17
+9.
 (pdftex.def)             Requested size: 369.88583pt x 277.42719pt.
 
-<../plots/corr_weight_mat.png, id=34, 361.35pt x 722.7pt>
-File: ../plots/corr_weight_mat.png Graphic file (type png)
+<../../plots/act_dendrogram.png, id=33, 462.528pt x 346.896pt>
+File: ../../plots/act_dendrogram.png Graphic file (type png)
 
-<use ../plots/corr_weight_mat.png>
-Package pdftex.def Info: ../plots/corr_weight_mat.png used on input line 195.
+<use ../../plots/act_dendrogram.png>
+Package pdftex.def Info: ../../plots/act_dendrogram.png used on input line 188.
+
+(pdftex.def)             Requested size: 369.88583pt x 277.42719pt.
+
+<../../plots/corr_weight_mat.png, id=34, 361.35pt x 722.7pt>
+File: ../../plots/corr_weight_mat.png Graphic file (type png)
+
+<use ../../plots/corr_weight_mat.png>
+Package pdftex.def Info: ../../plots/corr_weight_mat.png used on input line 195
+.
 (pdftex.def)             Requested size: 295.90979pt x 591.82385pt.
 
 
 LaTeX Warning: Float too large for page by 22.34349pt on input line 197.
 
-[4 <../plots/pop_act_time.png>] [5 <../plots/thresholds_time.png> <../plots/act
-_raster.png>] [6 <../plots/isi_dist.png> <../plots/w_ee_sample_time.png>]
-[7 <../plots/act_dendrogram.png>] [8 <../plots/corr_weight_mat.png>]
-<../plots/f_comp.png, id=58, 578.16pt x 433.62pt>
-File: ../plots/f_comp.png Graphic file (type png)
- <use ../plots/f_comp.png>
-Package pdftex.def Info: ../plots/f_comp.png used on input line 230.
+[4 <../../plots/pop_act_time.png>] [5 <../../plots/thresholds_time.png> <../../
+plots/act_raster.png>] [6 <../../plots/isi_dist.png> <../../plots/w_ee_sample_t
+ime.png>] [7 <../../plots/act_dendrogram.png>] [8 <../../plots/corr_weight_mat.
+png>] <../../plots/f_comp.png, id=58, 578.16pt x 433.62pt>
+File: ../../plots/f_comp.png Graphic file (type png)
+
+<use ../../plots/f_comp.png>
+Package pdftex.def Info: ../../plots/f_comp.png used on input line 230.
 (pdftex.def)             Requested size: 184.94292pt x 138.70168pt.
 
-<../plots/corr_weight_mat_prox_dist.png, id=59, 361.35pt x 722.7pt>
-File: ../plots/corr_weight_mat_prox_dist.png Graphic file (type png)
+<../../plots/corr_weight_mat_prox_dist.png, id=59, 361.35pt x 722.7pt>
+File: ../../plots/corr_weight_mat_prox_dist.png Graphic file (type png)
 
-<use ../plots/corr_weight_mat_prox_dist.png>
-Package pdftex.def Info: ../plots/corr_weight_mat_prox_dist.png used on input l
-ine 237.
+<use ../../plots/corr_weight_mat_prox_dist.png>
+Package pdftex.def Info: ../../plots/corr_weight_mat_prox_dist.png used on inpu
+t line 237.
 (pdftex.def)             Requested size: 295.90979pt x 591.82385pt.
 
 
 LaTeX Warning: Float too large for page by 10.89905pt on input line 239.
 
-<../plots/prox_dist_act_cloud.png, id=60, 729.2043pt x 430.0065pt>
-File: ../plots/prox_dist_act_cloud.png Graphic file (type png)
+<../../plots/prox_dist_act_cloud.png, id=60, 729.2043pt x 430.0065pt>
+File: ../../plots/prox_dist_act_cloud.png Graphic file (type png)
 
-<use ../plots/prox_dist_act_cloud.png>
-Package pdftex.def Info: ../plots/prox_dist_act_cloud.png used on input line 24
-6.
+<use ../../plots/prox_dist_act_cloud.png>
+Package pdftex.def Info: ../../plots/prox_dist_act_cloud.png used on input line
+ 246.
 (pdftex.def)             Requested size: 369.88583pt x 218.11937pt.
 
-<../plots/artif_grammar_illustration.png, id=61, 772.8875pt x 393.47pt>
-File: ../plots/artif_grammar_illustration.png Graphic file (type png)
+<../../plots/artif_grammar_illustration.png, id=61, 772.8875pt x 393.47pt>
+File: ../../plots/artif_grammar_illustration.png Graphic file (type png)
 
-<use ../plots/artif_grammar_illustration.png>
-Package pdftex.def Info: ../plots/artif_grammar_illustration.png used on input 
-line 255.
+<use ../../plots/artif_grammar_illustration.png>
+Package pdftex.def Info: ../../plots/artif_grammar_illustration.png used on inp
+ut line 255.
 (pdftex.def)             Requested size: 258.91895pt x 131.81476pt.
 
-<../plots/Reber_Grammar_States.png, id=62, 257.763pt x 305.943pt>
-File: ../plots/Reber_Grammar_States.png Graphic file (type png)
+<../../plots/Reber_Grammar_States.png, id=62, 257.763pt x 305.943pt>
+File: ../../plots/Reber_Grammar_States.png Graphic file (type png)
 
-<use ../plots/Reber_Grammar_States.png>
-Package pdftex.def Info: ../plots/Reber_Grammar_States.png used on input line 2
-56.
+<use ../../plots/Reber_Grammar_States.png>
+Package pdftex.def Info: ../../plots/Reber_Grammar_States.png used on input lin
+e 256.
 (pdftex.def)             Requested size: 184.94292pt x 219.51784pt.
- [9 <../plots/f_comp.png>] [10 <../plots/corr_weight_mat_prox_dist.png>] [11 <.
-./plots/prox_dist_act_cloud.png>]
-[12 <../plots/artif_grammar_illustration.png> <../plots/Reber_Grammar_States.pn
-g>] (./rnn_sequences.bbl) [13] (./rnn_sequences.aux) ) 
+ [9 <../../plots/f_comp.png>]
+[10 <../../plots/corr_weight_mat_prox_dist.png>]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 266.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 266.
+ [11 <../../plots/prox_dist_act_cloud.png>] [12 <../../plots/artif_grammar_illu
+stration.png> <../../plots/Reber_Grammar_States.png>]
+<../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/activi
+ty_plot.png, id=81, 1084.05pt x 361.35pt>
+File: ../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/a
+ctivity_plot.png Graphic file (type png)
+
+<use ../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/ac
+tivity_plot.png>
+Package pdftex.def Info: ../../code/rnn_prox_dist_non_bin/plots/plastic_input_w
+eights_small_init/activity_plot.png used on input line 276.
+(pdftex.def)             Requested size: 369.88583pt x 123.29295pt.
+
+<../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/lyapun
+ov_exponents.png, id=82, 1084.05pt x 361.35pt>
+File: ../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/l
+yapunov_exponents.png Graphic file (type png)
+
+<use ../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/ly
+apunov_exponents.png>
+Package pdftex.def Info: ../../code/rnn_prox_dist_non_bin/plots/plastic_input_w
+eights_small_init/lyapunov_exponents.png used on input line 283.
+(pdftex.def)             Requested size: 369.88583pt x 123.29295pt.
+ [13 <../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/a
+ctivity_plot.png> <../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights
+_small_init/lyapunov_exponents.png>]
+<../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/I_ee_I
+_eext_mean_std.png, id=89, 1084.05pt x 361.35pt>
+File: ../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/I
+_ee_I_eext_mean_std.png Graphic file (type png)
+
+<use ../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/I_
+ee_I_eext_mean_std.png>
+Package pdftex.def Info: ../../code/rnn_prox_dist_non_bin/plots/plastic_input_w
+eights_small_init/I_ee_I_eext_mean_std.png used on input line 293.
+(pdftex.def)             Requested size: 369.88583pt x 123.29295pt.
+
+<../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_large_init/I_ee_I
+_eext_mean_std.png, id=90, 1084.05pt x 361.35pt>
+File: ../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_large_init/I
+_ee_I_eext_mean_std.png Graphic file (type png)
+
+<use ../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_large_init/I_
+ee_I_eext_mean_std.png>
+Package pdftex.def Info: ../../code/rnn_prox_dist_non_bin/plots/plastic_input_w
+eights_large_init/I_ee_I_eext_mean_std.png used on input line 299.
+(pdftex.def)             Requested size: 369.88583pt x 123.29295pt.
+
+<../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/input_
+hist_time.png, id=91, 1084.05pt x 361.35pt>
+File: ../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/i
+nput_hist_time.png Graphic file (type png)
+
+<use ../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/in
+put_hist_time.png>
+Package pdftex.def Info: ../../code/rnn_prox_dist_non_bin/plots/plastic_input_w
+eights_small_init/input_hist_time.png used on input line 305.
+(pdftex.def)             Requested size: 369.88583pt x 123.29295pt.
+
+<../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_large_init/input_
+hist_time.png, id=92, 1084.05pt x 361.35pt>
+File: ../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_large_init/i
+nput_hist_time.png Graphic file (type png)
+
+<use ../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_large_init/in
+put_hist_time.png>
+Package pdftex.def Info: ../../code/rnn_prox_dist_non_bin/plots/plastic_input_w
+eights_large_init/input_hist_time.png used on input line 311.
+(pdftex.def)             Requested size: 369.88583pt x 123.29295pt.
+ [14 <../../code/rnn_prox_dist_non_bin/plots/plastic_input_weights_small_init/I
+_ee_I_eext_mean_std.png> <../../code/rnn_prox_dist_non_bin/plots/plastic_input_
+weights_large_init/I_ee_I_eext_mean_std.png>] [15 <../../code/rnn_prox_dist_non
+_bin/plots/plastic_input_weights_small_init/input_hist_time.png> <../../code/rn
+n_prox_dist_non_bin/plots/plastic_input_weights_large_init/input_hist_time.png>
+] (./rnn_sequences.bbl) [16] (./rnn_sequences.aux)
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 4045 strings out of 493223
- 53159 string characters out of 6142684
- 130247 words of memory out of 5000000
- 7449 multiletter control sequences out of 15000+600000
+ 4100 strings out of 493223
+ 56348 string characters out of 6142684
+ 130364 words of memory out of 5000000
+ 7495 multiletter control sequences out of 15000+600000
  11541 words of font info for 45 fonts, out of 8000000 for 9000
  1084 hyphenation exceptions out of 8191
- 38i,10n,27p,1269b,250s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-r12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on rnn_sequences.pdf (13 pages, 3048060 bytes).
+ 38i,10n,27p,1269b,262s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cms
+y7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb
+>
+Output written on rnn_sequences.pdf (16 pages, 7542319 bytes).
 PDF statistics:
- 124 PDF objects out of 1000 (max. 8388607)
- 68 compressed objects within 1 object stream
+ 145 PDF objects out of 1000 (max. 8388607)
+ 74 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 71 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 101 words of extra memory for PDF output out of 10000 (max. 10000000)
 
