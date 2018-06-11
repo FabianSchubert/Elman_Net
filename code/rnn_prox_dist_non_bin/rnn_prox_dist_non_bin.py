@@ -4,7 +4,7 @@ import numpy as np
 #import matplotlib.pyplot as plt
 from tqdm import tqdm
 
-#import pdb
+import pdb
 
 from grammar_data_reader import *
 
@@ -17,8 +17,25 @@ import sys
 
 
 
+def h(X, y_post, y, y_mean, a):
+	f = a*(2.+a*X*(1.-2*y_post))*(2*y_post-1.+2.*a*X*(1.-2.*y_post)*y_post)
+	return np.outer(f,y-y_mean)
 
-def h(x_post_pot,x_pre,x_pre_mean,a):
+def dgain(X,y_post,th,gain,l1,l2):
+	std = 1./(-l2*2.)**.5
+	mean = -l1/(2.*l2)
+	#theta = (1-2.*y_post)+y_post*(1.-y_post)*(l1+2.*l2*y_post)
+	#return 1./gain + (X-th)*theta
+	return std**2 - (y_post - mean)**2
+
+def dthresh(y_post,gain,l1,l2):
+	mean = -l1/(2.*l2)
+	#theta = (1-2.*y_post)+y_post*(1.-y_post)*(l1+2.*l2*y_post)
+	#return -gain*theta
+	return y_post - mean
+	
+
+def h_approx(x_post_pot,x_pre,x_pre_mean,a):
 
 	#f = (x_post_pot*np.tanh(a)/a - np.tanh(x_post_pot))/a**3
 	#f = (x_post_pot**2)*(a-x_post_pot)
@@ -30,9 +47,9 @@ def h(x_post_pot,x_pre,x_pre_mean,a):
 	#return np.outer(f,x_pre-x_pre_mean)# - np.outer(x_pre,x_post)
 	return np.outer(f,x_pre)# - np.outer(x_pre,x_post)
 
-def act(x,gain):
+def act(x,gain,th):
 
-	return (np.tanh(gain*x/2.)+1.)/2.
+	return (np.tanh(gain*(x-th)/2.)+1.)/2.
 
 
 def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../../misc_data/grammar_mat_simple.ppm", letter_map_path = "../../misc_data/letter_mapping_simple.csv" , path="./data/sim_data"):
@@ -56,8 +73,8 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 		p_mat_node_letter[inp_node_ind[k],k] = 1.
 	##
 	'''
-	N_ext = 300
-	N_letter_nodes = 300
+	N_ext = 9
+	N_letter_nodes = 9
 
 	param_dict = {}
 
@@ -77,16 +94,22 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 
 	mu_learn_ext = float(param_dict["mu_learn_ext"])
 	mu_learn_int = float(param_dict["mu_learn_int"])
+	mu_learn_gain = float(param_dict["mu_learn_gain"])
+	mu_learn_thresh = float(param_dict["mu_learn_thresh"])
+
+	mean_act_target = float(param_dict["mean_act_target"])
+	std_act_target = float(param_dict["std_act_target"])
+	# Parameters of target function exp(l1*x + l2*x**2):
+	l1 = mean_act_target/std_act_target**2
+	l2 = -1./(2.*std_act_target**2)
 
 	mu_act_av = float(param_dict["mu_act_av"])
 
-	mu_hom = float(param_dict["mu_hom"])
 
-
-	gain_neuron = float(param_dict["gain_neuron"])
-
-	act_fix = float(param_dict["act_fix"])
-	a_hebb = -np.log(1./act_fix - 1.)/gain_neuron
+	gain_neuron = np.ones(N_e)*float(param_dict["gain_neuron_init"])
+	thresh_neuron = np.ones(N_e)*float(param_dict["thresh_neuron_init"])
+	#act_fix = float(param_dict["act_fix"])
+	#a_hebb = -np.log(1./act_fix - 1.)/gain_neuron
 
 	#print(a_hebb)
 
@@ -107,6 +130,7 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 	n_t_rec = int(n_t/n_t_skip)
 	##
 
+	
 
 	#print ("Initialize Ext->I")
 	if w_std_pre_ext_input == 0:
@@ -120,8 +144,8 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 
 	x_ext_mean = np.zeros((N_letter_nodes))
 
-	std_ext = np.ones(N_ext)
-	std_ext[0] = 5.
+	std_ext = np.ones(N_ext)*0.
+	#std_ext[0] = 5.
 	'''
 	M_mod_rand_inp = np.eye(N_ext)
 	M_mod_rand_inp[:,0] = np.array([1.,1.,0.,0.,0.,0.,0.,0.,0.])
@@ -159,6 +183,9 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 
 	W_eext_rec = np.ndarray((n_t_rec,N_e,N_ext))
 
+	gain_rec = np.ndarray((n_t_rec,N_e))
+	thresh_rec = np.ndarray((n_t_rec,N_e))
+
 	I_ee_rec = np.ndarray((n_t_rec,N_e))
 	I_eext_rec = np.ndarray((n_t_rec,N_e))
 
@@ -169,7 +196,7 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 
 		###CUSTOM_COMMANDS_FLAG###
 		
-		'''
+		''' 
 		## Generate Markov Grammar Input
 		p_next = np.dot(Markov_Gramm,x_letter_node)
 		next_letter_node = np.random.choice(N_letter_nodes,p=p_next)
@@ -192,17 +219,21 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 		I_eext = np.dot(W_eext,x_ext)
 		I = I_ee + I_eext
 
-		x_e_new = act(I,gain_neuron)
+		x_e_new = act(I,gain_neuron,thresh_neuron)
 
 		x_e_mean += mu_act_av*(x_e_new - x_e_mean)
 		x_ext_mean += mu_act_av*(x_ext - x_ext_mean)
 
 		#pdb.set_trace()
+
 		if int_plast:
-			W += mu_learn_int*h(I,x_e,x_e_mean,a_hebb)
+			W += mu_learn_int*h(I,x_e_new,x_e,x_e_mean,gain_neuron)
 			W[range(N_e),range(N_e)] = 0.
+			gain_neuron += mu_learn_gain*dgain(I,x_e_new,thresh_neuron,gain_neuron,l1,l2)
+			gain_neuron = np.maximum(gain_neuron,0.01)
+			thresh_neuron += mu_learn_thresh*dthresh(x_e_new,gain_neuron,l1,l2)
 		if ext_plast:
-			W_eext += mu_learn_ext*h(I,x_ext,x_ext_mean,a_hebb)
+			W_eext += mu_learn_ext*h(I,x_e_new,x_ext,x_ext_mean,gain_neuron)
 		#W = (W.T / W.std(axis=1)).T
 		
 
@@ -214,6 +245,8 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 			x_ext_mean_rec[int(t/n_t_skip),:] = x_ext_mean
 			W_rec[int(t/n_t_skip),:,:] = W
 			W_eext_rec[int(t/n_t_skip),:,:] = W_eext
+			gain_rec[int(t/n_t_skip),:] = gain_neuron
+			thresh_rec[int(t/n_t_skip),:] = thresh_neuron
 			I_ee_rec[int(t/n_t_skip),:] = I_ee
 			I_eext_rec[int(t/n_t_skip),:] = I_eext
 		
@@ -225,7 +258,7 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 	#plt.plot(x_e_rec)
 	#plt.show()
 
-	np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,W_rec=W_rec,W_eext_rec=W_eext_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
+	np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,W_rec=W_rec,W_eext_rec=W_eext_rec,gain_rec=gain_rec,thresh_rec=thresh_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
 	
 
 	#pdb.set_trace()

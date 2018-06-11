@@ -22,7 +22,7 @@ if not os.path.isdir("./plots/"+file):
 	os.makedirs("./plots/"+file)
 
 
-x,x_mean,x_ext,x_ext_mean,W_ee,W_eext,I_ee,I_eext,p = load_data("./data/"+file+".npz")
+x,x_mean,x_ext,x_ext_mean,W_ee,W_eext,gain,thresh,I_ee,I_eext,p = load_data("./data/"+file+".npz")
 #x2,W2,I2,p2 = load_data("./data/x_e_rec_2.npy","./data/W_rec_2.npy","./data/I_ee_rec_2.npy","./data/parameters_2.p")
 
 t_ax = np.linspace(0.,p["n_t"],p["n_t_rec"])

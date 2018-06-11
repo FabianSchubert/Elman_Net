@@ -14,11 +14,13 @@ def load_data(path):
 	x_ext_mean = dat['x_ext_mean_rec']
 	W = dat['W_rec']
 	W_eext = dat['W_eext_rec']
+	gain = dat['gain_rec']
+	thresh = dat['thresh_rec']
 	I_ee = dat['I_ee_rec']
 	I_eext = dat['I_eext_rec']
 	p = dat['param_dict'].tolist()
 	
-	return x,x_mean,x_ext,x_ext_mean,W,W_eext,I_ee,I_eext,p
+	return x,x_mean,x_ext,x_ext_mean,W,W_eext,gain,thresh,I_ee,I_eext,p
 
 def h(x_post_pot,x_pre,a):
 
