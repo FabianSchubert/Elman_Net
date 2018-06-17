@@ -24,15 +24,15 @@ def h(X, y_post, y, y_mean, a):
 def dgain(X,y_post,th,gain,l1,l2):
 	std = 1./(-l2*2.)**.5
 	mean = -l1/(2.*l2)
-	#theta = (1-2.*y_post)+y_post*(1.-y_post)*(l1+2.*l2*y_post)
-	#return 1./gain + (X-th)*theta
-	return std**2 - (y_post - mean)**2
+	theta = (1-2.*y_post)+y_post*(1.-y_post)*(l1+2.*l2*y_post)
+	return 1./gain + (X-th)*theta
+	#return std**2 - (y_post - mean)**2
 
 def dthresh(y_post,gain,l1,l2):
 	mean = -l1/(2.*l2)
-	#theta = (1-2.*y_post)+y_post*(1.-y_post)*(l1+2.*l2*y_post)
-	#return -gain*theta
-	return y_post - mean
+	theta = (1-2.*y_post)+y_post*(1.-y_post)*(l1+2.*l2*y_post)
+	return -gain*theta
+	#return y_post - mean
 	
 
 def h_approx(x_post_pot,x_pre,x_pre_mean,a):
@@ -237,7 +237,7 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 		#W = (W.T / W.std(axis=1)).T
 		
 
-
+		
 		if t%n_t_skip == 0:
 			x_e_rec[int(t/n_t_skip),:] = x_e_new
 			x_e_mean_rec[int(t/n_t_skip),:] = x_e_mean
@@ -250,6 +250,19 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 			I_ee_rec[int(t/n_t_skip),:] = I_ee
 			I_eext_rec[int(t/n_t_skip),:] = I_eext
 		
+		'''
+		if t >= n_t-n_t_rec:# t%n_t_skip == 0:
+			x_e_rec[t+n_t_rec-n_t,:] = x_e_new
+			x_e_mean_rec[t+n_t_rec-n_t,:] = x_e_mean
+			x_ext_rec[t+n_t_rec-n_t,:] = x_ext
+			x_ext_mean_rec[t+n_t_rec-n_t,:] = x_ext_mean
+			W_rec[t+n_t_rec-n_t,:,:] = W
+			W_eext_rec[t+n_t_rec-n_t,:,:] = W_eext
+			gain_rec[t+n_t_rec-n_t,:] = gain_neuron
+			thresh_rec[t+n_t_rec-n_t,:] = thresh_neuron
+			I_ee_rec[t+n_t_rec-n_t,:] = I_ee
+			I_eext_rec[t+n_t_rec-n_t,:] = I_eext
+		'''
 		x_e = x_e_new
 
 	#plt.plot(W_rec[:,0,:])

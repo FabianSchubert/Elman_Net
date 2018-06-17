@@ -9,6 +9,11 @@ from tqdm import tqdm
 import sys
 import os
 
+
+def gauss(x,mean,std):
+
+	return np.exp(-(x-mean)**2/(2.*std**2))/(np.sqrt(2.*np.pi)*std)
+
 def angle(v1,v2):
 	return np.arccos(np.dot(v1,v2)/(np.linalg.norm(v1)*np.linalg.norm(v2)))
 
@@ -24,6 +29,8 @@ if not os.path.isdir("./plots/"+file):
 
 x,x_mean,x_ext,x_ext_mean,W_ee,W_eext,gain,thresh,I_ee,I_eext,p = load_data("./data/"+file+".npz")
 #x2,W2,I2,p2 = load_data("./data/x_e_rec_2.npy","./data/W_rec_2.npy","./data/I_ee_rec_2.npy","./data/parameters_2.p")
+
+
 
 t_ax = np.linspace(0.,p["n_t"],p["n_t_rec"])
 
@@ -80,7 +87,7 @@ def plot_lyap_exp():
 
 
 	for k in tqdm(range(p["n_t_rec"])):
-		d_sigm = d_act(np.dot(W_ee[k,:,:],x[k,:]),p["gain_neuron"])
+		d_sigm = x[k,:]*(1.-x[k,:])*gain[k,:]#d_act(np.dot(W_ee[k,:,:],x[k,:]),gain[k,:])
 		W_tilde = (W_ee[k,:,:].T*d_sigm).T
 		l[k,:] = np.linalg.eig(W_tilde)[0]
 
@@ -261,6 +268,23 @@ def plot_rec_field_end():
 	ax_rec_field_end.invert_yaxis()
 
 	plt.show()
+
+def comp_act_target_dist(n_last_steps):
+
+	fig_comp_act_target_dist, ax_comp_act_target_dist = plt.subplots(1,1,figsize=(5,5))
+
+	ax_comp_act_target_dist.hist(np.reshape(x[-n_last_steps:,:],(n_last_steps*p["N_e"])),bins=50,normed=True)
+
+	x_space = np.linspace(0.,1.,1000)
+
+	ax_comp_act_target_dist.plot(x_space,gauss(x_space,p["mean_act_target"],p["std_act_target"]))
+
+	ax_comp_act_target_dist.set_ylabel("$p$")
+	ax_comp_act_target_dist.set_xlabel("$x_e$")
+
+	plt.show()
+
+
 
 
 #plot_I_hist()
