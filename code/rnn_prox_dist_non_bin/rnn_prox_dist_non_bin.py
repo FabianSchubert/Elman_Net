@@ -116,6 +116,9 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 	w_mean_pre_ext_input = float(param_dict["w_mean_pre_ext_input"])
 	w_std_pre_ext_input = float(param_dict["w_std_pre_ext_input"])
 
+	store_w= param_dict["store_w"]
+	store_w_ext = param_dict["store_w_ext"]
+
 	ext_plast = param_dict["ext_plast"]
 	int_plast = param_dict["int_plast"]
 
@@ -181,10 +184,10 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 	x_ext_rec = np.ndarray((n_t_rec,N_ext))
 	x_ext_mean_rec = np.ndarray((n_t_rec,N_ext))
 
-
-	W_rec = np.ndarray((n_t_rec,N_e,N_e))
-
-	W_eext_rec = np.ndarray((n_t_rec,N_e,N_ext))
+	if store_w:
+		W_rec = np.ndarray((n_t_rec,N_e,N_e))
+	if store_w_ext:
+		W_eext_rec = np.ndarray((n_t_rec,N_e,N_ext))
 
 	gain_rec = np.ndarray((n_t_rec,N_e))
 	thresh_rec = np.ndarray((n_t_rec,N_e))
@@ -252,8 +255,10 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 			x_e_mean_rec[int(t/n_t_skip),:] = x_e_mean
 			x_ext_rec[int(t/n_t_skip),:] = x_ext
 			x_ext_mean_rec[int(t/n_t_skip),:] = x_ext_mean
-			W_rec[int(t/n_t_skip),:,:] = W
-			W_eext_rec[int(t/n_t_skip),:,:] = W_eext
+			if store_w:
+				W_rec[int(t/n_t_skip),:,:] = W
+			if store_w_ext:
+				W_eext_rec[int(t/n_t_skip),:,:] = W_eext
 			gain_rec[int(t/n_t_skip),:] = gain_neuron
 			thresh_rec[int(t/n_t_skip),:] = thresh_neuron
 			I_ee_rec[int(t/n_t_skip),:] = I_ee
@@ -279,10 +284,14 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 
 	#plt.plot(x_e_rec)
 	#plt.show()
-
-	np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,W_rec=W_rec,W_eext_rec=W_eext_rec,gain_rec=gain_rec,thresh_rec=thresh_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
-	
-
+	if store_w and store_w_ext:
+		np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,W_rec=W_rec,W_eext_rec=W_eext_rec,gain_rec=gain_rec,thresh_rec=thresh_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
+	elif store_w and not(store_w_ext):
+		np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,W_rec=W_rec,gain_rec=gain_rec,thresh_rec=thresh_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
+	elif not(store_w) and store_w_ext:
+		np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,W_eext_rec=W_eext_rec,gain_rec=gain_rec,thresh_rec=thresh_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
+	else:
+		np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,gain_rec=gain_rec,thresh_rec=thresh_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
 	#pdb.set_trace()
 	#with open(path_p,"wb") as file:
 	#	pickle.dump(param_dict,file)

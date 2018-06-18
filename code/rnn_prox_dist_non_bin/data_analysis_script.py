@@ -27,7 +27,23 @@ if not os.path.isdir("./plots/"+file):
 	os.makedirs("./plots/"+file)
 
 
-x,x_mean,x_ext,x_ext_mean,W_ee,W_eext,gain,thresh,I_ee,I_eext,p = load_data("./data/"+file+".npz")
+dat = load_data("./data/"+file+".npz")
+
+if "W" in dat:
+	W_ee = dat["W"]
+if "W_eext" in dat:
+	W_eext = dat["W_eext"]
+
+
+x = dat["x"]
+x_mean = dat["x_mean"]
+x_ext = dat["x_ext"]
+x_ext_mean = dat["x_ext_mean"]
+gain = dat["gain"]
+thresh = dat["thresh"]
+I_ee = dat["I_ee"]
+I_eext = dat["I_eext"]
+p = dat["p"]
 #x2,W2,I2,p2 = load_data("./data/x_e_rec_2.npy","./data/W_rec_2.npy","./data/I_ee_rec_2.npy","./data/parameters_2.p")
 
 
@@ -62,11 +78,10 @@ plt.hist(angles_end,bins=30,normed=True,histtype="step")
 plt.show()
 '''
 
-def plot_act():
-	
+def plot_act(skip_dat = 1):
 	fig_act,ax_act = plt.subplots(1,1,figsize=(15,5))
 
-	ax_act.plot(t_ax,x)
+	ax_act.plot(t_ax[::skip_dat],x[::skip_dat,:])
 	ax_act.set_xlabel("#t")
 	ax_act.set_ylabel("$x_i$")
 
