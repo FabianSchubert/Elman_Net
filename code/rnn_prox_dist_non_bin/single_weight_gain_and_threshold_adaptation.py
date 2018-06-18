@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+
 
 from tqdm import tqdm
 import pdb
 
-mu_w = 0.001
-mu_a = 0.001
-mu_b = 0.001
+mu_w = 0.1
+mu_a = 0.1
+mu_b = 0.#0.1
 
 
 
@@ -18,10 +20,12 @@ std_y_pre = .1
 y_target = 0.5
 std_target = 0.1
 
-n_t = 10000
-n_trials = 50
+n_t = 50000
+n_t_rec = 1000
+n_t_skip = int(n_t/n_t_rec)
+n_trials = 2
 
-rec = np.ndarray((n_trials,n_t,3))
+rec = np.ndarray((n_trials,n_t_rec,5))
 
 def s(x,a,b):
 
@@ -57,21 +61,29 @@ def F(phi):
 	r[1] = mu_a * da(x,a,b)
 	r[2] = mu_b * db(x,a,b)
 
-	return r
+	return r, y_pre, s(x,a,b)
 
 
 for k in tqdm(range(n_trials)):
 
-	v = (np.random.rand(3) - .5)*2.
+	v = np.ndarray((3))
+	v[0] =  (np.random.rand() - .5)*2.*5.
+	v[1] = 1.
+	v[2] = 0.
 
-	for t in range(n_t):
+	for t in tqdm(range(n_t)):
 
-		v += F(v)
+		dF, y_pre, y_post = F(v)
 
-		rec[k,t,:] = v
+		v += dF
+		if t%n_t_skip == 0:
+
+			rec[k,int(t/n_t_skip),:3] = v
+			rec[k,int(t/n_t_skip),3] = y_pre
+			rec[k,int(t/n_t_skip),4] = y_post
 
 
-pdb.set_trace()
+
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 fig = plt.figure()

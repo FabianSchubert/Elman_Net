@@ -119,6 +119,9 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 	ext_plast = param_dict["ext_plast"]
 	int_plast = param_dict["int_plast"]
 
+	int_gain_adapt = param_dict["int_gain_adapt"]
+	int_thresh_adapt = param_dict["int_thresh_adapt"]
+
 	staging = param_dict["staging"]
 	##
 
@@ -229,11 +232,17 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 		if int_plast:
 			W += mu_learn_int*h(I,x_e_new,x_e,x_e_mean,gain_neuron)
 			W[range(N_e),range(N_e)] = 0.
+		if int_gain_adapt:
 			gain_neuron += mu_learn_gain*dgain(I,x_e_new,thresh_neuron,gain_neuron,l1,l2)
 			gain_neuron = np.maximum(gain_neuron,0.01)
-			thresh_neuron += mu_learn_thresh*dthresh(x_e_new,gain_neuron,l1,l2)
+		if int_thresh_adapt:
+			thresh_neuron += mu_learn_thresh*dthresh(x_e_new,gain_neuron,l1,l2)	
 		if ext_plast:
 			W_eext += mu_learn_ext*h(I,x_e_new,x_ext,x_ext_mean,gain_neuron)
+
+		
+		
+
 		#W = (W.T / W.std(axis=1)).T
 		
 
