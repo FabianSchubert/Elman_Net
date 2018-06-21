@@ -18,23 +18,15 @@ def load_data(path):
 	x_ext_mean = dat['x_ext_mean_rec']
 	store_w = p["store_w"]
 	store_w_ext = p["store_w_ext"]
-	if store_w:
-		W = dat['W_rec']
-	if store_w_ext:
-		W_eext = dat['W_eext_rec']
+	W = dat['W_rec']
+	W_eext = dat['W_eext_rec']
 	gain = dat['gain_rec']
 	thresh = dat['thresh_rec']
 	I_ee = dat['I_ee_rec']
 	I_eext = dat['I_eext_rec']
 	
-	if store_w and store_w_ext:
-		return {"x":x,"x_mean":x_mean,"x_ext":x_ext,"x_ext_mean":x_ext_mean,"W":W,"W_eext":W_eext,"gain":gain,"thresh":thresh,"I_ee":I_ee,"I_eext":I_eext,"p":p}
-	elif store_w and not(store_w_ext):
-		return {"x":x,"x_mean":x_mean,"x_ext":x_ext,"x_ext_mean":x_ext_mean,"W":W,"gain":gain,"thresh":thresh,"I_ee":I_ee,"I_eext":I_eext,"p":p}
-	elif not(store_w) and store_w_ext:
-		return {"x":x,"x_mean":x_mean,"x_ext":x_ext,"x_ext_mean":x_ext_mean,"W_eext":W_eext,"gain":gain,"thresh":thresh,"I_ee":I_ee,"I_eext":I_eext,"p":p}
-	else:
-		return {"x":x,"x_mean":x_mean,"x_ext":x_ext,"x_ext_mean":x_ext_mean,"gain":gain,"thresh":thresh,"I_ee":I_ee,"I_eext":I_eext,"p":p}
+	return {"x":x,"x_mean":x_mean,"x_ext":x_ext,"x_ext_mean":x_ext_mean,"W":W,"W_eext":W_eext,"gain":gain,"thresh":thresh,"I_ee":I_ee,"I_eext":I_eext,"p":p}
+	
 
 def h(x_post_pot,x_pre,a):
 

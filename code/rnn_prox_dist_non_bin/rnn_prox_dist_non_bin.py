@@ -287,11 +287,11 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 	if store_w and store_w_ext:
 		np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,W_rec=W_rec,W_eext_rec=W_eext_rec,gain_rec=gain_rec,thresh_rec=thresh_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
 	elif store_w and not(store_w_ext):
-		np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,W_rec=W_rec,gain_rec=gain_rec,thresh_rec=thresh_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
+		np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,W_rec=W_rec,W_eext_rec=W_eext,gain_rec=gain_rec,thresh_rec=thresh_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
 	elif not(store_w) and store_w_ext:
-		np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,W_eext_rec=W_eext_rec,gain_rec=gain_rec,thresh_rec=thresh_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
+		np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,W_rec=W,W_eext_rec=W_eext_rec,gain_rec=gain_rec,thresh_rec=thresh_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
 	else:
-		np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,gain_rec=gain_rec,thresh_rec=thresh_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
+		np.savez(path,x_e_rec=x_e_rec,x_e_mean_rec=x_e_mean_rec,x_ext_rec=x_ext_rec,x_ext_mean_rec=x_ext_mean_rec,W_rec=W,W_eext_rec=W_eext,gain_rec=gain_rec,thresh_rec=thresh_rec,I_ee_rec=I_ee_rec,I_eext_rec=I_eext_rec,param_dict=param_dict)
 	#pdb.set_trace()
 	#with open(path_p,"wb") as file:
 	#	pickle.dump(param_dict,file)

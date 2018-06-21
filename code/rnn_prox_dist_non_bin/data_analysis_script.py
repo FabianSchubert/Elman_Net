@@ -29,10 +29,8 @@ if not os.path.isdir("./plots/"+file):
 
 dat = load_data("./data/"+file+".npz")
 
-if "W" in dat:
-	W_ee = dat["W"]
-if "W_eext" in dat:
-	W_eext = dat["W_eext"]
+W_ee = dat["W"]
+W_eext = dat["W_eext"]
 
 
 x = dat["x"]
@@ -83,7 +81,7 @@ def plot_act(skip_dat = 1):
 
 	ax_act.plot(t_ax[::skip_dat],x[::skip_dat,:])
 	ax_act.set_xlabel("#t")
-	ax_act.set_ylabel("$x_i$")
+	ax_act.set_ylabel("$y_i$")
 
 	ax_act.set_xlim([t_ax[0],t_ax[-1]])
 
@@ -95,22 +93,31 @@ def plot_act(skip_dat = 1):
 
 
 
-def plot_lyap_exp():
+def plot_lyap_exp(t_start=0,t_end=p["n_t_rec"],skip_dat = 1):
+	
+	t_ax_skip = t_ax[t_start:t_end:skip_dat]
 
-	l = np.ndarray((p["n_t_rec"],p["N_e"]),dtype="complex128")
+	n_data_points = t_ax_skip.shape[0]
+
+	l = np.ndarray((n_data_points,p["N_e"]),dtype="complex128")
 
 
+	for n in tqdm(range(n_data_points)):
 
-	for k in tqdm(range(p["n_t_rec"])):
+		k = t_start + n*skip_dat
+
 		d_sigm = x[k,:]*(1.-x[k,:])*gain[k,:]#d_act(np.dot(W_ee[k,:,:],x[k,:]),gain[k,:])
-		W_tilde = (W_ee[k,:,:].T*d_sigm).T
-		l[k,:] = np.linalg.eig(W_tilde)[0]
+		if p["store_w"]:
+			W_tilde = (W_ee[k,:,:].T*d_sigm).T
+		else:
+			W_tilde = (W_ee.T*d_sigm).T
+		l[n,:] = np.linalg.eig(W_tilde)[0]
 
 	max_l_real_abs = np.abs(np.real(l)).max(axis=1)
 
 	fig_lyap_exp,ax_lyap_exp = plt.subplots(1,1,figsize=(15,5))
 
-	ax_lyap_exp.plot(t_ax,np.log(max_l_real_abs),'-o')
+	ax_lyap_exp.plot(t_ax_skip,np.log(max_l_real_abs),'-o')
 	ax_lyap_exp.grid()
 	ax_lyap_exp.set_xlabel("#t")
 	ax_lyap_exp.set_ylabel("Max. Lyapunov Exponent")
@@ -186,7 +193,7 @@ def plot_I_mean_std():
 	ax_I_mean_std.set_xlim([t_ax[0],t_ax[-1]])
 
 	ax_I_mean_std.set_xlabel("#t")
-	ax_I_mean_std.set_ylabel("$W_{ij}$ (black),$W_{ij,\\rm ext}$ (blue)")
+	ax_I_mean_std.set_ylabel("$x_{ee}$ (black),$x_{\\rm eext}$ (blue)")
 
 	plt.tight_layout()
 
@@ -201,7 +208,7 @@ def plot_I_ee_I_eext_diff():
 	ax_I_ee_I_eext_diff.plot(t_ax,(np.abs(I_ee)-np.abs(I_eext))/np.abs(I_ee+I_eext))
 
 	ax_I_ee_I_eext_diff.set_xlabel("#t")
-	ax_I_ee_I_eext_diff.set_ylabel("$(|I_{ee}|-|I_{eext}|)/|I_{ee}+I_{eext}|$")
+	ax_I_ee_I_eext_diff.set_ylabel("$(|x_{ee}|-|x_{eext}|)/|x_{ee}+x_{eext}|$")
 
 	plt.tight_layout()
 
@@ -235,8 +242,8 @@ def plot_I_hist(n_bins=50):
 	ax_I_hist[1].step(h[-1,:],bins_h[1:])
 	ax_I_hist[3].step(h_ext[-1,:],bins_h[1:])
 
-	ax_I_hist[0].set_ylabel("$I_{ee}$")
-	ax_I_hist[2].set_ylabel("$I_{eext}$")
+	ax_I_hist[0].set_ylabel("$x_{ee}$")
+	ax_I_hist[2].set_ylabel("$x_{eext}$")
 
 	ax_I_hist[0].set_xlabel("#t")
 	ax_I_hist[2].set_xlabel("#t")
@@ -258,8 +265,10 @@ def analyze_fp_stab():
 	l = np.ndarray((p["n_t_rec"]))
 
 	for k in tqdm(range(p["n_t_rec"])):
-
-		l[k] = np.log(np.abs(np.real(np.linalg.eigvals(d_fix*W_ee[k,:,:]))).max())
+		if p["store_w"]:
+			l[k] = np.log(np.abs(np.real(np.linalg.eigvals(d_fix*W_ee[k,:,:]))).max())
+		else:
+			l[k] = np.log(np.abs(np.real(np.linalg.eigvals(d_fix*W_ee))).max())
 
 	plt.plot(t_ax,l,'-o')
 
@@ -275,8 +284,8 @@ def plot_rec_field_end():
 	ax_rec_field_end.pcolormesh(np.abs(W_eext[-1,:,:]))
 	
 	
-	ax_rec_field_end.set_ylabel("$x_{\\mathrm{e},i}$")
-	ax_rec_field_end.set_xlabel("$x_{\\mathrm{ext},i}$")
+	ax_rec_field_end.set_ylabel("$y_{\\mathrm{e},i}$")
+	ax_rec_field_end.set_xlabel("$y_{\\mathrm{ext},i}$")
 
 	ax_rec_field_end.xaxis.tick_top()
 	ax_rec_field_end.xaxis.set_label_position("top")
@@ -295,7 +304,7 @@ def comp_act_target_dist(n_last_steps):
 	ax_comp_act_target_dist.plot(x_space,gauss(x_space,p["mean_act_target"],p["std_act_target"]))
 
 	ax_comp_act_target_dist.set_ylabel("$p$")
-	ax_comp_act_target_dist.set_xlabel("$x_e$")
+	ax_comp_act_target_dist.set_xlabel("$y$")
 
 	plt.show()
 

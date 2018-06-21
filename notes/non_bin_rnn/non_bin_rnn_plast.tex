@@ -5,11 +5,43 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{geometry}
 \author{Fabian Schubert}
-\title{Tuning feed-forward and recurrent connections in a plastic network}
+\title{Notes on Homeostasis and Plasticity in a Non-binary Recurrent Network}
 \begin{document}
-\maketitle
+\section{Equations of the Network Model}
+We investigate a discrete-time, fully connected recurrent network model that includes homeostatic threshold and gain control by using the Kullback-Leibler divergence between a target distribution and neuronal output as a control measure. Standard parameters of the model are given in Table \ref{tab:parameters}. Find the details of the model in the following sections.
+\begin{table}
+\centering
+\caption{Parameters of the network}
+
+\begin{tabular}{l|r}
+$N$ & $300$ \\
+$\mathrm{E}[W]$ &  $0$\\
+$\mathrm{Std}[W]$ & $1/\sqrt{N_e}$ \\
+$\mu_b$ & $0.001$ \\
+$\mu_a$ & $0.001$ \\
+Initial $a$ & $1$ \\
+Initial $b$ & $0$
+\end{tabular}
+\label{tab:parameters}
+\end{table}
+
+\subsection{Neuron Model}
+At discrete times $t$, each neuron $i$ in our network is characterized by a single activity variable $y^t_i$. The next state is calculated by:
+\begin{align}
+y^{t+1}_i &= \sigma\left(x^t_i\right) \\
+\sigma(x) &= \frac{1}{1+\exp(-a(x-b))} \\
+x^t_i &= x^t_{i,ee} + x^t_{i,eext} = \sum_j W_{ij} y^t_j  + x^t_{i,eext} \\
+\end{align}
+
+where $W_{ij}$ is a connectivity matrix whose properties are described in the following section and $x^t_{i,eext}$ is an optional external input.
+
+\subsection{Recurrent Network Properties}
+$W_{ij}$ is a fixed randomly generated matrix, whose entries were drawn from a normal distribution with mean and standard deviation given in Table \ref{tab:parameters}. Autapses were prohibited, meaning that $W_{ii} = 0$. Note that we did not impose Dale's law onto the sign of our connections.
+
+
+\section{Activity Regulation in a Non-binary Recurrent Network}
 
 
 
