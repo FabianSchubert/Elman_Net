@@ -5,11 +5,11 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage{geometry}
 \author{Fabian Schubert}
 \title{Notes on Homeostasis and Plasticity in a Non-binary Recurrent Network}
 \begin{document}
-\section{Equations of the Network Model}
+\maketitle
+\section{Description of the Network Model}
 We investigate a discrete-time, fully connected recurrent network model that includes homeostatic threshold and gain control by using the Kullback-Leibler divergence between a target distribution and neuronal output as a control measure. Standard parameters of the model are given in Table \ref{tab:parameters}. Find the details of the model in the following sections.
 \begin{table}
 \centering
@@ -18,7 +18,7 @@ We investigate a discrete-time, fully connected recurrent network model that inc
 \begin{tabular}{l|r}
 $N$ & $300$ \\
 $\mathrm{E}[W]$ &  $0$\\
-$\mathrm{Std}[W]$ & $1/\sqrt{N_e}$ \\
+$\mathrm{Std}[W]$ & $1/\sqrt{N}$ \\
 $\mu_b$ & $0.001$ \\
 $\mu_a$ & $0.001$ \\
 Initial $a$ & $1$ \\
@@ -34,14 +34,21 @@ y^{t+1}_i &= \sigma\left(x^t_i\right) \\
 \sigma(x) &= \frac{1}{1+\exp(-a(x-b))} \\
 x^t_i &= x^t_{i,ee} + x^t_{i,eext} = \sum_j W_{ij} y^t_j  + x^t_{i,eext} \\
 \end{align}
-
 where $W_{ij}$ is a connectivity matrix whose properties are described in the following section and $x^t_{i,eext}$ is an optional external input.
 
 \subsection{Recurrent Network Properties}
-$W_{ij}$ is a fixed randomly generated matrix, whose entries were drawn from a normal distribution with mean and standard deviation given in Table \ref{tab:parameters}. Autapses were prohibited, meaning that $W_{ii} = 0$. Note that we did not impose Dale's law onto the sign of our connections.
+$W_{ij}$ is a fixed randomly generated matrix, whose entries were drawn from a normal distribution with mean and standard deviation given in Table \ref{tab:parameters}. Autapses were prohibited, meaning that $W_{ii} = 0$. Note that we did not impose Dale's law onto the signs of the connections.
 
-
-\section{Activity Regulation in a Non-binary Recurrent Network}
+\subsection{Gain and Threshold Control via the Kullback-Leibler Divergence}
+We define by
+\begin{equation}
+p_{\rm t}(y,\lambda_1,\lambda_2) \propto \exp(\lambda_1 y + \lambda_2 y^2)
+\end{equation}
+a family of Gaussian distributions as a target for the neural activity. Note that $\lambda_1$ and $\lambda_2$ are related to the mean and variance via $\lambda_1 = \mathrm{E}[y]/\mathrm{Var}[y]$ and $\lambda_2 = -1/(2 \mathrm{Var}[y])$. The Kullback-Leibler divergence allows us to define a measure between the target distribution and the actual distribution---though only assessible via sampling of the output---which shall be denoted by $p_{\rm s}$. The K.-L. divergence is given by
+\begin{equation}
+D_{KL}(p_{\rm s}||p_{\rm t}) = \int \mathrm{d}y \ p_{\rm s}(y) \ln \left( \frac{p_{\rm s}(y)}{p_{\rm t}(y)} \right) \; .
+\end{equation}
+If we 
 
 
 
