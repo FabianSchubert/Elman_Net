@@ -73,10 +73,16 @@ a^{t+1}_i &= a^t_i + \Delta a^t_i \\
 b^{t+1}_i &= b^t_i + \Delta b^t_i \\
 \Delta a^t_i &= - \epsilon_a \frac{\partial d(x^t_i)}{\partial a_i} = \epsilon_a \frac{1}{a^t_i}\left[ 1 - \ln \left( \frac{1}{y^t_i} - 1 \right) \Theta^t_i \right] \\
 \Delta b^t_i &= - \epsilon_b \frac{\partial d(x^t_i)}{\partial b_i} = \epsilon_b \left(-a^t_i\right) \Theta^t_i \\
-\Theta^t_i &\equiv 1-2y^t_i + y^t_i (1-2y^t_i)[\lambda_1 + 2\lambda_2 y^t_i]
+\Theta^t_i &\equiv 1-2y^t_i + y^t_i (1-2y^t_i)[\lambda_1 + 2\lambda_2 y^t_i] \label{eq:theta}
 \end{align}
 
-Note that, aside from a scaling factor, gain and threshold dynamics can be expressed solely in terms of output activity and target parameters. This allows us to relate dynamical fixed points to of the output activity. We cannot directly solve the fixed point conditions for the output activity, but we can 
+Note that, aside from a scaling factor, gain and threshold dynamics can be expressed solely in terms of output activity and target parameters. This allows us to find dynamical fixed points of $a$ and $b$ in terms of the output activity.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{./figures/gain_thresh_dyn.png}
+\caption{\textbf{A},\textbf{B}: $\Theta$ as a function of $y$ as given in \eqref{eq:theta}. }
+\end{figure}
 
 \section{}
 
