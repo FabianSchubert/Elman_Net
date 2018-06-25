@@ -7,6 +7,18 @@
 \usepackage{graphicx}
 \author{Fabian Schubert}
 \title{Notes on Homeostasis and Plasticity in a Non-binary Recurrent Network}
+
+\newcommand{\diff}[1]{\mathrm{d}#1}
+
+\newcommand{\expval}[1]{\mathrm{E}[#1]}
+\newcommand{\var}[1]{\mathrm{Var}[#1]}
+\newcommand{\std}[1]{\mathrm{Std}[#1]}
+
+\newcommand{\psample}{p_{\rm s}}
+\newcommand{\qsample}{q_{\rm s}}
+\newcommand{\ptarget}{p_{\rm t}}
+
+
 \begin{document}
 \maketitle
 \section{Description of the Network Model}
@@ -31,7 +43,7 @@ Initial $b$ & $0$
 At discrete times $t$, each neuron $i$ in our network is characterized by a single activity variable $y^t_i$. The next state is calculated by:
 \begin{align}
 y^{t+1}_i &= \sigma\left(x^t_i\right) \\
-\sigma(x) &= \frac{1}{1+\exp(-a(x-b))} \\
+\sigma\left(x\right) &= \frac{1}{1+\exp\left(-a\left(x-b\right)\right)} \\
 x^t_i &= x^t_{i,ee} + x^t_{i,eext} = \sum_j W_{ij} y^t_j  + x^t_{i,eext} \\
 \end{align}
 where $W_{ij}$ is a connectivity matrix whose properties are described in the following section and $x^t_{i,eext}$ is an optional external input.
@@ -42,13 +54,31 @@ $W_{ij}$ is a fixed randomly generated matrix, whose entries were drawn from a n
 \subsection{Gain and Threshold Control via the Kullback-Leibler Divergence}
 We define by
 \begin{equation}
-p_{\rm t}(y,\lambda_1,\lambda_2) \propto \exp(\lambda_1 y + \lambda_2 y^2)
+\ptarget (y,\lambda_1,\lambda_2 ) \propto \exp\left(\lambda_1 y + \lambda_2 y^2\right)
 \end{equation}
-a family of Gaussian distributions as a target for the neural activity. Note that $\lambda_1$ and $\lambda_2$ are related to the mean and variance via $\lambda_1 = \mathrm{E}[y]/\mathrm{Var}[y]$ and $\lambda_2 = -1/(2 \mathrm{Var}[y])$. The Kullback-Leibler divergence allows us to define a measure between the target distribution and the actual distribution---though only assessible via sampling of the output---which shall be denoted by $p_{\rm s}$. The K.-L. divergence is given by
-\begin{equation}
-D_{KL}(p_{\rm s}||p_{\rm t}) = \int \mathrm{d}y \ p_{\rm s}(y) \ln \left( \frac{p_{\rm s}(y)}{p_{\rm t}(y)} \right) \; .
-\end{equation}
-If we 
+a family of Gaussian distributions as a target for the neural activity. Note that $\lambda_1$ and $\lambda_2$ are related to the target mean and variance $\mu_t,\sigma_t$ via $\lambda_1 = \mu_t/\sigma_t^2$ and $\lambda_2 = -1/\left(2 \sigma_t^2\right)$. The Kullback-Leibler divergence allows us to define a measure between the target distribution and the actual distribution---though only assessible via sampling of the output---which shall be denoted by $\psample (y)$. The K.-L. divergence is given by
+\begin{align}
+D_{KL}\left(p_{\rm s}||p_{\rm t}\right) &= \int \diff{y} \ \psample (y) \ln \left( \frac{\psample (y)}{\ptarget (y)} \right) \\
+&= \int \diff{y} \ \qsample (x) \left[ \ln \qsample (x) - \ln\sigma '\left(x\right) - \ln \ptarget (\sigma\left(x\right)) \right]
+\end{align}
+where $\qsample (x)$ denotes the sampled distribution of the synaptic input or ``membrane potential". The total derivative with respect to a parameter $\theta$ of our transfer function is then given by
+\begin{align}
+\frac{\diff{D}}{\diff{\theta}} &= -\int \diff{x} \ \qsample (x) \sigma'^{-1} \left(x\right) \frac{\partial \sigma'}{\partial \theta} \left( x\right) - \int \diff{x} \ \qsample (x) \frac{\ptarget'(x)}{ \ptarget(x)} \frac{\partial \sigma}{\partial \theta} (x) \\
+&\equiv \int \diff{x} \ \qsample (x) \frac{\partial d(x)}{\partial \theta} \; .
+\end{align}
+
+We then used this expression to derive on-line local adaptation rules for the gain $a$ and threshold $b$ by steepest decent:
+\begin{align}
+a^{t+1}_i &= a^t_i + \Delta a^t_i \\
+b^{t+1}_i &= b^t_i + \Delta b^t_i \\
+\Delta a^t_i &= - \epsilon_a \frac{\partial d(x^t_i)}{\partial a_i} = \epsilon_a \frac{1}{a^t_i}\left[ 1 - \ln \left( \frac{1}{y^t_i} - 1 \right) \Theta^t_i \right] \\
+\Delta b^t_i &= - \epsilon_b \frac{\partial d(x^t_i)}{\partial b_i} = \epsilon_b \left(-a^t_i\right) \Theta^t_i \\
+\Theta^t_i &\equiv 1-2y^t_i + y^t_i (1-2y^t_i)[\lambda_1 + 2\lambda_2 y^t_i]
+\end{align}
+
+Note that, aside from a scaling factor, gain and threshold dynamics can be expressed solely in terms of output activity and target parameters. This allows us to relate dynamical fixed points to of the output activity. We cannot directly solve the fixed point conditions for the output activity, but we can 
+
+\section{}
 
 
 
