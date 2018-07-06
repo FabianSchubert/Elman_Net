@@ -52,7 +52,7 @@ def act(x,gain,th):
 	return (np.tanh(gain*(x-th)/2.)+1.)/2.
 
 
-def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../../misc_data/grammar_mat_simple.ppm", letter_map_path = "../../misc_data/letter_mapping_simple.csv" , path="./data/sim_data"):
+def main(x_e, W, gain_neuron, thresh_neuron, params_path = "./sim_parameters/no_input.csv",gramm_path = "../../misc_data/grammar_mat_simple.ppm", letter_map_path = "../../misc_data/letter_mapping_simple.csv" , path="./data/sim_data"):
 
 
 	###### Parameters
@@ -73,6 +73,9 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 		p_mat_node_letter[inp_node_ind[k],k] = 1.
 	##
 	'''
+
+
+
 	N_ext = 9
 	N_letter_nodes = 9
 
@@ -106,8 +109,7 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 	mu_act_av = float(param_dict["mu_act_av"])
 
 
-	gain_neuron = np.ones(N_e)*float(param_dict["gain_neuron_init"])
-	thresh_neuron = np.ones(N_e)*float(param_dict["thresh_neuron_init"])
+	
 	#act_fix = float(param_dict["act_fix"])
 	#a_hebb = -np.log(1./act_fix - 1.)/gain_neuron
 
@@ -126,6 +128,9 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 	int_thresh_adapt = param_dict["int_thresh_adapt"]
 
 	staging = param_dict["staging"]
+
+
+
 	##
 
 	## Simulation
@@ -174,6 +179,10 @@ def main(x_e, W, params_path = "./sim_parameters/no_input.csv",gramm_path = "../
 	W[range(N_e),range(N_e)] = 0.
 	x_e = np.array(x_e)
 	x_e_mean = x_e[:]
+
+	gain_neuron = np.array(gain_neuron)
+	thresh_neuron = np.array(thresh_neuron)
+
 	#x_e = np.random.rand((N_e))
 
 	## recording
@@ -320,14 +329,23 @@ if __name__ == "__main__":
 	sigma_w_init = float(param_dict["sigma_w_init"])
 	mu_w_init = float(param_dict["mu_w_init"])
 
+	if param_dict["load_init_data"]:
+		init_dat = np.load(param_dict["load_init_data"])
+		x_seed = init_dat['x']
+		W_seed = init_dat['W']
+		gain_seed = init_dat['gain']
+		thresh_seed = init_dat['thresh']
+	else:
+
+		gain_seed = np.ones(N_e)*float(param_dict["gain_neuron_init"])
+		thresh_seed = np.ones(N_e)*float(param_dict["thresh_neuron_init"])
+
+		x_seed = np.random.rand(N_e)
+		W_seed = np.random.normal(mu_w_init,sigma_w_init,(N_e,N_e))
 
 
-	x_seed = np.random.rand(N_e)
-	W_seed = np.random.normal(mu_w_init,sigma_w_init,(N_e,N_e))
 
-
-
-	main(x_seed,W_seed,"./sim_parameters/"+file+".csv","../../misc_data/random_input.ppm","../../misc_data/letter_mapping_simple.csv","./data/"+file)
+	main(x_seed,W_seed,gain_seed,thresh_seed,"./sim_parameters/"+file+".csv","../../misc_data/random_input.ppm","../../misc_data/letter_mapping_simple.csv","./data/"+file)
 	
 	#x_seed = x_seed+(np.random.rand((N_e))-.5)*0.000000000001
 	#W = W+np.random.normal(mu_w_init, sigma_w_init, (N_e,N_e))*0.

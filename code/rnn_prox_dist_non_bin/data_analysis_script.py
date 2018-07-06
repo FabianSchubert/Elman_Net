@@ -126,6 +126,38 @@ def plot_lyap_exp(t_start=0,t_end=p["n_t_rec"],skip_dat = 1):
 
 	plt.show()
 
+def plot_lyap_exp_fp(t_start=0,t_end=p["n_t_rec"],skip_dat = 1):
+
+	t_ax_skip = t_ax[t_start:t_end:skip_dat]
+
+	n_data_points = t_ax_skip.shape[0]
+
+	l = np.ndarray((n_data_points,p["N_e"]),dtype="complex128")
+
+
+	for n in tqdm(range(n_data_points)):
+
+		k = t_start + n*skip_dat
+
+		d_sigm = p["mean_act_target"]*(1.-p["mean_act_target"])*gain[k,:]#d_act(np.dot(W_ee[k,:,:],x[k,:]),gain[k,:])
+		if p["store_w"]:
+			W_tilde = (W_ee[k,:,:].T*d_sigm).T
+		else:
+			W_tilde = (W_ee.T*d_sigm).T
+		l[n,:] = np.linalg.eig(W_tilde)[0]
+
+	max_l_real_abs = np.abs(np.real(l)).max(axis=1)
+
+	fig_lyap_exp,ax_lyap_exp = plt.subplots(1,1,figsize=(15,5))
+
+	ax_lyap_exp.plot(t_ax_skip,np.log(max_l_real_abs),'-o')
+	ax_lyap_exp.grid()
+	ax_lyap_exp.set_xlabel("#t")
+	ax_lyap_exp.set_ylabel("Max. Lyapunov Exponent")
+	
+	plt.savefig("./plots/" + file + "/lyapunov_exponents_fp.png",dpi=300)
+
+	plt.show()
 
 
 def plot_weights_sample():
@@ -309,8 +341,23 @@ def comp_act_target_dist(n_last_steps):
 	plt.show()
 
 
+def autocorr(x,n_shift):
+
+	autoc = np.ndarray((n_shift))
+
+	cv = np.cov(x,x)
+
+	autoc[0] = cv[0,1]/(cv[0,0]*cv[1,1])**.5
+
+	for k in range(1,n_shift):
+
+		cv = np.cov(x[k:],x[:-k])
+
+		autoc[k] = cv[0,1]/(cv[0,0]*cv[1,1])**.5
 
 
+
+	return autoc
 #plot_I_hist()
 #analyze_fp_stab()
 plt.ion()
