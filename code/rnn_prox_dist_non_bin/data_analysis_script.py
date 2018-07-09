@@ -356,8 +356,22 @@ def autocorr(x,n_shift):
 		autoc[k] = cv[0,1]/(cv[0,0]*cv[1,1])**.5
 
 
-
 	return autoc
+
+def avln_s(threshold=0.6):
+
+	avln = ((x>threshold).sum(axis=1)>0)*1.
+	
+	t_zero = np.where(avln==0)[0]
+
+	t_zero_diff = t_zero[1:] - t_zero[:-1]
+
+	avln_list = t_zero_diff[np.where(t_zero_diff > 1)[0]]
+
+	return avln_list
+
+
+
 #plot_I_hist()
 #analyze_fp_stab()
 plt.ion()
