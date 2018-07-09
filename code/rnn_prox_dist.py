@@ -41,7 +41,7 @@ CF_ie = 0.1 # connection fraction E->I
 CF_ii = 0.1 # connection fraction I->I
 
 CF_eext = 0.1 # connection fraction Ext->E
-w_mean_pre_ext_input = .2
+w_mean_pre_ext_input = 10.*(N_e+N_i)**.5
 
 w_exc_min = 0.001
 w_inh_max = -0.0001
@@ -58,23 +58,23 @@ r_target_i_sigm = 0.#2 # standard deviation of homeostatic inhibitory target fir
 
 mu_IP = 0.001 # threshold adaption rate
 
-T_e_init_range = [-.1,.1]
-T_i_init_range = [-.1,.1]
+T_e_init_range = [-.01,.01]
+T_i_init_range = [-.01,.01]
 
 mu_mem_noise = 0.
-sigm_mem_noise = np.sqrt(0.01)
+sigm_mem_noise = np.sqrt(0.0)
 ##
 
 ## Synaptic Normalization
-w_total_ee = .5#*N_e**.5 # total presynaptic E->E input
+w_total_ee = .5*(N_e+N_i)**.5#*N_e**.5 # total presynaptic E->E input
 #w_total_eext = .5 # total presynaptic Ext->E input
-w_total_ei = -.5#*N_i**.5 # total presynaptic I->E input
-w_total_ie = .5#*N_e**.5 # total presynaptic E->I input
-w_total_ii = -.5#*N_i**.5 # total presynaptic I->I input
+w_total_ei = -.5*(N_e+N_i)**.5#*N_i**.5 # total presynaptic I->E input
+w_total_ie = .5*(N_e+N_i)**.5#*N_e**.5 # total presynaptic E->I input
+w_total_ii = -.5*(N_e+N_i)**.5#*N_i**.5 # total presynaptic I->I input
 ##
 
 ## Excitatory Plasticity
-mu_plast_ee = 0.002 # E->E learning rate
+mu_plast_ee = 0.02 # E->E learning rate
 ##
 
 ## Inhibitory Plasticity
@@ -96,13 +96,13 @@ alpha = 2.
 
 ## Simulation
 
-n_t_plast = 1000
-n_t_readout_convergence = 5000
-n_t_analysis = 5000
+n_t_plast = 2000
+n_t_readout_convergence = 2000
+n_t_analysis = 2000
 
 #n_t = n_t_plast + n_t_readout_convergence + n_t_analysis # simulation time steps
 
-n_t_skip_w_rec = 200 # only record every n_th weight matrix
+n_t_skip_w_rec = 100 # only record every n_th weight matrix
 ##
 
 
@@ -127,12 +127,21 @@ def s_pd(n_in,x_p,x_d,norm_x_p,norm_x_d,T_contr):
 	x_p_norm = x_p/norm_x_p
 	x_d_norm = x_d/norm_x_d
 
+	M = m_0 + a_m*sigma((x_d_norm-theta_m)/s_m)
+	T = a_t*sigma((x_d_norm-theta_t)/s_t)
+	f = M*sigma((x_p_norm+T-theta_p)/s_p)*(1.-T_contr)
+	return 1.*(np.random.rand(n_in) <= f)
+
+	'''
 	M = a1 + a2*sigma((x_d_norm-a3)/a4)
 	T = b1 + b2*sigma((x_d_norm-b3)/b4)
 	f = M*sigma((x_p_norm-T)/c)
 	return 1.*(np.random.rand(n_in)*sigma(-T_contr) <= f)
+	'''
+
 
 # Parameters
+'''
 a1 = 0.5
 a2 = 0.5
 a3 = 0.36
@@ -142,6 +151,18 @@ b2 = 0.5
 b3 = 0.3
 b4 = -0.063
 c = 0.003
+'''
+m_0 = 0.25
+a_m = 0.75
+theta_m = 0.65
+s_m = 0.05
+
+a_t = 0.33
+theta_t = 0.65
+s_t = 0.1
+
+theta_p = 0.5
+s_p = 0.05
 #
 
 ##
@@ -172,7 +193,7 @@ def update_th(T,x,r_target,mu):
 	return T + mu*(x-r_target)
 	#return T + mu*(x.mean()-r_target)
 
-def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = 30000):
+def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = n_t_plast):
 
 	n_t = n_t_plast + n_t_readout_convergence + n_t_analysis
 
@@ -346,7 +367,10 @@ def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = 30000):
 		##
 
 		## Update activities
-		I_eext = np.dot(W_eext,x_ext)
+		if t <= (n_t_plast + n_t_readout_convergence):
+			I_eext = np.dot(W_eext,x_ext)
+		else:
+			I_eext = 0.
 
 		I_ee = np.dot(W_ee,x_e)
 		I_ei = np.dot(W_ei,x_i)
@@ -354,9 +378,13 @@ def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = 30000):
 		I_ie = np.dot(W_ie,x_e)
 		I_ii = np.dot(W_ii,x_i)
 
-		noise_e = np.random.normal(mu_mem_noise,sigm_mem_noise,N_e)
-		noise_i = np.random.normal(mu_mem_noise,sigm_mem_noise,N_i)
-
+		noise_e = np.random.normal(0.,1.,N_e)*sigm_mem_noise+mu_mem_noise
+		noise_i = np.random.normal(0.,1.,N_i)*sigm_mem_noise+mu_mem_noise
+		
+		#x_e = s_pd(N_e,(I_ee + I_ei - w_total_ei)/(w_total_ee - w_total_ei),I_eext/(w_mean_pre_ext_input*2.),1.,1.,T_e)
+		#x_i = s_pd(N_i,(I_ie + I_ii - w_total_ii)/(w_total_ie - w_total_ii),0.,1.,1.,T_i)
+		
+		#x_i = s(I_ie + I_ii + noise_i - T_i,g_neur)
 		#x_e = s_pd(N_e,I_eext/(w_mean_pre_ext_input*2.),(I_ee + I_ei - w_total_ei)/(w_total_ee - w_total_ei),1.,1.,T_e)#.2,T_e)#r_target_set_e.mean()*w_total_ee,T_e)
 		#x_i = s(N_i,I_ie + I_ii,0.,r_target_set_i.mean()*w_total_ii + r_target_set_e.mean()*w_total_ie,1.,T_i)
 
@@ -370,8 +398,8 @@ def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = 30000):
 		##
 
 		## Update tresholds
-		T_e = update_th(T_e, x_e, r_target_set_e, mu_IP)
-		T_i = update_th(T_i, x_i, r_target_set_i, mu_IP)
+		#T_e = update_th(T_e, x_e, r_target_set_e, mu_IP)
+		#T_i = update_th(T_i, x_i, r_target_set_i, mu_IP)
 		##
 		
 		if t <= n_t_plast:
@@ -681,10 +709,10 @@ def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = 30000):
 
 		X_D,X_P = np.meshgrid(x_p,x_d)
 
-		M = a1 + a2*sigma((X_D - a3)/a4)
-		T = b1 + b2*sigma((X_D - b3)/b4)
-		f = M*sigma((X_P - T)/c)
-		
+		M = m_0 + a_m*sigma((X_D-theta_m)/s_m)
+		T = a_t*sigma((X_D-theta_t)/s_t)
+		f = M*sigma((X_P+T-theta_p)/s_p)
+
 		#pdb.set_trace()
 
 		I_eext_rec = np.dot(W_eext,x_ext_rec.T).T
