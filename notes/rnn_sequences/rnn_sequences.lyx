@@ -1,0 +1,2189 @@
+#LyX file created by tex2lyx 2.2
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin /home/fschubert/work/repos/Elman_Net/notes/rnn_sequences/
+\textclass article
+\begin_preamble
+\usepackage[english]{babel}
+\usepackage{amsfonts}
+\usepackage{comment}
+\title{Learning Structure in Time with a Plastic Recurrent Neural Network}
+\author{Fabian Schubert}
+
+\g@addto@macro\@floatboxreset{\centering}
+
+%\usepackage{helvet}
+%\renewcommand{\familydefault}{\sfdefault}
+
+\end_preamble
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding utf8
+\fontencoding default
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize 10
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_package amsmath 2
+\use_package amssymb 2
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+maketitle
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+We implemented a neural network consisting of binary neurons, modeled in discrete time steps, which follows the ideas presented in 
+\begin_inset CommandInset citation
+LatexCommand citet
+after ""
+before ""
+key "Duarte_2014"
+
+\end_inset
+
+. The architecture of our network is depicted in Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:architecture"
+
+\end_inset
+
+ and shall be described in further detail.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename ../../plots/illustration.png
+	width 70text%
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:architecture"
+
+\end_inset
+
+ Architecture of the RNN
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The recurrent network consists of a population with 
+\begin_inset Formula $N_e = 300$
+\end_inset
+
+ excitatory units (denoted as 
+\begin_inset Formula $x_e$
+\end_inset
+
+) and a population with 
+\begin_inset Formula $N_i = 60$
+\end_inset
+
+ (denoted as 
+\begin_inset Formula $x_i$
+\end_inset
+
+) inhibitory units. Furthermore, a population of 
+\begin_inset Formula $N_{ext} = 9$
+\end_inset
+
+ excitatory units (
+\begin_inset Formula $I_j$
+\end_inset
+
+) is interpreted as external input, where the input coming from each external unit is to be interpreted as encoding a particular feature of a sensory stream, e.g. the recognition of a particular letter or symbol.
+\end_layout
+
+\begin_layout Section
+Methods
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset CommandInset label
+LatexCommand label
+name "Methods"
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Subsection
+Network Details
+\end_layout
+
+\begin_layout Standard
+Synaptic connectivities - represented by arrows in the illustration - were initially generated from a uniform distribution and the following properties, listed in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:network_params"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Network parameters
+\end_layout
+
+\end_inset
+
+
+\begin_inset Tabular 
+<lyxtabular version="3" rows="10" columns="2">
+<features rotate="0" tabularvalignment="middle" tabularwidth="0pt">
+<column alignment="left" valignment="top">
+<column alignment="right" valignment="top">
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Connection Fraction 
+\begin_inset Formula $W_{ee}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.05$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Connection Fraction 
+\begin_inset Formula $W_{ei}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.1$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Connection Fraction 
+\begin_inset Formula $W_{ie}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.2$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Connection Fraction 
+\begin_inset Formula $W_{ii}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.2$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Connection Fraction 
+\begin_inset Formula $W_{e,ext}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.1$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $\langle W_{e,ext} \rangle$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.2$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Total postsynaptic E
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+E input 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $1.0$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Total postsynaptic I
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+E input 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $-1.0$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Total postsynaptic E
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+I input 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $1.0$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Total postsynaptic I
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+I input 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="right" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $-1.0$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:network_params"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Neuron Model
+\end_layout
+
+\begin_layout Standard
+The state of the neurons is updated in discrete time steps by the following equations:
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Formula \begin{align}
+x_{e,n}(t+1) &= \theta\left( \sum_{j=0}^{N_e - 1} W_{ee,nj} x_{e,j}(t) + \sum_{k=0}^{N_i-1} W_{ei,nk} x_{i,k}(t)  + \sum_{l=0}^{N_{ext}-1} W_{e,ext,nl} I_{l}(t) - T_{e,n}(t) + \xi_{e,n}(t) \right) \\
+x_{i,n}(t+1) &= \theta\left( \sum_{j=0}^{N_e - 1} W_{ie,nj} x_{e,j}(t) + \sum_{k=0}^{N_i-1} W_{ii,nk} x_{i,k}(t)  - T_{i,n}(t)  + \xi_{i,n}(t)\right)
+\end{align}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\theta(\cdot)$
+\end_inset
+
+ is the theta function and 
+\begin_inset Formula $T_e$
+\end_inset
+
+ and 
+\begin_inset Formula $T_i$
+\end_inset
+
+ represent additional threshold values. 
+\begin_inset Formula $\xi_{e/i}$
+\end_inset
+
+ are random noise terms sampled from a Gaussian distribution at each time step with parameters 
+\begin_inset Formula $\mu_{noise,e/i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{noise,e/i}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+To stabilize network activity, each neuron's threshold is updated each time step such that the neuron's average activity approach a given target value:
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Formula \begin{equation}
+T_{e/i,n}(t+1) = T_{e/i,n}(t) + \mu_{IP}\left(x_{e/i,n}(t)-r_{target,e/i,n}\right)
+\end{equation}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\mu_{IP}$
+\end_inset
+
+ is the learning rate of this 
+\begin_inset Quotes eld
+\end_inset
+
+intrinsic plasticity". Target rates 
+\begin_inset Formula $r_{target,e/i}$
+\end_inset
+
+ were drawn randomly from a Gaussian distribution with parameters 
+\begin_inset Formula $\mu_{target,e/i}$
+\end_inset
+
+ and 
+\begin_inset Formula $\sigma_{target,e/i}$
+\end_inset
+
+ for each neuron and kept fixed throughout the simulation.
+\end_layout
+
+\begin_layout Standard
+Parameters of the dynamics described in this section are given in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:neuron_params"
+
+\end_inset
+
+. 
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Parameters of the neuron model
+\end_layout
+
+\end_inset
+
+
+\begin_inset Tabular 
+<lyxtabular version="3" rows="9" columns="2">
+<features rotate="0" tabularvalignment="middle" tabularwidth="0pt">
+<column alignment="left" valignment="top">
+<column alignment="left" valignment="top">
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $\mu_{noise,e}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.0$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $\mu_{noise,i}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.0$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $\sigma_{noise,e}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.1$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $\sigma_{noise,i}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.1$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $\mu_{target,e}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.1$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $\mu_{target,i}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.1$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $\sigma_{target,e}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.0$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $\sigma_{target,i}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.0$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $\mu_{IP}$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.002$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:neuron_params"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Note Comment
+status open
+
+\begin_layout Standard
+<!– wmeanpreextinput = .2
+\end_layout
+
+\begin_layout Standard
+wexcmin = 0.0001 winhmax = -0.0001 ##
+\end_layout
+
+\begin_layout Standard
+## Neuron gneur = 20. # gain factor of the activation function
+\end_layout
+
+\begin_layout Standard
+rtargetemu = 0.1 # mean homeostatic excitatory target firing rate rtargetesigm = 0.#2 # standard deviation of homeostatic excitatory target firing rate rtargetsete = np.minimum(1.,np.maximum(0.,np.random.normal(rtargetemu,rtargetesigm,Ne)))
+\end_layout
+
+\begin_layout Standard
+rtargetimu = 0.1 # mean homeostatic inhibitory target firing rate rtargetisigm = 0.#2 # standard deviation of homeostatic inhibitory target firing rate rtargetseti = np.minimum(1.,np.maximum(0.,np.random.normal(rtargetimu,rtargetisigm,Ni)))
+\end_layout
+
+\begin_layout Standard
+muIP = 0.002 # threshold adaption rate
+\end_layout
+
+\begin_layout Standard
+Temaxinit = 1. Timaxinit = 1.
+\end_layout
+
+\begin_layout Standard
+mumemnoise = 0. sigmmemnoise = np.sqrt(0.01) ##
+\end_layout
+
+\begin_layout Standard
+## Synaptic Normalization wtotalee = .5#*Ne**.5 # total presynaptic E->E input #wtotaleext = .5 # total presynaptic Ext->E input wtotalei = -1.#*Ni**.5 # total presynaptic I->E input wtotalie = 1.#*Ne**.5 # total presynaptic E->I input wtotalii = -1.#*Ni**.5 # total presynaptic I->I input ## 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Rules of the Input Sequence
+\end_layout
+
+\begin_layout Standard
+In each time step, only a single unit is in its active state 
+\begin_inset Formula $I_j(t) = 1$
+\end_inset
+
+. The sequence of active input nodes was generated by a markov chain with transition probabilities shown in Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:grammar_markov"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename ../../plots/Grammar_Markov.png
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:grammar_markov"
+
+\end_inset
+
+ Transition Matrix between subsequently active input states
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Due to the structure of the transition matrix, the sequence is partially predictable in the sense that an element of 
+\begin_inset Formula $\{0,1,2\}$
+\end_inset
+
+ will always be followed by an element of 
+\begin_inset Formula $\{3,4,5\}$
+\end_inset
+
+ etc.
+\end_layout
+
+\begin_layout Subsection
+Plasticity Rules
+\end_layout
+
+\begin_layout Standard
+Recurrent excitatory connection were subject to two plasticity mechanisms: A simple pre-post Hebbian learning rule and a postsynaptic multiplicative normalization preventing connectivity runaway.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Formula \begin{align}
+\Delta W_{ee,ij}(t) &= \mu_{hebb} \left( x_{e,j}(t-1)x_{e,i}(t) - x_{e,i}(t-1)x_{e,j}(t) \right) \\
+W_{ee,ij}(t) &= w_{total,ee}\frac{W_{ee,ij}(t-1) + \Delta W_{ee,ij}(t)}{\sum_{k=0}^{N_e - 1} W_{ee,ik}(t-1) + \Delta W_{ee,ik}(t)}
+\end{align}
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We did not include pruning or creation of synapses, but set a very small lower bound for existing excitatory connections.
+\end_layout
+
+\begin_layout Section
+Results
+\end_layout
+
+\begin_layout Standard
+Network activity settled at a constant mean rate and a corresponding mean treshold, see Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:pop_act_time"
+
+\end_inset
+
+ and Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:thresholds_time"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename ../../plots/pop_act_time.png
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:pop_act_time"
+
+\end_inset
+
+ Running average of excitatory and inhibitory population activity.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename ../../plots/thresholds_time.png
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:thresholds_time"
+
+\end_inset
+
+ Population mean of excitatory and inhibitory thresholds.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Furthermore, Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:act_raster"
+
+\end_inset
+
+ and Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:isi_dist"
+
+\end_inset
+
+ suggest that the appearance of active states follows poissonian statistics. However, the distribution of excitatory inter
+\begin_inset Quotes eld
+\end_inset
+
+spike"-intervals shows a clear preference for multiples of 3, which was not present in the absence of external input and is reflected in the 3-fold periodicity of the input sequence.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename ../../plots/act_raster.png
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:act_raster"
+
+\end_inset
+
+ Raster plot of network activity.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename ../../plots/isi_dist.png
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:isi_dist"
+
+\end_inset
+
+ Distribution of interspike intervals.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Generally speaking, the implemented plasticity rules often gave rise to time courses of synaptic weights similar to the one shown in Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:w_ee_sample_time"
+
+\end_inset
+
+: the emergence of one or more comparably strong weights alongside a majority of weak connections.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename ../../plots/w_ee_sample_time.png
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:w_ee_sample_time"
+
+\end_inset
+
+ Sample time course of E->E weights.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Cluster Analysis of Excitatory Activity
+\end_layout
+
+\begin_layout Standard
+Following the conceptual idea presented by Elman 
+\begin_inset CommandInset citation
+LatexCommand citet
+after ""
+before ""
+key "Elman_1990"
+
+\end_inset
+
+, we performed a hierarchical cluster analysis of the binary activity vectors of the exitatory population. For this, we used the activity data of 
+\begin_inset Formula $x_e$
+\end_inset
+
+ from the last 
+\begin_inset Formula $3000$
+\end_inset
+
+ steps. We then performed a hierachical cluster analysis with Ward's method. The resulting dendrogram is depicted in Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:act_dendrogram"
+
+\end_inset
+
+. A 3-fold structure is visible in the uppermost branching layer.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename ../../plots/act_dendrogram.png
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:act_dendrogram"
+
+\end_inset
+
+ Dendrogram of a cluster analysis of excitatory activity patterns.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Furthermore, if we use the cluster analysis to reorder the recurrent weight matrix after the plasticity phase in such a way that units with correlated activity are listed next to each other, we observe a structure depicted in Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:corr_weight_mat"
+
+\end_inset
+
+. In particular, the weight matrix resembles the structure of the transition matrix shown in Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:grammar_markov"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename ../../plots/corr_weight_mat.png
+	width 80text%
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:corr_weight_mat"
+
+\end_inset
+
+ Top: Correlation matrix of 
+\begin_inset Formula $x_e$
+\end_inset
+
+ according to the clustering depicted in Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:act_dendrogram"
+
+\end_inset
+
+. Bottom: Recurrent weight matrix after plasticity, ordered based on the same clustering.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Using a Simple Model of Dendritic Separation
+\end_layout
+
+\begin_layout Standard
+So far, the neuron model we used was a simple point neuron model, which did not distinguish between input received by recurrent connection and the one stemming from recurrent connections. As such, one can argue that the emergence of a network structure reflecting the temporal structure of the external input significantly relies on the network being mostly driven by this external signal. Subpopulations subsequently being activated by the external input develop stronger connections due to the pre-post structure of the Hebbian plasticity rule. It is reasonable to assume that this 
+\begin_inset Quotes eld
+\end_inset
+
+driven learning" easily overrides any more complex structure that could potentially arise within the recurrent network.
+\end_layout
+
+\begin_layout Standard
+Recently, nonlinear interactions between dendritic input proximal and distal to the soma have been investigated 
+\begin_inset CommandInset citation
+LatexCommand citet
+after ""
+before ""
+key "Shai_2015,Bono_2017"
+
+\end_inset
+
+. Based on experimental findings and detailed neuronal compartment models, Shai et al. proposed a relatively simple phenomenological rate model that subsumes proximal and distal inputs into two input streams: Given some basal synaptic input 
+\begin_inset Formula $Y_p$
+\end_inset
+
+ and distal input 
+\begin_inset Formula $Y_d$
+\end_inset
+
+, we express the postsynaptic firing rate as 
+\begin_inset Formula \begin{align}
+M &= a_1 + a_2 \sigma \left( \left(Y_d-a_3\right) / a_4 \right) \label{f_comp1} \\ 
+T &= b_1 + b_2 \sigma \left( \left(Y_d-b_3\right) / b_4 \right) \label{f_comp2}\\ 
+f_{\rm comp} &= M \sigma \left(\left(Y_p - T \right) / c \right) \label{f_comp3}\\
+\sigma (x) &= \frac{1}{1+\mathrm{exp}(-x)} \label{f_comp4}
+\end{align}
+\end_inset
+
+where the parameters given in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "params_f_comp"
+
+\end_inset
+
+ were chosen to fit the composite function in 
+\begin_inset CommandInset citation
+LatexCommand citet
+after ""
+before ""
+key "Shai_2015"
+
+\end_inset
+
+. Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:f_comp_plot"
+
+\end_inset
+
+ shows the resulting dependence on the input: maximum postsynaptic activity is only achieved with a combination of basal and proximal input. However, intermediate activity can also be observed by sufficient proximal input. 
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+\align center
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Parameters for 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "f_comp1"
+
+\end_inset
+
+ - 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "f_comp3"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\begin_inset Tabular 
+<lyxtabular version="3" rows="9" columns="2">
+<features rotate="0" tabularvalignment="middle" tabularwidth="0pt">
+<column alignment="left" valignment="top">
+<column alignment="left" valignment="top">
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $a_1$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.5$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $a_2$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.5$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $a_3$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.36$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $a_4$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.05$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $b_1$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.1$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $b_2$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.5$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $b_3$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.3$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $b_4$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $-0.063$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="left" valignment="top" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $c$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\begin_inset Formula $0.003$
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "params_f_comp"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+\backslash
+centering
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../../plots/f_comp.png
+	width 50text%
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:f_comp_plot"
+
+\end_inset
+
+ Output activity given by 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "f_comp3"
+
+\end_inset
+
+ as a function of 
+\begin_inset Formula $Y_p$
+\end_inset
+
+ and 
+\begin_inset Formula $Y_d$
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We implemented this neuron model for the excitatory neurons in our network. Note that since our neurons are only allowed to take binary states, we interpreted the output 
+\begin_inset Formula $f$
+\end_inset
+
+ as a probability of being in the up-state. Basal input was associated with the external signals, while distal input was chosen to be the sum of recurrent excitation and inhibition. Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:corr_weight_mat_prox_dist"
+
+\end_inset
+
+ shows the resulting weight matrix after plasticity and the clustered correlation matrix.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename ../../plots/corr_weight_mat_prox_dist.png
+	width 80text%
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:corr_weight_mat_prox_dist"
+
+\end_inset
+
+ Same analysis as in Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:corr_weight_mat"
+
+\end_inset
+
+, but using the phenomenological compartment model described in 
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "f_comp1"
+
+\end_inset
+
+–
+\begin_inset CommandInset ref
+LatexCommand eqref
+reference "f_comp4"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+A Multi Compartment Model is not Scale Invariant
+\end_layout
+
+\begin_layout Standard
+One advantage of using a simple linear superposition of inputs in combination with a theta function as a nonlinear output is the scale invariance with respect to the input, since the up-down state separatrix in the input space is simply a plane that does not change shape under a rescale of the input. This, however, is obviously not the case for the activation function shown in Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:f_comp_plot"
+
+\end_inset
+
+. Under ideal working conditions, the Input should span the region depicted in this figure. However, this is not the case if we naively pass the Input into our prox-dist activation function, as can be seen in Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:prox_dist_act_cloud"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename ../../plots/prox_dist_act_cloud.png
+	width 100text%
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:prox_dist_act_cloud"
+
+\end_inset
+
+ Overlay of proximal-distal inputs that the excitatory neurons received throughout the simulation over the activation function shown in Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:f_comp_plot"
+
+\end_inset
+
+. Each blue dot represents a pair of proximal and distal input.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+More Complex Input Sequences
+\end_layout
+
+\begin_layout Standard
+In the input sequence used in the previous section each letter corresponds to a a particular state in a Markov model. Thus, the prediction of the next letter only requires knowledge about the previous letter received. A more realistic kind of input stream would require the network to gather information about multiple time steps in order to optimally predict the next letter. Such a kind of artificial grammar was also used in 
+\begin_inset CommandInset citation
+LatexCommand citep
+after ""
+before ""
+key "Duarte_2014"
+
+\end_inset
+
+ and initially introduced by Reber 
+\begin_inset CommandInset citation
+LatexCommand citet
+after ""
+before ""
+key "Reber_1967"
+
+\end_inset
+
+. It is depicted in Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Reber_Grammar"
+
+\end_inset
+
+(top). Interestingly, the rules of this grammar is described as a finite-state machine where the 
+\shape italic
+transitions
+\shape default
+ between states correspond to letters. Of course, this kind of representation of the dynamics also has a counterpart where letters are identified with states, see the bottom network in Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Reber_Grammar"
+
+\end_inset
+
+. Our previous analysis of network activity was based on the assumption that letters, or sets of letters were represented by states of the recurrent network and not in transitions between those. In consequence, a reflection of the Reber grammar within the network should resemble the mapping shown in the bottom network of Fig. 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Reber_Grammar"
+
+\end_inset
+
+. 
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+
+\begin_layout Standard
+
+\begin_inset Graphics 
+	filename ../../plots/artif_grammar_illustration.png
+	width 70text%
+
+\end_inset
+
+ 
+\begin_inset Graphics 
+	filename ../../plots/Reber_Grammar_States.png
+	width 50text%
+
+\end_inset
+
+ 
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Artificial Grammar Rule proposed by Reber 
+\begin_inset CommandInset citation
+LatexCommand citep
+after ""
+before ""
+key "Reber_1967"
+
+\end_inset
+
+ (top) and the corresponding network where letters are represented by states (bottom).
+\end_layout
+
+\end_inset
+
+
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Reber_Grammar"
+
+\end_inset
+
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Using a non-binary network with plastic inputs
+\end_layout
+
+\begin_layout Standard
+Generalizing the model presented in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "Methods"
+
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Newpage newpage
+\end_inset
+
+ 
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "../code/ipynb_biblio"
+options "unsrt"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

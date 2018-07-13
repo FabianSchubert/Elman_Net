@@ -1,0 +1,136 @@
+\documentclass[8pt,aspectratio=169]{beamer}
+%\documentclass[8pt]{beamer}
+\usetheme{Montpellier}
+\usecolortheme{dove}
+\usepackage[utf8]{inputenc}
+\usepackage{fontspec} % This line only for XeLaTeX and LuaLaTeX
+\usepackage{pgfplots}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+
+\usepackage[absolute,overlay]{textpos}
+
+\author{Fabian Schubert}
+\title{Learning of Time Sequences through Plasticity in Externally Driven Networks}
+%\setbeamercovered{transparent} 
+%\setbeamertemplate{navigation symbols}{} 
+%\logo{} 
+%\institute{} 
+\date{18.07.2018} 
+%\subject{} 
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\tableofcontents
+\end{frame}
+
+\section{Introduction to Sequence Learning}
+\begin{frame}[t]{What are possible sequence learning tasks?}
+
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics{./figures/sequ_learn_illustration_0.pdf}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+How can a dynamical system $x(t)$ be modified appropriately, such that it can generate an output signal $y(t)$ that mimics or predicts some target signal $f(t)$?
+
+In fact, different task scenarios have to be distinguished:
+
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[t]{What are possible sequence learning tasks?}
+
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\begin{picture}(0,0)
+\put(-79.9,-130.2){\hbox{\includegraphics{./figures/sequ_learn_illustration_1.pdf}}}
+\end{picture}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+How can a dynamical system $x(t)$ be modified appropriately, such that it can generate an output signal $y(t)$ that mimics or predicts some target signal $f(t)$?
+
+In fact, different task scenarios have to be distinguished:
+
+\bigskip
+In one scenario, the system is supposed to predict the \emph{future} state of the $f(t)$ based on the history of $f(t)$.
+
+This task usually involves feeding the target signal into the dynamical system, even after learning, since an accurate prediction requires the integration of information about the past.
+
+In this case, the role of the dynamical system can be regarded as a computational, or information processing unit.
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[t]{What are possible sequence learning tasks?}
+
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\begin{picture}(0,0)
+\put(-71,-130.2){\hbox{\includegraphics{./figures/sequ_learn_illustration_2.pdf}}}
+\end{picture}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+How can a dynamical system $x(t)$ be modified appropriately, such that it can generate an output signal $y(t)$ that mimics or predicts some target signal $f(t)$?
+
+In fact, different task scenarios have to be distinguished:
+
+\bigskip
+In another case, the dynamical system is supposed to autonomously generate an output $y(t)$ that reproduces $f(t)$.
+
+Here, $x(t)$ does not receive $f(t)$ as an input, since this would turn the task into a trivial problem, solved by simply passing on $f(t)$ to $y(t)$.
+
+In contrast to the first case, the process of learning can be rather interpreted as solely building an internal model of the dynamics underlying $f(t)$.
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[t]{What are possible sequence learning tasks?}
+
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\begin{picture}(0,0)
+\put(-71,-130.2){\hbox{\includegraphics{./figures/sequ_learn_illustration_0.pdf}}}
+\end{picture}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+Still, also the first tasks requires the system to build some internal representation of the underlying structure of the signal it receives.
+
+In a living organism, the need to autonomously generate patterns of output might seem more ``obvious", e.g. with respect to motor control. However, being able to predict sensory signals is also crucial for taking appropriate actions under a changing environment. 
+\end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Sequence Learning from a Machine Learning Perspective}
+
+
+\begin{figure}
+	\begin{center}
+		\input{example.pgf}
+	\end{center}
+\end{figure}
+
+
+
+\end{frame}
+
+
+\end{document}
