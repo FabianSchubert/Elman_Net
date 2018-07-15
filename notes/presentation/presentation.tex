@@ -10,6 +10,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{caption}
 
 \usepackage[absolute,overlay]{textpos}
 
@@ -121,15 +122,44 @@ In a living organism, the need to autonomously generate patterns of output might
 
 \begin{frame}{Sequence Learning from a Machine Learning Perspective}
 
-
+\begin{columns}
+\begin{column}{0.5\textwidth}
 \begin{figure}
-	\begin{center}
-		\input{example.pgf}
-	\end{center}
+\includegraphics[width=0.7\textwidth]{./figures/rnn_mach_learn_illustration.png}
+\caption*{\footnotesize Lukoševičius,Jaeger 2009}
 \end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\end{column}
+\end{columns}
+\end{frame}
 
+\section{Synaptic Plasticity in the Context of Sequence Learning}
 
+\begin{frame}{The Spike-Timing Approach}
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics{./figures/stdp_illustration.pdf}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
 
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Implementation in a Recurrent Network}
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\includegraphics{./figures/rec_ei_network_illustration.pdf}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+
+\end{column}
+\end{columns}
 \end{frame}
 
 

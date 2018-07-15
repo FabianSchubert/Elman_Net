@@ -35,13 +35,13 @@ for k in range(N_letter_nodes):
 N_e = 300 # number of excitatory neurons
 N_i = int(N_e*.2) # number of inhibitory neurons
 
-CF_ee = 0.025 # connection fraction E->E
-CF_ei = 0.05 # connection fraction I->E
-CF_ie = 0.1 # connection fraction E->I
-CF_ii = 0.1 # connection fraction I->I
+CF_ee = 0.05 # connection fraction E->E
+CF_ei = 0.1 # connection fraction I->E
+CF_ie = 0.2 # connection fraction E->I
+CF_ii = 0.2 # connection fraction I->I
 
 CF_eext = 0.1 # connection fraction Ext->E
-w_mean_pre_ext_input = 10.*(N_e+N_i)**.5
+w_mean_pre_ext_input = 1.
 
 w_exc_min = 0.001
 w_inh_max = -0.0001
@@ -56,25 +56,25 @@ r_target_e_sigm = 0.#2 # standard deviation of homeostatic excitatory target fir
 r_target_i_mu = 0.1 # mean homeostatic inhibitory target firing rate
 r_target_i_sigm = 0.#2 # standard deviation of homeostatic inhibitory target firing rate
 
-mu_IP = 0.001 # threshold adaption rate
+mu_IP = 0.002 # threshold adaption rate
 
 T_e_init_range = [-.01,.01]
 T_i_init_range = [-.01,.01]
 
 mu_mem_noise = 0.
-sigm_mem_noise = np.sqrt(0.0)
+sigm_mem_noise = 0.2
 ##
 
 ## Synaptic Normalization
-w_total_ee = .5*(N_e+N_i)**.5#*N_e**.5 # total presynaptic E->E input
+w_total_ee = 1.#*N_e**.5 # total presynaptic E->E input
 #w_total_eext = .5 # total presynaptic Ext->E input
-w_total_ei = -.5*(N_e+N_i)**.5#*N_i**.5 # total presynaptic I->E input
-w_total_ie = .5*(N_e+N_i)**.5#*N_e**.5 # total presynaptic E->I input
-w_total_ii = -.5*(N_e+N_i)**.5#*N_i**.5 # total presynaptic I->I input
+w_total_ei = -1.#*N_i**.5 # total presynaptic I->E input
+w_total_ie = 1.#*N_e**.5 # total presynaptic E->I input
+w_total_ii = -1.#*N_i**.5 # total presynaptic I->I input
 ##
 
 ## Excitatory Plasticity
-mu_plast_ee = 0.02 # E->E learning rate
+mu_plast_ee = 0.005 # E->E learning rate
 ##
 
 ## Inhibitory Plasticity
@@ -96,9 +96,9 @@ alpha = 2.
 
 ## Simulation
 
-n_t_plast = 2000
-n_t_readout_convergence = 2000
-n_t_analysis = 2000
+n_t_plast = 15000
+n_t_readout_convergence = 10000
+n_t_analysis = 10000
 
 #n_t = n_t_plast + n_t_readout_convergence + n_t_analysis # simulation time steps
 
@@ -193,7 +193,7 @@ def update_th(T,x,r_target,mu):
 	return T + mu*(x-r_target)
 	#return T + mu*(x.mean()-r_target)
 
-def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = n_t_plast):
+def main_simulation(N_e = 300,N_i = int(N_e*.2),n_t_plast = n_t_plast):
 
 	n_t = n_t_plast + n_t_readout_convergence + n_t_analysis
 
@@ -367,10 +367,14 @@ def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = n_t_plast):
 		##
 
 		## Update activities
+		'''
 		if t <= (n_t_plast + n_t_readout_convergence):
 			I_eext = np.dot(W_eext,x_ext)
 		else:
 			I_eext = 0.
+		'''
+
+		I_eext = np.dot(W_eext,x_ext)
 
 		I_ee = np.dot(W_ee,x_e)
 		I_ei = np.dot(W_ei,x_i)
@@ -398,8 +402,8 @@ def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = n_t_plast):
 		##
 
 		## Update tresholds
-		#T_e = update_th(T_e, x_e, r_target_set_e, mu_IP)
-		#T_i = update_th(T_i, x_i, r_target_set_i, mu_IP)
+		T_e = update_th(T_e, x_e, r_target_set_e, mu_IP)
+		T_i = update_th(T_i, x_i, r_target_set_i, mu_IP)
 		##
 		
 		if t <= n_t_plast:
@@ -701,7 +705,7 @@ def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = n_t_plast):
 		plt.show()
 		plt.close("all")
 		plt.show()
-		
+		'''
 		#pdb.set_trace()
 		
 		x_p = np.linspace(0.,1.,100)
@@ -725,7 +729,7 @@ def main_simulation(N_e = 500,N_i = int(N_e*.2),n_t_plast = n_t_plast):
 			plt.plot((I_ee_rec[-10000:,k]+I_ei_rec[-10000:,k]- w_total_ei)/(w_total_ee - w_total_ei),I_eext_rec[-10000:,k]/(2.*w_mean_pre_ext_input),'.',c='#1f77b4',markeredgewidth=0.0,alpha=0.03,rasterized=True)
 
 		plt.show()
-
+		'''
 		pdb.set_trace()
 
 	## See what we got
