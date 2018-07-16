@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 
 import numpy as np
@@ -41,14 +41,14 @@ def main():
 	n_h = 30
 	n_o = 1
 
-	n_t = 400000
+	n_t = 40000
 
 	mu_learn = np.ones((n_h,n_i+n_h+1))*.5
 	mu_learn[:,-1] = .01
 	mu_learn_out = np.ones((n_o,n_h + 1))*.05
 	mu_learn_out[:,-1] = .001
 
-	n_trials = 40
+	n_trials = 5
 	n_error_rec = int(0.25*n_t)
 	E_rec_trials = np.ndarray((n_trials,n_error_rec))
 
