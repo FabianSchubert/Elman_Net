@@ -1,0 +1,33 @@
+\begin{thebibliography}{1}
+
+\bibitem{Letzkus_2006}
+Johannes~J. Letzkus, Bj{\"o}rn~M. Kampa, and Greg~J. Stuart.
+\newblock Learning rules for spike timing-dependent plasticity depend on
+  dendritic synapse location.
+\newblock {\em Journal of Neuroscience}, 26(41):10420--10429, 2006.
+
+\bibitem{Shai_2015}
+Adam~S. Shai, Costas~A. Anastassiou, Matthew~E. Larkum, and Christof Koch.
+\newblock Physiology of layer 5 pyramidal neurons in mouse primary visual
+  cortex: Coincidence detection through bursting.
+\newblock {\em PLOS Computational Biology}, 11(3):1--18, 03 2015.
+
+\bibitem{Bono_2017}
+J.~Bono and C.~Clopath.
+\newblock {Modeling somatic and dendritic spike mediated plasticity at the
+  single neuron and network level}.
+\newblock {\em nature communications}, 2017.
+
+\bibitem{Jaeger_2010}
+Herbert Jaeger.
+\newblock The ``echo state ” approach to analysing and training recurrent
+  neural networks – with an erratum note.
+\newblock 2010.
+
+\bibitem{Echeveste_2015}
+Rodrigo Echeveste, Samuel Eckmann, and Claudius Gros.
+\newblock {The fisher information as a neural guiding principle for independent
+  component analysis}.
+\newblock {\em Entropy}, 17(6):3838--3856, 2015.
+
+\end{thebibliography}
