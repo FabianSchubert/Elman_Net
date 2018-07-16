@@ -9,6 +9,8 @@ from tqdm import tqdm
 import sys
 import os
 
+import pickle
+
 
 def gauss(x,mean,std):
 
@@ -290,21 +292,44 @@ def plot_I_hist(n_bins=50):
 
 	plt.show()
 
-def analyze_fp_stab():
+def analyze_fp_stab(t_start=0,t_end=p["n_t_rec"],skip_dat = 1):
 
-	d_fix = p["gain_neuron"]*p["act_fix"]*(1.-p["act_fix"])
+	t_ax_skip = t_ax[t_start:t_end:skip_dat]
 
-	l = np.ndarray((p["n_t_rec"]))
+	n_data_points = t_ax_skip.shape[0]
 
-	for k in tqdm(range(p["n_t_rec"])):
+	d_fix = 0.25
+
+	l = np.ndarray((n_data_points))
+
+	for n in tqdm(range(n_data_points)):
+
+		k = t_start + n*skip_dat
+
 		if p["store_w"]:
-			l[k] = np.log(np.abs(np.real(np.linalg.eigvals(d_fix*W_ee[k,:,:]))).max())
+			#l[n] = np.log(np.abs(np.real(np.linalg.eigvals(d_fix*W_ee[k,:,:]))).max())
+			pass
 		else:
-			l[k] = np.log(np.abs(np.real(np.linalg.eigvals(d_fix*W_ee))).max())
 
-	plt.plot(t_ax,l,'-o')
+			W_g=np.zeros((p["N_e"],p["N_e"]))
+			W_g[range(p["N_e"]),range(p["N_e"])] = gain[k,:]
+
+			W_total = 0.25*np.dot(W_g,W_ee)
+
+			l[n] = np.log(np.abs(np.real(np.linalg.eigvals(W_total))).max())
+
+	fig_fp, ax_fp = plt.subplots()
+
+	ax_fp.plot(t_ax_skip,l,'-o')
+
+	ax_fp.set_xlabel("#t")
+	ax_fp.set_ylabel("Max. Lyapunov Exponent")
+
+	pickle.dump(fig_fp,open('../../notes/presentation/figures/fp_stability.p','wb'))
 
 	plt.savefig("./plots/" + file + "/fp_stability.png",dpi=300)
+
+
 
 	plt.show()
 
