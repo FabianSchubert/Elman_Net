@@ -1,8 +1,8 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import sys
 sys.path.append("../../../custom_modules/")
-from plot_settings_mpl import *
+#from plot_settings_mpl import *
 
 import numpy as np
 import matplotlib.pyplot as plt
