@@ -103,8 +103,6 @@ X_d = np.dot(X_p,lin_comb)
 
 #X_p[:,1] *= 2.
 #X_p[:,1:5] *=0.5
-X_p[:,2:] *= 2.
-X_p[:,2] *= 1.5
 X_d = X_p[:,0]
 
 
@@ -183,59 +181,81 @@ for t in tqdm(range(n_t_learn)):
 	I_d_mean_rec[t] = I_d_mean
 
 
+t_ax = np.array(range(n_t_learn))
+
 ###
-fig_act_pd, ax_act_pd = plt.subplots(1,2,figsize=(10,5))
-i_p = np.linspace(0.,4.,400)
-i_d = np.linspace(0.,4.,400)
+fig_act_pd, ax_act_pd = plt.subplots(1,2,figsize=(10.,4.))
+i_p = np.linspace(0.,1.,400)
+i_d = np.linspace(0.,1.,400)
 Ip,Id = np.meshgrid(i_p,i_d)
 
 #act_pd_p_beginning = ax_act_pd[0].pcolormesh(i_p,i_d,act_pd(Ip-th_p,Id-th_d,gain_pd,alpha_pd))
 act_pd_p_beginning = ax_act_pd[0].pcolormesh(i_p,i_d,act_pd_2(Ip,Id,gain_pd,th_p0,th_p1,th_d,alpha_pd))
 plt.colorbar(mappable=act_pd_p_beginning)
 
-ax_act_pd[0].plot(I_p_rec[:int(n_t_learn*0.1)],I_d_rec[:int(n_t_learn*0.1)],'.',c='r',alpha=0.2)
+t_wind = int(n_t_learn*0.02)
+ax_act_pd[0].plot(I_p_rec[:t_wind],I_d_rec[:t_wind],'.',c='r',alpha=0.2)
 ax_act_pd[0].set_xlabel("$I_{prox}$")
 ax_act_pd[0].set_ylabel("$I_{dist}$")
 
 #act_pd_p_end = ax_act_pd[1].pcolormesh(i_p,i_d,act_pd(Ip-th_p,Id-th_d,gain_pd,alpha_pd))
 act_pd_p_end = ax_act_pd[1].pcolormesh(i_p,i_d,act_pd_2(Ip,Id,gain_pd,th_p0,th_p1,th_d,alpha_pd))
 
-ax_act_pd[1].plot(I_p_rec[-int(n_t_learn*0.1):],I_d_rec[-int(n_t_learn*0.1):],'.',c='r',alpha=0.2)
+ax_act_pd[1].plot(I_p_rec[-t_wind:],I_d_rec[-t_wind:],'.',c='r',alpha=0.2)
 ax_act_pd[1].set_xlabel("$I_{prox}$")
 ax_act_pd[1].set_ylabel("$I_{dist}$")
 
-ax_act_pd[0].set_title("First 10% of learning phase")
-ax_act_pd[1].set_title("Last 10% of learning phase")
+ax_act_pd[0].set_title("First " + str(int(100.*t_wind/n_t_learn))+"% of learning phase")
+ax_act_pd[1].set_title("Last " + str(int(100.*t_wind/n_t_learn))+"% of learning phase")
+
 plt.tight_layout()
+
+plt.savefig("../notes/presentation/figures/act_pd_color_scatter.png",dpi=300)
 ###
 
-fig_w, ax_w = plt.subplots()
+###
+fig_w, ax_w = plt.subplots(figsize=(5.,2.5))
 ax_w.plot(w_prox_rec)
 ax_w.set_xlabel("#t")
 ax_w.set_ylabel("$w_{prox}$")
 
+plt.tight_layout()
+plt.savefig("../notes/presentation/figures/act_pd_w.png",dpi=300)
 ###
-fig_I, ax_I = plt.subplots(2,1,figsize=(10,5))
-ax_I[0].plot(I_p_rec[:int(n_t_learn*0.1)])
-ax_I[0].plot(I_d_rec[:int(n_t_learn*0.1)])
+
+
+###
+fig_I, ax_I = plt.subplots(2,1,figsize=(5,4))
+t_wind = int(n_t_learn*0.01)
+
+ax_I[0].plot(I_d_rec[:t_wind])
+ax_I[0].plot(I_p_rec[:t_wind])
+
 ax_I[0].set_xlabel("#t")
 ax_I[0].set_ylabel("$I_{prox}$, $I_{dist}$")
-ax_I[0].set_title("First 10% of learning phase")
+ax_I[0].set_title("First " + str(int(100.*t_wind/n_t_learn))+"% of learning phase")
 
-ax_I[1].plot(np.array(range(int(0.9*n_t_learn),n_t_learn)),I_p_rec[-int(n_t_learn*0.1):])
-ax_I[1].plot(np.array(range(int(0.9*n_t_learn),n_t_learn)),I_d_rec[-int(n_t_learn*0.1):])
+ax_I[1].plot(t_ax[-t_wind:],I_d_rec[-t_wind:])
+ax_I[1].plot(t_ax[-t_wind:],I_p_rec[-t_wind:])
+
 ax_I[1].set_xlabel("#t")
 ax_I[1].set_ylabel("$I_{prox}$, $I_{dist}$")
-ax_I[1].set_title("Last 10% of learning phase")
+ax_I[1].set_title("Last " + str(int(100.*t_wind/n_t_learn))+"% of learning phase")
 
 plt.tight_layout()
+plt.savefig("../notes/presentation/figures/I_pd.png",dpi=300)
 ###
 
-
-fig_X_p, ax_X_p = plt.subplots(figsize=(10,2.5))
-ax_X_p.plot(X_p[:int(n_t_learn*0.05)])
+###
+t_wind = int(n_t_learn*0.005)
+fig_X_p, ax_X_p = plt.subplots(figsize=(5,2.))
+ax_X_p.plot(X_p[:t_wind])
 ax_X_p.set_xlabel("#t")
 ax_X_p.set_ylabel("$x_{prox}$")
+
+plt.tight_layout()
+plt.savefig("../notes/presentation/figures/X_p.png",dpi=300)
+###
 
 plt.show()
 

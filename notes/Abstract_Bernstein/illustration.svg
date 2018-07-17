@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.7401456"
-     inkscape:cx="255.55172"
-     inkscape:cy="677.1068"
+     inkscape:zoom="2.1629334"
+     inkscape:cx="186.77807"
+     inkscape:cy="622.35293"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -45,7 +45,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -53,76 +53,320 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <circle
+    <g
+       id="g4851"
+       transform="translate(-62,12)"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       inkscape:export-xdpi="299.94498"
+       inkscape:export-ydpi="299.94498">
+      <text
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         sodipodi:linespacing="125%"
+         id="text4188"
+         y="322.4906"
+         x="155.48708"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:13.86728764px;line-height:125%;font-family:'CMU Sans Serif';-inkscape-font-specification:'CMU Sans Serif, Medium';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           y="322.4906"
+           x="155.48708"
+           id="tspan4190"
+           sodipodi:role="line">distal</tspan></text>
+      <text
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:13.86728764px;line-height:125%;font-family:'CMU Sans Serif';-inkscape-font-specification:'CMU Sans Serif, Medium';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="155.48708"
+         y="341.90482"
+         id="text4192"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4194"
+           x="155.48708"
+           y="341.90482">basal</tspan></text>
+      <circle
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         r="7.1111116"
+         cy="317.56079"
+         cx="137.84761"
+         id="path4196"
+         style="opacity:1;fill:#0047ff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <circle
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="circle4200"
+         cx="137.84761"
+         cy="336.97501"
+         r="7.1111116" />
+    </g>
+    <g
+       id="g4835"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       inkscape:export-xdpi="299.94498"
+       inkscape:export-ydpi="299.94498"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)">
+      <path
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         style="fill:none;fill-rule:evenodd;stroke:#005bff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 71.59818,414.5112 85.05036,0"
+         id="path4184"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cc" />
+      <path
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         sodipodi:type="star"
+         style="opacity:1;fill:#0047ff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path4204"
+         sodipodi:sides="3"
+         sodipodi:cx="120.245"
+         sodipodi:cy="414.5112"
+         sodipodi:r1="6.5584812"
+         sodipodi:r2="3.2792406"
+         sodipodi:arg1="2.0943951"
+         sodipodi:arg2="3.1415927"
+         inkscape:flatsided="false"
+         inkscape:rounded="0"
+         inkscape:randomized="0"
+         d="m 116.96576,420.19101 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.83991 z"
+         inkscape:transform-center-x="-1.6396203" />
+    </g>
+    <g
+       id="g4839"
+       transform="matrix(0.7671782,-0.35257648,0.28905097,0.935783,-105.4694,55.066333)"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       inkscape:export-xdpi="299.94498"
+       inkscape:export-ydpi="299.94498">
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4841"
+         d="m 71.59818,414.5112 85.05036,0"
+         style="fill:none;fill-rule:evenodd;stroke:#005bff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         inkscape:export-xdpi="299.94498"
+         inkscape:export-ydpi="299.94498" />
+      <path
+         inkscape:transform-center-x="-1.6396203"
+         d="m 116.96576,420.19101 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.83991 z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="false"
+         sodipodi:arg2="3.1415927"
+         sodipodi:arg1="2.0943951"
+         sodipodi:r2="3.2792406"
+         sodipodi:r1="6.5584812"
+         sodipodi:cy="414.5112"
+         sodipodi:cx="120.245"
+         sodipodi:sides="3"
+         id="path4843"
+         style="opacity:1;fill:#0047ff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         sodipodi:type="star"
+         inkscape:export-xdpi="299.94498"
+         inkscape:export-ydpi="299.94498" />
+    </g>
+    <g
+       id="g4845"
+       transform="matrix(0.76294969,0.3659737,-0.30003435,0.93062519,139.19564,12.187749)"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       inkscape:export-xdpi="299.94498"
+       inkscape:export-ydpi="299.94498">
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4847"
+         d="m 71.59818,414.5112 85.05036,0"
+         style="fill:none;fill-rule:evenodd;stroke:#005bff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         inkscape:export-xdpi="299.94498"
+         inkscape:export-ydpi="299.94498" />
+      <path
+         inkscape:transform-center-x="-1.6396203"
+         d="m 116.96576,420.19101 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.83991 z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="false"
+         sodipodi:arg2="3.1415927"
+         sodipodi:arg1="2.0943951"
+         sodipodi:r2="3.2792406"
+         sodipodi:r1="6.5584812"
+         sodipodi:cy="414.5112"
+         sodipodi:cx="120.245"
+         sodipodi:sides="3"
+         id="path4849"
+         style="opacity:1;fill:#0047ff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         sodipodi:type="star"
+         inkscape:export-xdpi="299.94498"
+         inkscape:export-ydpi="299.94498" />
+    </g>
+    <ellipse
        style="opacity:0.23000004;fill:#757575;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4136"
-       cx="278.09525"
-       cy="408.60349"
-       r="95.085716"
+       cx="213.7997"
+       cy="420.17151"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       rx="98.590981"
+       ry="98.028"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
+    <g
+       transform="matrix(-0.81754238,-0.07456891,0.06113345,-0.99721586,389.57329,894.83404)"
+       id="g4795"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       inkscape:export-xdpi="299.94498"
+       inkscape:export-ydpi="299.94498">
+      <path
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4797"
+         d="M 332.39365,445.27649 262.90794,418.45744"
+         style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         inkscape:transform-center-x="-0.36376475"
+         inkscape:transform-center-y="-0.65533921"
+         transform="matrix(0.56800137,0.19984696,-0.19984696,0.56800137,216.23381,179.73135)"
+         sodipodi:type="star"
+         style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path4799"
+         sodipodi:sides="3"
+         sodipodi:cx="251.81325"
+         sodipodi:cy="349.83182"
+         sodipodi:r1="6.5584812"
+         sodipodi:r2="3.2792406"
+         sodipodi:arg1="2.0943951"
+         sodipodi:arg2="3.1415927"
+         inkscape:flatsided="false"
+         inkscape:rounded="0"
+         inkscape:randomized="0"
+         d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z" />
+    </g>
+    <g
+       transform="matrix(0.81473282,0.11128229,-0.09123199,0.99378883,-39.271713,-57.379757)"
+       id="g4811"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       inkscape:export-xdpi="299.94498"
+       inkscape:export-ydpi="299.94498">
+      <path
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4813"
+         d="M 332.39365,445.27649 262.90794,418.45744"
+         style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         inkscape:transform-center-x="-0.36376475"
+         inkscape:transform-center-y="-0.65533921"
+         transform="matrix(0.56800137,0.19984696,-0.19984696,0.56800137,216.23381,179.73135)"
+         sodipodi:type="star"
+         style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path4815"
+         sodipodi:sides="3"
+         sodipodi:cx="251.81325"
+         sodipodi:cy="349.83182"
+         sodipodi:r1="6.5584812"
+         sodipodi:r2="3.2792406"
+         sodipodi:arg1="2.0943951"
+         sodipodi:arg2="3.1415927"
+         inkscape:flatsided="false"
+         inkscape:rounded="0"
+         inkscape:randomized="0"
+         d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z" />
+    </g>
+    <g
+       id="g4817"
+       transform="matrix(-0.71361192,0.49226687,-0.40357263,-0.87044432,553.18416,609.3545)"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       inkscape:export-xdpi="299.94498"
+       inkscape:export-ydpi="299.94498">
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 332.39365,445.27649 262.90794,418.45744"
+         id="path4819"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cc"
+         inkscape:export-xdpi="299.94498"
+         inkscape:export-ydpi="299.94498" />
+      <path
+         d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="false"
+         sodipodi:arg2="3.1415927"
+         sodipodi:arg1="2.0943951"
+         sodipodi:r2="3.2792406"
+         sodipodi:r1="6.5584812"
+         sodipodi:cy="349.83182"
+         sodipodi:cx="251.81325"
+         sodipodi:sides="3"
+         id="path4821"
+         style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         sodipodi:type="star"
+         transform="matrix(0.56800137,0.19984696,-0.19984696,0.56800137,216.23381,179.73135)"
+         inkscape:transform-center-y="-0.65533921"
+         inkscape:transform-center-x="-0.36376475"
+         inkscape:export-xdpi="299.94498"
+         inkscape:export-ydpi="299.94498" />
+    </g>
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 234.05714,371.32093 63.39048,1.21905"
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.90544182px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 201.54973,377.33129 51.9691,1.21905"
        id="path4160"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        inkscape:connector-curvature="0"
        id="path4162"
-       d="m 232.91306,363.41129 42.92308,-27.60928"
-       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 200.61179,369.42165 235.8012,341.81237"
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.90544182px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        sodipodi:nodetypes="cc"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#0047ff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 131.59818,368.5112 93.67033,0"
-       id="path4182"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 256.48131,423.14462 37.64054,-42.23785"
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.90544182px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 219.93363,429.15498 30.85865,-42.23785"
        id="path4164"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
-    <path
-       sodipodi:nodetypes="cc"
-       inkscape:connector-curvature="0"
-       id="path4184"
-       d="m 131.59818,414.5112 85.05036,0"
-       style="fill:none;fill-rule:evenodd;stroke:#005bff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        inkscape:connector-curvature="0"
        id="path4166"
-       d="m 236.93045,452.44813 59.67559,-4.13377"
-       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 203.90534,458.45849 48.92354,-4.13377"
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.90544182px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        sodipodi:nodetypes="cc"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 233.94321,453.65176 215.479,406.88214"
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.90544182px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 201.45633,459.66212 186.31891,412.8925"
        id="path4168"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        sodipodi:type="star"
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4138"
        sodipodi:sides="3"
        sodipodi:cx="277.53198"
-       sodipodi:cy="335.83308"
+       sodipodi:cy="341.83307"
        sodipodi:r1="15.0644"
        sodipodi:r2="7.5321999"
        sodipodi:arg1="0.52359878"
@@ -130,35 +374,136 @@
        inkscape:flatsided="false"
        inkscape:rounded="0"
        inkscape:randomized="0"
-       d="m 290.57814,343.36527 -13.04616,0 -13.04615,0 6.52308,-11.2983 6.52307,-11.2983 6.52308,11.2983 z"
+       d="m 290.57814,349.36527 -13.04616,0 -13.04615,0 6.52308,-11.2983 6.52307,-11.2983 6.52308,11.2983 z"
        inkscape:transform-center-y="-3.7661098"
        inkscape:transform-center-x="1.0547452e-05"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
+    <g
+       id="g4789"
+       transform="matrix(-0.49416396,0.79791672,-0.65415199,-0.6027677,594.18707,420.80796)"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       inkscape:export-xdpi="299.94498"
+       inkscape:export-ydpi="299.94498">
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 332.39365,445.27649 262.90794,418.45744"
+         id="path4791"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cc"
+         inkscape:export-xdpi="299.94498"
+         inkscape:export-ydpi="299.94498" />
+      <path
+         d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="false"
+         sodipodi:arg2="3.1415927"
+         sodipodi:arg1="2.0943951"
+         sodipodi:r2="3.2792406"
+         sodipodi:r1="6.5584812"
+         sodipodi:cy="349.83182"
+         sodipodi:cx="251.81325"
+         sodipodi:sides="3"
+         id="path4793"
+         style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         sodipodi:type="star"
+         transform="matrix(0.56800137,0.19984696,-0.19984696,0.56800137,216.23381,179.73135)"
+         inkscape:transform-center-y="-0.65533921"
+         inkscape:transform-center-x="-0.36376475"
+         inkscape:export-xdpi="299.94498"
+         inkscape:export-ydpi="299.94498" />
+    </g>
+    <g
+       transform="matrix(-0.45069782,0.83532998,-0.68482431,-0.54974888,590.70185,426.61177)"
+       id="g4829"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       inkscape:export-xdpi="299.94498"
+       inkscape:export-ydpi="299.94498">
+      <path
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4831"
+         d="M 332.39365,445.27649 262.90794,418.45744"
+         style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         inkscape:transform-center-x="-0.36376475"
+         inkscape:transform-center-y="-0.65533921"
+         transform="matrix(0.56800137,0.19984696,-0.19984696,0.56800137,216.23381,179.73135)"
+         sodipodi:type="star"
+         style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path4833"
+         sodipodi:sides="3"
+         sodipodi:cx="251.81325"
+         sodipodi:cy="349.83182"
+         sodipodi:r1="6.5584812"
+         sodipodi:r2="3.2792406"
+         sodipodi:arg1="2.0943951"
+         sodipodi:arg2="3.1415927"
+         inkscape:flatsided="false"
+         inkscape:rounded="0"
+         inkscape:randomized="0"
+         d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z" />
+    </g>
+    <g
+       transform="matrix(0.80847401,-0.16582911,0.13595083,0.98615451,-129.55179,89.349679)"
+       id="g4823"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       inkscape:export-xdpi="299.94498"
+       inkscape:export-ydpi="299.94498">
+      <path
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4825"
+         d="M 372.88286,460.99275 262.90794,418.45744"
+         style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         inkscape:transform-center-x="-0.36376475"
+         inkscape:transform-center-y="-0.65533921"
+         transform="matrix(0.56800137,0.19984696,-0.19984696,0.56800137,216.23381,179.73135)"
+         sodipodi:type="star"
+         style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path4827"
+         sodipodi:sides="3"
+         sodipodi:cx="251.81325"
+         sodipodi:cy="349.83182"
+         sodipodi:r1="6.5584812"
+         sodipodi:r2="3.2792406"
+         sodipodi:arg1="2.0943951"
+         sodipodi:arg2="3.1415927"
+         inkscape:flatsided="false"
+         inkscape:rounded="0"
+         inkscape:randomized="0"
+         d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z" />
+    </g>
     <path
        inkscape:connector-curvature="0"
        id="path4170"
-       d="m 237.77684,450.16153 -6.62668,-78.39232"
-       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 204.59924,456.17189 -5.43272,-78.39232"
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.90544182px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        sodipodi:nodetypes="cc"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#0055ff;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 131.59818,454.5112 104.01429,0"
-       id="path4186"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
-       inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 294.3141,447.722 25.36543,-36.53548"
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.90544182px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 250.94989,453.73236 271.7451,417.19688"
        id="path4172"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        inkscape:transform-center-x="1.0547452e-05"
        inkscape:transform-center-y="-3.7661098"
@@ -171,20 +516,23 @@
        sodipodi:r2="7.5321999"
        sodipodi:r1="15.0644"
        sodipodi:cy="368.11243"
-       sodipodi:cx="228.18595"
+       sodipodi:cx="228.18594"
        sodipodi:sides="3"
        id="path4140"
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="star"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 303.13651,376.60347 15.03492,41.85397 21.13016,-42.26031"
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.90544182px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 258.18272,382.61383 12.326,41.85397 17.32303,-42.26031"
        id="path4174"
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        sodipodi:type="star"
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -203,23 +551,53 @@
        inkscape:transform-center-y="-3.7661098"
        inkscape:transform-center-x="1.0547452e-05"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 237.71428,455.84157 38.60318,21.53651"
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.90544182px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 204.54795,461.85193 31.64785,21.53651"
        id="path4176"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="M 332.39365,445.27649 262.90794,418.45744"
-       id="path4178"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc"
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
+    <g
+       id="g4785"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)">
+      <path
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4178"
+         d="M 332.39365,445.27649 262.90794,418.45744"
+         style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="299.94498"
+         inkscape:export-xdpi="299.94498"
+         inkscape:transform-center-x="-0.36376475"
+         inkscape:transform-center-y="-0.65533921"
+         transform="matrix(0.56800137,0.19984696,-0.19984696,0.56800137,216.23381,179.73135)"
+         sodipodi:type="star"
+         style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path4218"
+         sodipodi:sides="3"
+         sodipodi:cx="251.81325"
+         sodipodi:cy="349.83182"
+         sodipodi:r1="6.5584812"
+         sodipodi:r2="3.2792406"
+         sodipodi:arg1="2.0943951"
+         sodipodi:arg2="3.1415927"
+         inkscape:flatsided="false"
+         inkscape:rounded="0"
+         inkscape:randomized="0"
+         d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z" />
+    </g>
     <path
        inkscape:transform-center-x="1.0547452e-05"
        inkscape:transform-center-y="-3.7661098"
@@ -238,13 +616,50 @@
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="star"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
+    <g
+       id="g4801"
+       transform="matrix(0.7613586,-0.37087093,0.30404922,0.92868442,-195.74242,132.66127)"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       inkscape:export-xdpi="299.94498"
+       inkscape:export-ydpi="299.94498">
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 332.39365,445.27649 262.90794,418.45744"
+         id="path4803"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cc"
+         inkscape:export-xdpi="299.94498"
+         inkscape:export-ydpi="299.94498" />
+      <path
+         d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="false"
+         sodipodi:arg2="3.1415927"
+         sodipodi:arg1="2.0943951"
+         sodipodi:r2="3.2792406"
+         sodipodi:r1="6.5584812"
+         sodipodi:cy="349.83182"
+         sodipodi:cx="251.81325"
+         sodipodi:sides="3"
+         id="path4805"
+         style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         sodipodi:type="star"
+         transform="matrix(0.56800137,0.19984696,-0.19984696,0.56800137,216.23381,179.73135)"
+         inkscape:transform-center-y="-0.65533921"
+         inkscape:transform-center-x="-0.36376475"
+         inkscape:export-xdpi="299.94498"
+         inkscape:export-ydpi="299.94498" />
+    </g>
     <path
        sodipodi:type="star"
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4146"
        sodipodi:sides="3"
-       sodipodi:cx="217.53198"
+       sodipodi:cx="157.53198"
        sodipodi:cy="415.83307"
        sodipodi:r1="15.0644"
        sodipodi:r2="7.5321999"
@@ -253,19 +668,22 @@
        inkscape:flatsided="false"
        inkscape:rounded="0"
        inkscape:randomized="0"
-       d="m 230.57814,423.36527 -13.04616,0 -13.04615,0 6.52308,-11.2983 6.52307,-11.2983 6.52308,11.2983 z"
+       d="m 170.57814,423.36527 -13.04616,0 -13.04615,0 6.52308,-11.2983 6.52307,-11.2983 6.52308,11.2983 z"
        inkscape:transform-center-y="-3.7661098"
        inkscape:transform-center-x="1.0547452e-05"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 330.36191,446.49554 -53.6381,29.66349"
+       style="fill:none;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.90544182px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 280.50278,452.5059 -43.97385,29.66349"
        id="path4180"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        inkscape:transform-center-x="1.0547452e-05"
        inkscape:transform-center-y="-3.7661098"
@@ -277,14 +695,16 @@
        sodipodi:arg1="0.52359878"
        sodipodi:r2="7.5321999"
        sodipodi:r1="15.0644"
-       sodipodi:cy="453.39498"
-       sodipodi:cx="234.77642"
+       sodipodi:cy="453.39499"
+       sodipodi:cx="234.77641"
        sodipodi:sides="3"
        id="path4148"
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="star"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
     <path
        sodipodi:type="star"
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -303,7 +723,9 @@
        inkscape:transform-center-y="-3.7661098"
        inkscape:transform-center-x="1.0547452e-05"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
     <path
        inkscape:transform-center-x="1.0547452e-05"
        inkscape:transform-center-y="-3.7661098"
@@ -315,14 +737,16 @@
        sodipodi:arg1="0.52359878"
        sodipodi:r2="7.5321999"
        sodipodi:r1="15.0644"
-       sodipodi:cy="446.89339"
-       sodipodi:cx="293.06214"
+       sodipodi:cy="446.8934"
+       sodipodi:cx="293.06213"
        sodipodi:sides="3"
        id="path4152"
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="star"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
     <path
        sodipodi:type="star"
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -341,7 +765,9 @@
        inkscape:transform-center-y="-3.7661098"
        inkscape:transform-center-x="1.0547452e-05"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
     <path
        inkscape:transform-center-x="1.0547452e-05"
        inkscape:transform-center-y="-3.7661098"
@@ -353,14 +779,16 @@
        sodipodi:arg1="0.52359878"
        sodipodi:r2="7.5321999"
        sodipodi:r1="15.0644"
-       sodipodi:cy="444.4553"
-       sodipodi:cx="333.93833"
+       sodipodi:cy="444.45529"
+       sodipodi:cx="333.93832"
        sodipodi:sides="3"
        id="path4156"
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="star"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
     <path
        sodipodi:type="star"
        style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -379,103 +807,9 @@
        inkscape:transform-center-y="-3.7661098"
        inkscape:transform-center-x="1.0547452e-05"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:13.86728764px;line-height:125%;font-family:'CMU Sans Serif';-inkscape-font-specification:'CMU Sans Serif, Medium';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="155.48708"
-       y="322.4906"
-       id="text4188"
-       sodipodi:linespacing="125%"
-       inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498"><tspan
-         sodipodi:role="line"
-         id="tspan4190"
-         x="155.48708"
-         y="322.4906">distal</tspan></text>
-    <text
-       sodipodi:linespacing="125%"
-       id="text4192"
-       y="341.90482"
-       x="155.48708"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:13.86728764px;line-height:125%;font-family:'CMU Sans Serif';-inkscape-font-specification:'CMU Sans Serif, Medium';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       xml:space="preserve"
-       inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498"><tspan
-         y="341.90482"
-         x="155.48708"
-         id="tspan4194"
-         sodipodi:role="line">basal</tspan></text>
-    <circle
-       style="opacity:1;fill:#0047ff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path4196"
-       cx="137.84761"
-       cy="317.56079"
-       r="7.1111116"
-       inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
-    <circle
-       r="7.1111116"
-       cy="336.97501"
-       cx="137.84761"
-       id="circle4200"
-       style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
-    <path
-       sodipodi:type="star"
-       style="opacity:1;fill:#0047ff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path4202"
-       sodipodi:sides="3"
-       sodipodi:cx="160.245"
-       sodipodi:cy="368.5112"
-       sodipodi:r1="6.5584812"
-       sodipodi:r2="3.2792406"
-       sodipodi:arg1="2.0943951"
-       sodipodi:arg2="3.1415927"
-       inkscape:flatsided="false"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 156.96575,374.19101 0,-5.67981 0,-5.67981 4.91887,2.8399 4.91886,2.83991 -4.91886,2.83991 z"
-       inkscape:transform-center-x="-1.6396203"
-       inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
-    <path
-       inkscape:transform-center-x="-1.6396203"
-       d="m 156.96575,420.19101 0,-5.67981 0,-5.67981 4.91887,2.8399 4.91886,2.83991 -4.91886,2.83991 z"
-       inkscape:randomized="0"
-       inkscape:rounded="0"
-       inkscape:flatsided="false"
-       sodipodi:arg2="3.1415927"
-       sodipodi:arg1="2.0943951"
-       sodipodi:r2="3.2792406"
-       sodipodi:r1="6.5584812"
-       sodipodi:cy="414.5112"
-       sodipodi:cx="160.245"
-       sodipodi:sides="3"
-       id="path4204"
-       style="opacity:1;fill:#0047ff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       sodipodi:type="star"
-       inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
-    <path
-       sodipodi:type="star"
-       style="opacity:1;fill:#0047ff;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path4206"
-       sodipodi:sides="3"
-       sodipodi:cx="160.245"
-       sodipodi:cy="454.5112"
-       sodipodi:r1="6.5584812"
-       sodipodi:r2="3.2792406"
-       sodipodi:arg1="2.0943951"
-       sodipodi:arg2="3.1415927"
-       inkscape:flatsided="false"
-       inkscape:rounded="0"
-       inkscape:randomized="0"
-       d="m 156.96575,460.19101 0,-5.67981 0,-5.67981 4.91887,2.8399 4.91886,2.83991 -4.91886,2.83991 z"
-       inkscape:transform-center-x="-1.6396203"
-       inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
     <path
        d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
        inkscape:randomized="0"
@@ -491,15 +825,16 @@
        id="path4208"
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="star"
-       transform="matrix(0.53916113,0.26808513,-0.26808513,0.53916113,210.38877,94.622995)"
+       transform="matrix(0.44201771,0.26808513,-0.21978286,0.53916113,182.14581,100.63335)"
        inkscape:transform-center-y="-0.87911697"
        inkscape:transform-center-x="-0.12268019"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        inkscape:transform-center-x="-0.12268019"
        inkscape:transform-center-y="-0.87911697"
-       transform="matrix(0.53916113,0.26808513,-0.26808513,0.53916113,192.38877,154.62299)"
+       transform="matrix(0.44201771,0.26808513,-0.21978286,0.53916113,167.38897,160.63335)"
        sodipodi:type="star"
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4210"
@@ -515,7 +850,8 @@
        inkscape:randomized="0"
        d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
        inkscape:randomized="0"
@@ -531,11 +867,12 @@
        id="path4212"
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="star"
-       transform="matrix(0.59801709,0.07028456,-0.07028456,0.59801709,100.09512,206.57176)"
+       transform="matrix(0.4902693,0.07028456,-0.05762103,0.59801709,91.724335,212.58212)"
        inkscape:transform-center-y="-0.23048776"
        inkscape:transform-center-x="-0.78091594"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
        inkscape:randomized="0"
@@ -551,15 +888,16 @@
        id="path4214"
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="star"
-       transform="matrix(0.60201444,0.01195683,-0.01195683,0.60201444,116.69933,158.14727)"
+       transform="matrix(0.49354642,0.01195683,-0.00980251,0.60201444,105.33688,164.15763)"
        inkscape:transform-center-y="-0.039212012"
        inkscape:transform-center-x="-0.95312082"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        inkscape:transform-center-x="-0.65752642"
        inkscape:transform-center-y="-0.36148683"
-       transform="matrix(0.59195623,0.11023693,-0.11023693,0.59195623,167.71522,163.62884)"
+       transform="matrix(0.48530045,0.11023693,-0.09037498,0.59195623,147.16098,169.6392)"
        sodipodi:type="star"
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4216"
@@ -575,31 +913,12 @@
        inkscape:randomized="0"
        d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
-    <path
-       d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
-       inkscape:randomized="0"
-       inkscape:rounded="0"
-       inkscape:flatsided="false"
-       sodipodi:arg2="3.1415927"
-       sodipodi:arg1="2.0943951"
-       sodipodi:r2="3.2792406"
-       sodipodi:r1="6.5584812"
-       sodipodi:cy="349.83182"
-       sodipodi:cx="251.81325"
-       sodipodi:sides="3"
-       id="path4218"
-       style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       sodipodi:type="star"
-       transform="matrix(0.56800137,0.19984696,-0.19984696,0.56800137,216.23381,179.73135)"
-       inkscape:transform-center-y="-0.65533921"
-       inkscape:transform-center-x="-0.36376475"
-       inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        inkscape:transform-center-x="0.88052079"
        inkscape:transform-center-y="-0.12111038"
-       transform="matrix(0.33248542,0.50201375,-0.50201375,0.33248542,360.33311,207.55653)"
+       transform="matrix(0.27257982,0.50201375,-0.41156337,0.33248542,305.07392,213.56689)"
        sodipodi:type="star"
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4220"
@@ -615,7 +934,8 @@
        inkscape:randomized="0"
        d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
        inkscape:randomized="0"
@@ -631,15 +951,16 @@
        id="path4222"
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="star"
-       transform="matrix(0.60207413,0.00843189,-0.00843189,0.60207413,157.66853,217.01563)"
+       transform="matrix(0.49359536,0.00843189,-0.00691267,0.60207413,138.92445,223.02599)"
        inkscape:transform-center-y="-0.027658007"
        inkscape:transform-center-x="-0.96322609"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        inkscape:transform-center-x="-0.075282825"
        inkscape:transform-center-y="-0.9213636"
-       transform="matrix(0.53256171,0.28096687,-0.28096687,0.53256171,267.06012,204.5022)"
+       transform="matrix(0.43660735,0.28096687,-0.23034363,0.53256171,228.6064,210.51256)"
        sodipodi:type="star"
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4224"
@@ -655,7 +976,8 @@
        inkscape:randomized="0"
        d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
        inkscape:randomized="0"
@@ -671,15 +993,16 @@
        id="path4226"
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="star"
-       transform="matrix(0.53256171,0.28096687,-0.28096687,0.53256171,219.92361,208.87045)"
+       transform="matrix(0.43660735,0.28096687,-0.23034363,0.53256171,189.96271,214.88081)"
        inkscape:transform-center-y="-0.9213636"
        inkscape:transform-center-x="-0.075282825"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        inkscape:transform-center-x="0.88686658"
        inkscape:transform-center-y="-0.11403104"
-       transform="matrix(0.33067747,0.50320649,-0.50320649,0.33067747,422.49529,153.13669)"
+       transform="matrix(0.27109762,0.50320649,-0.41254121,0.33067747,356.03602,159.14705)"
        sodipodi:type="star"
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4228"
@@ -695,7 +1018,8 @@
        inkscape:randomized="0"
        d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
        inkscape:export-xdpi="299.94498"
-       inkscape:export-ydpi="299.94498" />
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
     <path
        d="m 248.53401,355.51163 0,-5.67981 0,-5.67981 4.91886,2.8399 4.91886,2.83991 -4.91886,2.8399 z"
        inkscape:randomized="0"
@@ -711,9 +1035,82 @@
        id="path4230"
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="star"
-       transform="matrix(0.22568686,0.55823812,-0.55823812,0.22568686,447.35355,173.42206)"
+       transform="matrix(0.18502371,0.55823812,-0.45765751,0.22568686,376.41544,179.43242)"
        inkscape:transform-center-y="0.27436091"
        inkscape:transform-center-x="0.74006626"
+       inkscape:export-xdpi="299.94498"
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png" />
+    <path
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-xdpi="299.94498"
+       inkscape:transform-center-x="1.0547452e-05"
+       inkscape:transform-center-y="-3.7661098"
+       d="m 226.57814,419.36527 -13.04616,0 -13.04615,0 6.52308,-11.2983 6.52307,-11.2983 6.52308,11.2983 z"
+       inkscape:randomized="0"
+       inkscape:rounded="0"
+       inkscape:flatsided="false"
+       sodipodi:arg2="1.5707963"
+       sodipodi:arg1="0.52359878"
+       sodipodi:r2="7.5321999"
+       sodipodi:r1="15.0644"
+       sodipodi:cy="411.83307"
+       sodipodi:cx="213.53198"
+       sodipodi:sides="3"
+       id="path4783"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:type="star"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
+    <path
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-xdpi="299.94498"
+       inkscape:transform-center-x="1.0547452e-05"
+       inkscape:transform-center-y="-3.7661098"
+       d="m 170.57814,457.36527 -13.04616,0 -13.04615,0 6.52308,-11.2983 6.52307,-11.2983 6.52308,11.2983 z"
+       inkscape:randomized="0"
+       inkscape:rounded="0"
+       inkscape:flatsided="false"
+       sodipodi:arg2="1.5707963"
+       sodipodi:arg1="0.52359878"
+       sodipodi:r2="7.5321999"
+       sodipodi:r1="15.0644"
+       sodipodi:cy="449.83307"
+       sodipodi:cx="157.53198"
+       sodipodi:sides="3"
+       id="path4807"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       sodipodi:type="star"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
+    <path
+       sodipodi:type="star"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path4809"
+       sodipodi:sides="3"
+       sodipodi:cx="157.53198"
+       sodipodi:cy="383.83307"
+       sodipodi:r1="15.0644"
+       sodipodi:r2="7.5321999"
+       sodipodi:arg1="0.52359878"
+       sodipodi:arg2="1.5707963"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 170.57814,391.36527 -13.04616,0 -13.04615,0 6.52308,-11.2983 6.52307,-11.2983 6.52308,11.2983 z"
+       inkscape:transform-center-y="-3.7661098"
+       inkscape:transform-center-x="1.0547452e-05"
+       inkscape:export-xdpi="299.94498"
+       inkscape:export-ydpi="299.94498"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
+       transform="matrix(0.81982489,0,0,1,9.6638643,6.0103562)" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.90544182;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2.71632546, 2.71632546;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 163.93063,346.16576 0,146.13639"
+       id="path4859"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/fschubert/work/repos/Elman_Net/notes/presentation/figures/prox_dist_rnn_illustration.png"
        inkscape:export-xdpi="299.94498"
        inkscape:export-ydpi="299.94498" />
   </g>
