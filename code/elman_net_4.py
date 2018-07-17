@@ -32,6 +32,10 @@ def s(x):
 	return np.tanh(x)
 
 
+def act_pos(x):
+
+	return (np.tanh(2.*x)+1.)/2.
+
 
 def input(t):
 

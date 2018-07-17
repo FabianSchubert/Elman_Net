@@ -101,7 +101,7 @@ X_d = np.dot(X_p,lin_comb)
 '''
 
 
-#X_p[:,1] *= 2.
+X_p[:,1] *= 3.
 #X_p[:,1:5] *=0.5
 X_d = X_p[:,0]
 
@@ -146,8 +146,8 @@ for t in tqdm(range(n_t_learn)):
 	th_d = 1.4*I_d_mean
 
 	#x = act_pd(I_p-th_p,I_d-th_d,gain_pd,alpha_pd)
-	x = act_pd_2(I_p,I_d,gain_pd,th_p0,th_p1,th_d,alpha_pd)
-	#x = act_pos(I_p+I_d)
+	#x = act_pd_2(I_p,I_d,gain_pd,th_p0,th_p1,th_d,alpha_pd)
+	x = act_pos(I_p+I_d-0.5)
 	#x = (I_p+I_d)
 	#x = act_pos(I_p*I_d)
 	#x = (I_p*I_d)
@@ -185,12 +185,15 @@ t_ax = np.array(range(n_t_learn))
 
 ###
 fig_act_pd, ax_act_pd = plt.subplots(1,2,figsize=(10.,4.))
-i_p = np.linspace(0.,1.,400)
-i_d = np.linspace(0.,1.,400)
+i_p = np.linspace(0.,2.5,400)
+i_d = np.linspace(0.,2.5,400)
 Ip,Id = np.meshgrid(i_p,i_d)
 
 #act_pd_p_beginning = ax_act_pd[0].pcolormesh(i_p,i_d,act_pd(Ip-th_p,Id-th_d,gain_pd,alpha_pd))
-act_pd_p_beginning = ax_act_pd[0].pcolormesh(i_p,i_d,act_pd_2(Ip,Id,gain_pd,th_p0,th_p1,th_d,alpha_pd))
+
+#act_pd_p_beginning = ax_act_pd[0].pcolormesh(i_p,i_d,act_pd_2(Ip,Id,gain_pd,th_p0,th_p1,th_d,alpha_pd))
+act_pd_p_beginning = ax_act_pd[0].pcolormesh(i_p,i_d,act_pos(Ip+Id-.5))
+
 plt.colorbar(mappable=act_pd_p_beginning)
 
 t_wind = int(n_t_learn*0.02)
@@ -199,7 +202,10 @@ ax_act_pd[0].set_xlabel("$I_{prox}$")
 ax_act_pd[0].set_ylabel("$I_{dist}$")
 
 #act_pd_p_end = ax_act_pd[1].pcolormesh(i_p,i_d,act_pd(Ip-th_p,Id-th_d,gain_pd,alpha_pd))
-act_pd_p_end = ax_act_pd[1].pcolormesh(i_p,i_d,act_pd_2(Ip,Id,gain_pd,th_p0,th_p1,th_d,alpha_pd))
+
+#act_pd_p_end = ax_act_pd[1].pcolormesh(i_p,i_d,act_pd_2(Ip,Id,gain_pd,th_p0,th_p1,th_d,alpha_pd))
+act_pd_p_end = ax_act_pd[1].pcolormesh(i_p,i_d,act_pos(Ip+Id-.5))
+
 
 ax_act_pd[1].plot(I_p_rec[-t_wind:],I_d_rec[-t_wind:],'.',c='r',alpha=0.2)
 ax_act_pd[1].set_xlabel("$I_{prox}$")
@@ -210,7 +216,7 @@ ax_act_pd[1].set_title("Last " + str(int(100.*t_wind/n_t_learn))+"% of learning 
 
 plt.tight_layout()
 
-plt.savefig("../notes/presentation/figures/act_pd_color_scatter.png",dpi=300)
+plt.savefig("../notes/presentation/figures/act_pd_color_scatter_point_neuron_pc_defl.png",dpi=300)
 ###
 
 ###
@@ -220,7 +226,7 @@ ax_w.set_xlabel("#t")
 ax_w.set_ylabel("$w_{prox}$")
 
 plt.tight_layout()
-plt.savefig("../notes/presentation/figures/act_pd_w.png",dpi=300)
+plt.savefig("../notes/presentation/figures/act_pd_w_point_neuron_pc_defl.png",dpi=300)
 ###
 
 
@@ -243,7 +249,7 @@ ax_I[1].set_ylabel("$I_{prox}$, $I_{dist}$")
 ax_I[1].set_title("Last " + str(int(100.*t_wind/n_t_learn))+"% of learning phase")
 
 plt.tight_layout()
-plt.savefig("../notes/presentation/figures/I_pd.png",dpi=300)
+plt.savefig("../notes/presentation/figures/I_pd_point_neuron_pc_defl.png",dpi=300)
 ###
 
 ###
@@ -254,7 +260,7 @@ ax_X_p.set_xlabel("#t")
 ax_X_p.set_ylabel("$x_{prox}$")
 
 plt.tight_layout()
-plt.savefig("../notes/presentation/figures/X_p.png",dpi=300)
+plt.savefig("../notes/presentation/figures/X_p_point_neuron_pc_defl.png",dpi=300)
 ###
 
 plt.show()

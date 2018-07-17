@@ -29,6 +29,7 @@ def s(x):
 
 
 
+
 def input(t):
 
 	return np.sin(np.pi*2.*t/8.)+np.sin(np.pi*2.*t/32.)
