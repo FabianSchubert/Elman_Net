@@ -5,6 +5,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{natbib}
 \author{Fabian Schubert}
 \title{Notes on Homeostasis and Plasticity in a Non-binary Recurrent Network}
 
@@ -21,6 +22,11 @@
 
 \begin{document}
 \maketitle
+
+
+
+
+
 \section{Description of the Network Model}
 We investigate a discrete-time, fully connected recurrent network model that includes homeostatic threshold and gain control by using the Kullback-Leibler divergence between a target distribution and neuronal output as a control measure. Standard parameters of the model are given in Table \ref{tab:parameters}. Find the details of the model in the following sections.
 \begin{table}
@@ -84,8 +90,9 @@ Note that, aside from a scaling factor, gain and threshold dynamics can be expre
 \caption{\textbf{A},\textbf{B}: $\Theta$ as a function of $y$ as given in \eqref{eq:theta}. }
 \end{figure}
 
-\section{}
 
 
+\bibliographystyle{unsrt}
+\bibliography{/home/fschubert/work/lit_base.bib}
 
 \end{document}
