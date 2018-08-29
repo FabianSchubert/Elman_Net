@@ -24,7 +24,7 @@ def act_pd_2(p,d,gain,theta_p0,theta_p1,theta_d,alpha):
 def input(t):
 
 	return np.sin(np.pi*2.*t/8.)+np.sin(np.pi*2.*t/32.)
-	#return (np.sin(np.pi*2.*t/8.)+np.sin(np.pi*2.*t/32.)+2.)/4.
+	#return (np.sin(np.pi*2.*t/8.)+np.sin(np.pi*2.*t/32.))/8. + 0.5
 
 N = 300
 
@@ -32,32 +32,41 @@ N = 300
 
 mu_learn = 0.005
 
-n_t = 200000
+n_t = 3000000
+n_t_rec = 300000
+n_t_skip = int(n_t/n_t_rec)
 
 x = np.zeros(N)
 y = 0.
 
-cf = 0.1
-g = 0.8
-W = np.random.normal(0.,1.,(N,N))*(np.random.rand(N,N) <= cf)*g/(cf*N)**.5
-W[range(N),range(N)] = 0.
-
-w_yx_total= 1.
-w_yx_max = w_yx_total
-w_yx_min = 0.
-
-w_yx = np.random.rand(N)
-
-#w_yx = w_yx_total * w_yx/w_yx.sum()
 
 
-w_xy = np.random.normal(0.,1.,(N))
 
 w_dist = 1.
 
 alpha_pd = 0.05
 
 gain_pd = 5.
+
+w_xy = np.random.normal(0.,1.,(N))
+
+
+cf = 0.1
+g = 0.8
+W = np.random.normal(0.,1.,(N,N))*(np.random.rand(N,N) <= cf)*g/((cf*N)**.5)
+W[range(N),range(N)] = 0.
+
+w_yx_total= 1.
+w_yx_max = w_yx_total
+w_yx_min = 0.000001
+
+w_yx = np.random.rand(N)
+
+#w_yx = w_yx_total * w_yx/w_yx.sum()
+
+
+
+
 
 x_mean = 0.5*np.ones(N)
 mu_x_mean = 0.001
@@ -71,7 +80,7 @@ mu_I_p_mean = 0.001
 mu_I_d_mean = 0.001
 
 
-#w_yx_rec = np.ndarray((n_t,N))
+w_yx_rec = np.ndarray((n_t_rec,N))
 dw_yx_rec = np.ndarray((n_t))
 
 Err_rec = np.ndarray((n_t))
@@ -98,11 +107,16 @@ for t in tqdm(range(n_t)):
 	th_p1 = 0.1*I_p_mean
 	th_d = 1.4*I_d_mean
 
+	#I_p_x = np.dot(W,x) + w_xy*y
+
+	#th_p0_x = I_p_x
+
 	dw_yx = -mu_learn * (I_p-I_d)*x
-	
+	#dw_yx = mu_learn*(y-y_mean)*(x-x_mean)
 
 	#x = act_pos(np.dot(W,x) + w_xy*y)
 	x = s(np.dot(W,x) + w_xy*y)
+	#x = act_pd_2(np.dot(W,x) + w_xy*y,0.,gain_pd,th_p0_x,0.,1.,alpha_pd)
 	y = act_pd_2(I_p,I_d,gain_pd,th_p0,th_p1,th_d,alpha_pd)
 	#y = act_pos(I_p+I_d)
 	#y = s(I_p + I_d)
@@ -128,7 +142,8 @@ for t in tqdm(range(n_t)):
 	y_rec[t] = y
 	y_mean_rec[t] = y_mean
 
-	#w_yx_rec[t,:] = w_yx
+	if t%n_t_skip == 0:
+		w_yx_rec[int(t/n_t_skip),:] = w_yx
 	dw_yx_rec[t] = np.linalg.norm(dw_yx)
 
 	I_p_rec[t] =I_p
@@ -142,6 +157,7 @@ for t in tqdm(range(n_t)):
 input_sequ = input(np.array(range(n_t)))
 
 t_ax = np.array(range(n_t))
+t_ax_skip = np.linspace(0,n_t,n_t_rec)
 
 fig_end,ax_end = plt.subplots(figsize=(6,3))
 
@@ -151,7 +167,7 @@ ax_end.plot(t_ax[-100:],I_p_rec[-100:],label="$I_p$")
 
 ax_end.legend()
 
-ax_end.set_xlabel("time_step")
+ax_end.set_xlabel("time step")
 ax_end.set_ylabel("$I_p / I_d$")
 
 plt.tight_layout()
@@ -165,12 +181,23 @@ ax_start.plot(t_ax[:100],I_d_rec[:100],label="$I_d$")
 ax_start.plot(t_ax[:100],I_p_rec[:100],label="$I_p$")
 ax_start.legend()
 
-ax_start.set_xlabel("time_step")
+ax_start.set_xlabel("time step")
 ax_start.set_ylabel("$I_p / I_d$")
 
 plt.tight_layout()
 
 plt.savefig("../notes/presentation/figures/echo_state_network_pd_act_grad_desc_start.png",dpi=300)
+
+fig_w,ax_w = plt.subplots(figsize=(6,3))
+
+ax_w.plot(t_ax_skip[::100],w_yx_rec[::100,:])
+
+ax_w.set_xlabel("time step")
+ax_w.set_ylabel("$w_{yx}$")
+
+plt.tight_layout()
+
+plt.savefig("../notes/presentation/figures/echo_state_network_pd_act_grad_desc_w_yx.png",dpi=300)
 
 plt.show()
 
