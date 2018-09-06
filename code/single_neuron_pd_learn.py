@@ -42,7 +42,7 @@ def synnorm(w,w_total):
 
 
 
-def main(n_prox = 10, n_dist = 10, n_t_learn = 2000000, X_p = np.load("rand_chaotic_sequ.npy"), X_d = np.load("rand_chaotic_sequ.npy")[:,0], alpha_pd = 0.2, gain_pd = 20., gain_d_sign_inv = 1., w_dist = 1., w_prox_total = 1., w_prox_max = 1., w_prox_min = 0.0001, w_dist_total = 1., w_dist_max = 1., w_dist_min = 0.0001, mu_learn = 0.00005, mu_hom = 0.00002,  mu_avg = 0.00002):
+def main(n_prox = 1, n_dist = 10, n_t_learn = 2000000, X_p = np.load("rand_chaotic_sequ.npy"), X_d = np.load("rand_chaotic_sequ.npy")[:,0], alpha_pd = 0.2, gain_pd = 20., gain_d_sign_inv = 1., w_dist = 1., w_prox_total = 1., w_prox_max = 1., w_prox_min = 0.0001, w_dist_total = 1., w_dist_max = 1., w_dist_min = 0.0001, mu_learn = 0.00005, mu_hom = 0.00002,  mu_avg = 0.00002):
 	
 	# initialize proximal weights
 	w_prox = np.ones(n_prox)
@@ -120,12 +120,12 @@ def main(n_prox = 10, n_dist = 10, n_t_learn = 2000000, X_p = np.load("rand_chao
 
 		## plasticity
 		
-		w_prox += mu_learn * (x-x_mean)*(X_p[t,:]-X_p_mean)
+		#w_prox += mu_learn * (x-x_mean)*(X_p[t,:]-X_p_mean)
 
 		#w_prox = np.maximum(w_prox_min,w_prox)
 		#w_prox = np.minimum(w_prox_max,w_prox)
 		#w_prox = w_prox_total * w_prox/w_prox.sum()
-		w_prox = synnorm(w_prox,w_prox_total)
+		#w_prox = synnorm(w_prox,w_prox_total)
 
 		w_dist += mu_learn * (x-x_mean)*(X_d[t,:]-X_d_mean)
 
@@ -134,6 +134,7 @@ def main(n_prox = 10, n_dist = 10, n_t_learn = 2000000, X_p = np.load("rand_chao
 		#w_dist = w_dist_total * w_dist/w_dist.sum()
 		w_dist = synnorm(w_dist,w_dist_total)
 		##
+
 
 		'''
 		## plasticity-analytic
@@ -315,7 +316,7 @@ def main(n_prox = 10, n_dist = 10, n_t_learn = 2000000, X_p = np.load("rand_chao
 
 if __name__ == "__main__":
 	
-	'''
+	#'''
 	X_p = np.ndarray((2000000,10))
 	for k in tqdm(range(10)):
 
@@ -324,21 +325,15 @@ if __name__ == "__main__":
 	X_p = (X_p+1.)/2.
 
 	np.save("rand_chaotic_sequ.npy",X_p)
-	'''	
+	#'''	
 
-	X_p_sequ = np.load("rand_chaotic_sequ.npy")
+	X_d_sequ = np.load("rand_chaotic_sequ.npy")
 
-	X_d_sequ = np.ndarray((2000000,10))
+	#X_d_sequ = np.ndarray((2000000,10))
 
-	X_d_sequ[:,:] = X_p_sequ[:,:]
+	X_p_sequ = X_p_sequ[:,0]
 
-	X_p_sequ[:,1] = -X_p_sequ[:,0]
-	X_p_sequ[:,2] *= 3.
-
-
-	X_d_sequ[:,0] *= 3.
-	X_d_sequ[:,1] *=-X_d_sequ[:,0]
-	
+		
 	main(X_p = X_p_sequ, X_d = X_d_sequ)
 
 
