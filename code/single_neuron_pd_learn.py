@@ -42,15 +42,22 @@ def synnorm(w,w_total):
 
 
 
-def main(n_prox = 1, n_dist = 10, n_t_learn = 2000000, X_p = np.load("rand_chaotic_sequ.npy"), X_d = np.load("rand_chaotic_sequ.npy")[:,0], alpha_pd = 0.2, gain_pd = 20., gain_d_sign_inv = 1., w_dist = 1., w_prox_total = 1., w_prox_max = 1., w_prox_min = 0.0001, w_dist_total = 1., w_dist_max = 1., w_dist_min = 0.0001, mu_learn = 0.00005, mu_hom = 0.00002,  mu_avg = 0.00002):
+
+def main(n_prox = 1, n_dist = 10, n_t_learn = 1000000, X_p = np.load("rand_chaotic_sequ.npy"), X_d = np.load("rand_chaotic_sequ.npy")[:,0], alpha_pd = 1.0, gain_pd = 20., gain_d_sign_inv = 1., w_dist = 1., w_prox_total = 1., w_prox_max = 1., w_prox_min = 0.0001, w_dist_total = 1., w_dist_max = 1., w_dist_min = 0.0001, mu_learn = 0.00005, mu_hom = 0.00002,  mu_avg = 0.00002):
 	
 	# initialize proximal weights
-	w_prox = np.ones(n_prox)
-	w_prox = w_prox_total * w_prox/w_prox.sum()
+	if n_prox > 1:
+		w_prox = np.ones(n_prox)
+		w_prox = w_prox_total * w_prox/w_prox.sum()
+	else:
+		w_prox = 1
 
 	# initialize distal weights
-	w_dist = np.ones(n_dist)
-	w_dist = w_dist_total * w_dist/w_dist.sum()
+	if n_dist > 1:
+		w_dist = np.ones(n_dist)
+		w_dist = w_dist_total * w_dist/w_dist.sum()
+	else:
+		w_dist = 1
 
 	# initialize weights for "analytic" time evolution, by covariances
 	w_prox_analytic = np.ones(n_prox)
@@ -77,8 +84,14 @@ def main(n_prox = 1, n_dist = 10, n_t_learn = 2000000, X_p = np.load("rand_chaot
 
 	# initialize running averages
 	x_mean = 0.5
-	X_p_mean = X_p[0,:]
-	X_d_mean = X_d[0,:]
+	if n_prox > 1:
+		X_p_mean = X_p[0,:]
+	else:
+		X_p_mean = X_p[0]
+	if n_dist > 1:
+		X_d_mean = X_d[0,:]
+	else:
+		X_d_mean = X_d[0]
 
 	# initialize recordings
 	x_rec = np.ndarray((n_t_learn))
@@ -106,17 +119,32 @@ def main(n_prox = 1, n_dist = 10, n_t_learn = 2000000, X_p = np.load("rand_chaot
 
 	for t in tqdm(range(n_t_learn)):
 
-		I_p = np.dot(w_prox,X_p[t,:]) - th_p
-		I_d = np.dot(w_dist,X_d[t,:]) - th_d
-
+		if n_prox > 1:
+			I_p = np.dot(w_prox,X_p[t,:]) - th_p
+		else:
+			I_p = w_prox*X_p[t] - th_p
+		if n_dist > 1:
+			I_d = np.dot(w_dist,X_d[t,:]) - th_d
+		else:
+			I_d = w_dist*X_d[t] - th_d
+		
 		th_p += mu_hom*I_p
 		th_d += mu_hom*I_d
 		
 		x = act_pd(I_p,I_d,alpha_pd,gain_pd)
 
 		x_mean += mu_avg*(x - x_mean)
-		X_p_mean += mu_avg*(X_p[t,:] - X_p_mean)
-		X_d_mean += mu_avg*(X_d[t,:] - X_d_mean)
+		
+		if n_prox > 1:
+			X_p_mean += mu_avg*(X_p[t,:] - X_p_mean)
+		else:
+			X_p_mean += mu_avg*(X_p[t] - X_p_mean)
+
+		if n_dist > 1:
+			X_d_mean += mu_avg*(X_d[t,:] - X_d_mean)
+		else:
+			X_d_mean += mu_avg*(X_d[t] - X_d_mean)
+
 
 		## plasticity
 		
@@ -160,7 +188,14 @@ def main(n_prox = 1, n_dist = 10, n_t_learn = 2000000, X_p = np.load("rand_chaot
 
 		w_dist_rec[t,:] = w_dist
 
-		X_p_mean_rec[t,:] = X_p_mean
+		if n_prox > 1:
+			X_p_mean_rec[t,:] = X_p_mean
+		else:
+			X_p_mean_rec[t] = X_p_mean
+		if n_dist > 1:
+			X_d_mean_rec[t,:] = X_d_mean
+		else:
+			X_d_mean_rec[t] = X_d_mean
 
 		I_p_rec[t] = I_p
 		I_d_rec[t] = I_d
@@ -316,7 +351,7 @@ def main(n_prox = 1, n_dist = 10, n_t_learn = 2000000, X_p = np.load("rand_chaot
 
 if __name__ == "__main__":
 	
-	#'''
+	'''
 	X_p = np.ndarray((2000000,10))
 	for k in tqdm(range(10)):
 
@@ -325,14 +360,15 @@ if __name__ == "__main__":
 	X_p = (X_p+1.)/2.
 
 	np.save("rand_chaotic_sequ.npy",X_p)
-	#'''	
+	'''	
 
 	X_d_sequ = np.load("rand_chaotic_sequ.npy")
 
 	#X_d_sequ = np.ndarray((2000000,10))
 
-	X_p_sequ = X_p_sequ[:,0]
+	X_p_sequ = X_d_sequ[:,0]
 
+	X_d_sequ[:,1] *= 3.
 		
 	main(X_p = X_p_sequ, X_d = X_d_sequ)
 

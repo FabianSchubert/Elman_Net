@@ -22,5 +22,5 @@ file_format = [".png",".svg",".eps"] ## cycle through file formats and append to
 #sim_data_base_folder = "/home/fschubert/Master/sim_data/"
 #sim_data_base_folder = "/media/fschubert/Ohne Titel/sim_data/"
 
-plots_base_folder = "/home/fschubert/work/repos/Elman_Net/plots/" # base folder of plots
-
+#plots_base_folder = "/home/fschubert/work/repos/Elman_Net/plots/" # base folder of plots
+plots_base_folder = "/home/fabian/work/repos/Elman_Net/plots/"
