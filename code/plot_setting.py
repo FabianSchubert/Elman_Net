@@ -2,7 +2,7 @@
 
 import matplotlib as mpl
 mpl.rcParams['lines.linewidth'] = 2.
-mpl.rcParams['font.size'] = 10.
+mpl.rcParams['font.size'] = 15.
 mpl.rcParams['figure.autolayout'] = True
 #mpl.rcParams['axes.color_cycle'] = ['009BDE', 'FF8800', '00EB8D', 'FBC15E', '8EBA42', 'FFB5B8']
 mpl.rcParams['figure.facecolor'] = 'white'
@@ -22,5 +22,5 @@ file_format = [".png",".svg",".eps"] ## cycle through file formats and append to
 #sim_data_base_folder = "/home/fschubert/Master/sim_data/"
 #sim_data_base_folder = "/media/fschubert/Ohne Titel/sim_data/"
 
-#plots_base_folder = "/home/fschubert/work/repos/Elman_Net/plots/" # base folder of plots
-plots_base_folder = "/home/fabian/work/repos/Elman_Net/plots/"
+plots_base_folder = "/home/fschubert/work/repos/Elman_Net/plots/" # base folder of plots
+#plots_base_folder = "/home/fabian/work/repos/Elman_Net/plots/"

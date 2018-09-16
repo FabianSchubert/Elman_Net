@@ -45,17 +45,29 @@ def synnorm(w,w_total):
 
 
 
-def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = np.random.normal(0.,1.,(1000000,1)), alpha_pd = 0.25, gain_pd = 20., gain_d_sign_inv = 1., w_dist = 1., w_prox_total = 1., w_prox_max = 1., w_prox_min = 0.0001, w_dist_total = 1., w_dist_max = 1., w_dist_min = 0.0001, mu_learn = 0.00005, mu_hom = 0.00002,  mu_avg = 0.00002):
+def main(n_reservoir = 1000, n_t_learn = 200000, X_d = np.random.normal(0.,1.,(1000000,1)),
+	g_reserv = 1.2, cf_reservoir = 0.02, dt_reservoir = 0.1, alpha_pd = 0.25,
+	gain_pd = 10., gain_d_sign_inv = 1., w_dist = 1., w_prox_total = 1., w_prox_max = 1.,
+	w_prox_min = 0.0001, w_dist_total = 1., w_dist_max = 1., w_dist_min = 0.0001,
+	mu_learn = .01, mu_hom = 0.00002,  mu_avg = 0.00002):
 	
-	n_prox = X_p.shape[1]
 	n_dist = X_d.shape[1]
 
 	# initialize proximal weights
-	if n_prox > 1:
-		w_prox = np.ones(n_prox)
-		w_prox = w_prox_total * w_prox/w_prox.sum()
+	if n_reservoir > 1:
+		w_prox = np.random.normal(0.,1.,(n_reservoir))
+		#w_prox = w_prox_total * w_prox/w_prox.sum()
+		w_prox = w_prox_total * w_prox/np.linalg.norm(w_prox)
 	else:
 		w_prox = 1
+
+	#initialize reservoir
+	W = np.random.normal(0.,1.,(n_reservoir,n_reservoir))*(np.random.rand(n_reservoir,n_reservoir) <= cf_reservoir)*g_reserv/(cf_reservoir*n_reservoir)**.5
+	W[range(n_reservoir),range(n_reservoir)] = 0.
+	X_p = np.random.normal(0.,.5,(n_reservoir))
+
+	#initialize weights to reservoir
+	w_res = np.random.normal(0.,1.,(n_reservoir))*1
 
 	# initialize distal weights
 	if n_dist > 1:
@@ -63,12 +75,6 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 		w_dist = w_dist_total * w_dist/w_dist.sum()
 	else:
 		w_dist = 1
-
-	# initialize weights for "analytic" time evolution, by covariances
-	w_prox_analytic = np.ones(n_prox)
-	w_prox_analytic = w_prox_total * w_prox_analytic/w_prox_analytic.sum()
-
-	gamma = (1.-alpha_pd/2.)*alpha_pd*gain_pd/4.
 
 	'''
 	# Calc covariance matrices
@@ -89,7 +95,7 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 
 	# initialize running averages
 	x_mean = 0.5
-	X_p_mean = X_p[0,:]
+	X_p_mean = X_p[:]
 	
 	X_d_mean = X_d[0,:]
 	
@@ -98,9 +104,8 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 	x_rec = np.ndarray((n_t_learn))
 	x_mean_rec = np.ndarray((n_t_learn))
 
-	w_prox_rec = np.ndarray((n_t_learn,n_prox))
-	w_prox_analytic_rec = np.ndarray((n_t_learn,n_prox))
-
+	w_prox_rec = np.ndarray((n_t_learn,n_reservoir))
+	
 	'''
 	w_prox_analytic_cxx_rec = np.ndarray((n_t_learn,n_prox))
 	w_prox_analytic_cxd_rec = np.ndarray((n_t_learn,n_prox))
@@ -109,7 +114,9 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 
 	w_dist_rec = np.ndarray((n_t_learn,n_dist))
 
-	X_p_mean_rec = np.ndarray((n_t_learn,n_prox))
+	X_p_rec = np.ndarray((n_t_learn,n_reservoir))
+
+	X_p_mean_rec = np.ndarray((n_t_learn,n_reservoir))
 	X_d_mean_rec = np.ndarray((n_t_learn,n_dist))	
 
 	I_p_rec = np.ndarray((n_t_learn))
@@ -118,31 +125,42 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 	th_p_rec = np.ndarray((n_t_learn))
 	th_d_rec = np.ndarray((n_t_learn))
 
+	x = 0.
+
 	for t in tqdm(range(n_t_learn)):
 
-		I_p = np.dot(w_prox,X_p[t,:]) - th_p
-		
+		I_p = np.dot(w_prox,X_p) - th_p
 		I_d = np.dot(w_dist,X_d[t,:]) - th_d
-		
-		
+		#'''
+		if t <= n_t_learn*0.9:
+			I_d = np.dot(w_dist,X_d[t,:]) - th_d
+		else:
+			I_d = I_d*0.
+		#'''
+
 		th_p += mu_hom*I_p
 		th_d += mu_hom*I_d
 		
-		x = act_pd(I_p,I_d,alpha_pd,gain_pd)
+		x_old = x
 
+		#x = act_pd(I_p,I_d,alpha_pd,gain_pd)
+		x = np.tanh(I_p+I_d)
 		x_mean += mu_avg*(x - x_mean)
 		
-		X_p_mean += mu_avg*(X_p[t,:] - X_p_mean)
-		
-		X_d_mean += mu_avg*(X_d[t,:] - X_d_mean)
-		
-
-
 		## plasticity
-		
-		w_prox += mu_learn * (x-x_mean)*(X_p[t,:]-X_p_mean)
-		w_prox = synnorm(w_prox,w_prox_total)
-		
+		#w_prox += mu_learn * (x-x_mean)*(X_p-X_p_mean)
+		#w_prox = np.maximum(w_prox_min,w_prox)
+		#w_prox = np.minimum(w_prox_max,w_prox)
+		#w_prox = synnorm(w_prox,w_prox_total)
+		#'''
+		if t <= n_t_learn*0.9:
+			#w_prox += mu_learn * (x-x_mean)*(X_p-X_p_mean)
+			#w_prox = np.maximum(w_prox_min,w_prox)
+			#w_prox = np.minimum(w_prox_max,w_prox)
+			#w_prox = synnorm(w_prox,w_prox_total)
+			w_prox += mu_learn * (I_d - I_p)*w_prox
+
+		#'''
 		#w_prox = np.maximum(w_prox_min,w_prox)
 		#w_prox = np.minimum(w_prox_max,w_prox)
 		#w_prox = w_prox_total * w_prox/w_prox.sum()
@@ -173,13 +191,24 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 		##
 		'''
 
+		I_res = np.dot(W,X_p) + w_res*x_old
+
+		X_p = np.tanh(I_res)
+
+		X_p_mean += mu_avg*(X_p - X_p_mean)
+		
+		X_d_mean += mu_avg*(X_d[t,:] - X_d_mean)
+
+
 		x_rec[t] = x
 		x_mean_rec[t] = x_mean
 
 		w_prox_rec[t,:] = w_prox
-		w_prox_analytic_rec[t,:] = w_prox_analytic
+		#w_prox_analytic_rec[t,:] = w_prox_analytic
 
 		w_dist_rec[t,:] = w_dist
+
+		X_p_rec[t,:] = X_p[:]
 
 		X_p_mean_rec[t,:] = X_p_mean
 		X_d_mean_rec[t,:] = X_d_mean
@@ -219,7 +248,7 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 		ax_act_pd_beginning.set_xlim([-1.,1.])
 		ax_act_pd_beginning.set_ylim([-1.,1.])
 
-		t_wind = int(n_t_learn*0.02)
+		t_wind = int(n_t_learn*0.01)
 		ax_act_pd_beginning.plot(I_p_rec[:t_wind],I_d_rec[:t_wind],'.',c='r',alpha=0.2,rasterized=True)
 		ax_act_pd_beginning.set_xlabel("$I_{prox}$")
 		ax_act_pd_beginning.set_ylabel("$I_{dist}$")
@@ -235,7 +264,7 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 		i_d = np.linspace(-1.,1.,400)
 		Ip,Id = np.meshgrid(i_p,i_d)
 
-		t_wind = int(n_t_learn*0.02)
+		t_wind = int(n_t_learn*0.01)
 		
 		act_pd_p_end = ax_act_pd_end.pcolormesh(i_p,i_d,act_pd(Ip,Id,alpha_pd,gain_pd),rasterized=True)
 
@@ -257,7 +286,8 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 		###############
 		#fig_w_prox, ax_w_prox = plt.subplots(figsize=(width_total/4.,height_total/2.))
 		ax_w_prox = fig_poster.add_subplot(gsposter[1,0])
-		ax_w_prox.plot(w_prox_rec)
+		t_ax = np.array(range(0,n_t_learn,100))
+		ax_w_prox.plot(t_ax,w_prox_rec[::100,:])
 		ax_w_prox.set_xlabel("#t")
 		ax_w_prox.set_ylabel("$w_{prox}$")
 
@@ -281,7 +311,7 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 		###############
 		#fig_I_beginning, ax_I_beginning = plt.subplots(1,1,figsize=(width_total/4.,height_total/2.))
 		ax_I_beginning = fig_poster.add_subplot(gsposter[0,3])
-		t_wind = int(n_t_learn*0.005)
+		t_wind = int(n_t_learn*0.001)
 
 		ax_I_beginning.plot(I_d_rec[:t_wind],label="$I_d$")
 		ax_I_beginning.plot(I_p_rec[:t_wind],label="$I_p$")
@@ -300,7 +330,7 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 		###############
 		#fig_I_end, ax_I_end = plt.subplots(1,1,figsize=(width_total/4.,height_total/2.))
 		ax_I_end = fig_poster.add_subplot(gsposter[1,3])
-		t_wind = int(n_t_learn*0.005)
+		t_wind = int(n_t_learn*0.001)
 
 		ax_I_end.plot(t_ax[-t_wind:],I_d_rec[-t_wind:])
 		ax_I_end.plot(t_ax[-t_wind:],I_p_rec[-t_wind:])
@@ -318,10 +348,10 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 		###############
 
 		###############
-		t_wind = int(n_t_learn*0.0025)
+		t_wind = int(n_t_learn*0.0001)
 		#fig_X_p, ax_X_p = plt.subplots(figsize=(width_total/4.,height_total/2.))
 		ax_X_p = fig_poster.add_subplot(gsposter[0,0])
-		ax_X_p.plot(X_p[:t_wind])
+		ax_X_p.plot(X_p_rec[:t_wind,:])
 		ax_X_p.set_xlabel("#t")
 		ax_X_p.set_ylabel("$x_{prox}$")
 
@@ -373,7 +403,7 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 
 		poster_fig_folder = "/home/fschubert/work/2018/Poster_Bernstein/figures/"
 
-		fig_poster.savefig(poster_fig_folder + "fig3." + imgformat,dpi=300)
+		fig_poster.savefig(poster_fig_folder + "fig4." + imgformat,dpi=300)
 		plt.show()
 
 		pdb.set_trace()
@@ -392,18 +422,25 @@ if __name__ == "__main__":
 	np.save("rand_chaotic_sequ.npy",X_rand_sequ)
 	'''	
 
-	X_p_sequ = np.load("rand_chaotic_sequ.npy")[:,:10]
+	#X_p_sequ = np.load("rand_chaotic_sequ.npy")[:,:10]
 
 	#X_d_sequ = np.ndarray((2000000,10))
 
-	X_d_sequ = np.array([np.load("rand_chaotic_sequ.npy")[:,10]]).T
+	#X_d_sequ = np.array([np.load("rand_chaotic_sequ.npy")[:,0]]).T
+	t_arr = np.array(range(500000))*(2.*np.pi/32.)
+	X_d_sequ = (np.sin(t_arr) + np.sin(t_arr*4))*0.25
+	
+	#t_arr = np.array(range(500000))
+	#X_d_sequ = 0.5*(np.mod(t_arr,20))/20.
+	
+	X_d_sequ = np.array([X_d_sequ]).T
 
-	X_p_sequ[:,1] *= 3.
+	#X_p_sequ[:,1] *= 3.
 
-	X_p_sequ -= X_p_sequ.mean(axis=0)
+	#X_p_sequ -= X_p_sequ.mean(axis=0)
 	X_d_sequ -= X_d_sequ.mean(axis=0)
 		
-	main(X_p = X_p_sequ, X_d = X_d_sequ)
+	main(X_d = X_d_sequ)
 
 
 
