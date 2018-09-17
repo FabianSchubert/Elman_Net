@@ -45,8 +45,8 @@ A_ltp = 15.*10.**(-4.) # potentiation amplitude, mV^-1
 
 
 
-w_prox = 1.
-w_dist = 1.
+w_prox = .5
+w_dist = .5
 
 n_comp = 4
 
@@ -71,11 +71,11 @@ g_axial_dist_dist_prox_neg = 225.*10.**(-3.)
 
 ##
 
-n_sweep_rate_prox = 10
-n_sweep_rate_dist = 20
+n_sweep_rate_prox = 9
+n_sweep_rate_dist = 10
 
-rate_prox_sweep = np.linspace(0.,100.,n_sweep_rate_prox)
-rate_dist_sweep = np.linspace(0.,350.,n_sweep_rate_dist)
+rate_prox_sweep = np.linspace(0.,150.,n_sweep_rate_prox)
+rate_dist_sweep = np.linspace(0.,500.,n_sweep_rate_dist)
 
 output_rate = np.ndarray((n_sweep_rate_prox,n_sweep_rate_dist))
 
@@ -124,7 +124,9 @@ for i in tqdm(range(n_sweep_rate_prox)):
 
 			I_L = -g_L*(u - E_L)
 
-			I_exp[0] = g_L * Δ_T * np.exp((u[0] - V_T)/Δ_T)
+			#I_exp[0] = g_L * Δ_T * np.exp((u[0] - V_T)/Δ_T)
+			I_exp = g_L * Δ_T * np.exp((u - V_T)/Δ_T)
+			I_exp[2] = 0.
 
 			I_ampa_prox = -g_dyn_ampa_prox * (u[1] - E_ampa)
 			I_nmda_prox = -g_dyn_nmda_prox * (u[1] - E_nmda)
@@ -194,7 +196,7 @@ for i in tqdm(range(n_sweep_rate_prox)):
 		output_rate[i,j] = len(spike_list[0])/T
 
 fig_sweep, ax_sweep = plt.subplots(1,1)#
-ax_sweep.pcolormesh(output_rate)
+ax_sweep.pcolormesh(rate_prox_sweep,rate_dist_sweep,output_rate.T)
 
 t_arr = np.linspace(0.,T,n_t)
 

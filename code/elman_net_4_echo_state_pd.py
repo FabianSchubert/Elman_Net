@@ -156,6 +156,17 @@ for t in tqdm(range(n_t)):
 
 input_sequ = input(np.array(range(n_t)))
 
+np.save('./sim_data/echo_state_pd/y_rec',y_rec)
+np.save('./sim_data/echo_state_pd/y_mean_rec',y_mean_rec)
+np.save('./sim_data/echo_state_pd/w_yx_rec',w_yx_rec)
+np.save('./sim_data/echo_state_pd/I_p_rec',I_p_rec)
+np.save('./sim_data/echo_state_pd/I_d_rec',I_d_rec)
+np.save('./sim_data/echo_state_pd/I_d_mean_rec',I_d_mean_rec)
+np.save('./sim_data/echo_state_pd/I_p_mean_rec',I_p_mean_rec)
+np.save('./sim_data/echo_state_pd/Err_rec',Err_rec)
+np.save('./sim_data/echo_state_pd/input_sequ',input_sequ)
+np.save('./sim_data/echo_state_pd/w_xy',w_xy)
+
 t_ax = np.array(range(n_t))
 t_ax_skip = np.linspace(0,n_t,n_t_rec)
 
@@ -198,6 +209,15 @@ ax_w.set_ylabel("$w_{yx}$")
 plt.tight_layout()
 
 plt.savefig("../notes/presentation/figures/echo_state_network_pd_act_grad_desc_w_yx.png",dpi=300)
+
+
+height_total = 4.2
+width_total = 16.125
+
+fig_poster = plt.figure(figsize=(width_total,height_total))
+
+gsposter = gridspec.GridSpec(nrows=2,ncols=4,left=0.06,right=0.99,bottom=0.15,top=0.95,wspace=0.43,hspace=0.6) 
+
 
 plt.show()
 
