@@ -2,7 +2,7 @@
 
 import matplotlib as mpl
 mpl.rcParams['lines.linewidth'] = 2.
-mpl.rcParams['font.size'] = 15.
+mpl.rcParams['font.size'] = 22.
 mpl.rcParams['figure.autolayout'] = True
 #mpl.rcParams['axes.color_cycle'] = ['009BDE', 'FF8800', '00EB8D', 'FBC15E', '8EBA42', 'FFB5B8']
 mpl.rcParams['figure.facecolor'] = 'white'

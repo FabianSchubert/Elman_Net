@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import matplotlib.ticker as mticker
+from matplotlib.ticker import ScalarFormatter
 from tqdm import tqdm
 
 from plot_setting import *
@@ -41,7 +42,6 @@ def gen_rand_sequ(N,T,dt,n_out,g=2.):
 def synnorm(w,w_total):
 	#return w_total * w/w.sum()
 	return w_total * w/np.linalg.norm(w)
-
 
 
 
@@ -196,15 +196,17 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 
 		t_ax = np.array(range(n_t_learn))
 
-		height_total = 4.2
-		width_total = 16.125
+		height_total = 7.97
+		width_total = 30.586
 
 		fig_poster = plt.figure(figsize=(width_total,height_total))
 
 		gsposter = gridspec.GridSpec(nrows=2,ncols=4,left=0.06,right=0.99,bottom=0.15,top=0.95,wspace=0.43,hspace=0.6) 
 
 		
-		
+		scalform = ScalarFormatter(useMathText=True,useOffset=True)
+		scalform.set_powerlimits((0,0))
+		scalform.set_scientific(True)
 				
 
 		###############
@@ -221,10 +223,10 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 
 		t_wind = int(n_t_learn*0.02)
 		ax_act_pd_beginning.plot(I_p_rec[:t_wind],I_d_rec[:t_wind],'.',c='r',alpha=0.2,rasterized=True)
-		ax_act_pd_beginning.set_xlabel("$I_{prox}$")
-		ax_act_pd_beginning.set_ylabel("$I_{dist}$")
+		ax_act_pd_beginning.set_xlabel("$I_{p}$")
+		ax_act_pd_beginning.set_ylabel("$I_{d}$")
 
-		ax_act_pd_beginning.set_title("First " + str(int(100.*t_wind/n_t_learn))+"% of learning phase",fontsize=10)
+		ax_act_pd_beginning.set_title("First " + str(int(100.*t_wind/n_t_learn))+"% of learning phase",fontsize=20)
 
 		###############
 
@@ -243,31 +245,46 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 		ax_act_pd_end.set_ylim([-1.,1.])
 
 		ax_act_pd_end.plot(I_p_rec[-t_wind:],I_d_rec[-t_wind:],'.',c='r',alpha=0.2,rasterized=True)
-		ax_act_pd_end.set_xlabel("$I_{prox}$")
-		ax_act_pd_end.set_ylabel("$I_{dist}$")
+		ax_act_pd_end.set_xlabel("$I_{p}$")
+		ax_act_pd_end.set_ylabel("$I_{d}$")
 
-		ax_act_pd_end.set_title("Last " + str(int(100.*t_wind/n_t_learn))+"% of learning phase",fontsize=10)
+		ax_act_pd_end.set_title("Last " + str(int(100.*t_wind/n_t_learn))+"% of learning phase",fontsize=20)
 
 		cbar = plt.colorbar(mappable=act_pd_p_end)
 		cbar.ax.tick_params(labelsize=10)
 
 		###############
 
-
+		#'''
 		###############
 		#fig_w_prox, ax_w_prox = plt.subplots(figsize=(width_total/4.,height_total/2.))
 		ax_w_prox = fig_poster.add_subplot(gsposter[1,0])
 		ax_w_prox.plot(w_prox_rec)
 		ax_w_prox.set_xlabel("#t")
-		ax_w_prox.set_ylabel("$w_{prox}$")
+		ax_w_prox.set_ylabel("$w_{p}$")
 
 		ax_w_prox.get_xaxis().set_ticks(np.linspace(0,n_t_learn,3))
 
-		ax_w_prox.ticklabel_format(style='sci',axis='x',scilimits=(0,0),useMathText=True)
+		#ax_w_prox.ticklabel_format(style='sci',axis='x',scilimits=(0,0),useMathText=True)
+		ax_w_prox.get_xaxis().set_major_formatter(scalform)
+		###############
+		#'''
+		'''
+		###############
+		#fig_w_prox, ax_w_prox = plt.subplots(figsize=(width_total/4.,height_total/2.))
+		ax_w_dist = fig_poster.add_subplot(gsposter[1,0])
+		ax_w_dist.plot(w_dist_rec)
+		ax_w_dist.set_xlabel("#t")
+		ax_w_dist.set_ylabel("$w_{dist}$")
+
+		ax_w_dist.get_xaxis().set_ticks(np.linspace(0,n_t_learn,3))
+
+		ax_w_dist.ticklabel_format(style='sci',axis='x',scilimits=(0,0),useMathText=True)
 
 		###############
+		'''
 
-		'''*
+		'''
 		###############
 		fig_w_analytic, ax_w_analytic = plt.subplots(figsize=(5.,2.5))
 		ax_w_analytic.plot(w_prox_analytic_rec)
@@ -286,14 +303,15 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 		ax_I_beginning.plot(I_d_rec[:t_wind],label="$I_d$")
 		ax_I_beginning.plot(I_p_rec[:t_wind],label="$I_p$")
 
-		ax_I_beginning.legend(fontsize=10.,loc='upper right')
+		ax_I_beginning.legend(fontsize=15.,loc='upper right')
 
-		ax_I_beginning.get_xaxis().set_ticks(np.linspace(0,t_wind,3))
-		ax_I_beginning.ticklabel_format(style='sci',axis='x',scilimits=(0,0),useMathText=True)	
+		ax_I_beginning.get_xaxis().set_ticks(np.linspace(0,t_wind,3).round(2))
+		ax_I_beginning.get_xaxis().set_major_formatter(scalform)
+		#ax_I_beginning.ticklabel_format(style='sci',axis='x',scilimits=(0,0),useMathText=True)	
 		#ax_I_beginning.xaxis.set_major_formatter(FormatStrFormatter('%i'))
 		ax_I_beginning.set_xlabel("#t")
-		ax_I_beginning.set_ylabel("$I_{prox}$, $I_{dist}$")
-		ax_I_beginning.set_title("First " + str(round(100.*t_wind/n_t_learn,1))+"% of learning phase",fontsize=10)
+		ax_I_beginning.set_ylabel("$I_{p}$, $I_{d}$")
+		ax_I_beginning.set_title("First " + str(round(100.*t_wind/n_t_learn,1))+"% of learning phase",fontsize=20)
 
 		###############
 
@@ -306,27 +324,42 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 		ax_I_end.plot(t_ax[-t_wind:],I_p_rec[-t_wind:])
 
 		ax_I_end.get_xaxis().set_ticks(np.linspace(n_t_learn-t_wind,n_t_learn,3))
-		xformatter = mticker.ScalarFormatter(useOffset=True,useMathText=True)
-		gformat = lambda x,pos : "${}$".format(xformatter._formatSciNotation('%1.10e' % x))
+		#xformatter = mticker.ScalarFormatter(useOffset=True,useMathText=True)
+		#gformat = lambda x,pos : "${}$".format(xformatter._formatSciNotation('%1.10e' % x))
 		#ax_I_end.ticklabel_format(style='sci',axis='x',scilimits=(0,0),useMathText=True)
-		ax_I_end.xaxis.set_major_formatter(mticker.FuncFormatter(gformat))
+		ax_I_end.get_xaxis().set_major_formatter(scalform)
 
 		ax_I_end.set_xlabel("#t")
-		ax_I_end.set_ylabel("$I_{prox}$, $I_{dist}$")
-		ax_I_end.set_title("Last " + str(round(100.*t_wind/n_t_learn,1))+"% of learning phase",fontsize=10)
+		ax_I_end.set_ylabel("$I_{p}$, $I_{d}$")
+		ax_I_end.set_title("Last " + str(round(100.*t_wind/n_t_learn,1))+"% of learning phase",fontsize=20)
 
 		###############
 
+		
 		###############
 		t_wind = int(n_t_learn*0.0025)
 		#fig_X_p, ax_X_p = plt.subplots(figsize=(width_total/4.,height_total/2.))
 		ax_X_p = fig_poster.add_subplot(gsposter[0,0])
 		ax_X_p.plot(X_p[:t_wind])
 		ax_X_p.set_xlabel("#t")
-		ax_X_p.set_ylabel("$x_{prox}$")
+		ax_X_p.set_ylabel("$x_{p}$")
 
-		ax_X_p.ticklabel_format(style='sci',axis='x',scilimits=(0,0),useMathText=True)
+		ax_X_p.get_xaxis().set_major_formatter(scalform)
+		#ax_X_p.ticklabel_format(style='sci',axis='x',scilimits=(0,0),useMathText=True)
 		###############
+		
+		'''
+		###############
+		t_wind = int(n_t_learn*0.0025)
+		#fig_X_p, ax_X_p = plt.subplots(figsize=(width_total/4.,height_total/2.))
+		ax_X_d = fig_poster.add_subplot(gsposter[0,0])
+		ax_X_d.plot(X_d[:t_wind])
+		ax_X_d.set_xlabel("#t")
+		ax_X_d.set_ylabel("$x_{dist}$")
+
+		ax_X_d.ticklabel_format(style='sci',axis='x',scilimits=(0,0),useMathText=True)
+		###############
+		'''
 
 		fig_poster.tight_layout()
 		#fig_poster.subplots_adjust(wspace=0.001, hspace=0.001)
@@ -371,9 +404,9 @@ def main(n_t_learn = 500000, X_p = np.random.normal(0.,1.,(1000000,10)), X_d = n
 		fig_X_d.savefig(plots_base_folder + fold + "X_d." + imgformat,dpi=300)
 		'''
 
-		poster_fig_folder = "/home/fschubert/work/2018/Poster_Bernstein/figures/"
+		poster_fig_folder = "/home/fschubert/work/repos/Poster_Bernstein/figures/"
 
-		fig_poster.savefig(poster_fig_folder + "fig3." + imgformat,dpi=300)
+		fig_poster.savefig(poster_fig_folder + "fig2." + imgformat,dpi=300)
 		plt.show()
 
 		pdb.set_trace()
@@ -396,7 +429,10 @@ if __name__ == "__main__":
 
 	#X_d_sequ = np.ndarray((2000000,10))
 
-	X_d_sequ = np.array([np.load("rand_chaotic_sequ.npy")[:,10]]).T
+	X_d_sequ = np.array([np.load("rand_chaotic_sequ.npy")[:,0]]).T
+
+	#X_d_sequ[:,:2] *= 2.
+	#X_d_sequ[:,1] = X_d_sequ[:,0]*0.9 +  X_d_sequ[:,1]*0.1
 
 	X_p_sequ[:,1] *= 3.
 
